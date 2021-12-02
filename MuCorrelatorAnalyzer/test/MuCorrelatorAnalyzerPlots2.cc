@@ -181,7 +181,15 @@ int MuCorrelatorAnalyzerPlots2() {
   //makePlots("DYToLL_t114", "Summer20",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_L1TkMuonBayes_MC_analysis_DYToLL_M-50_Summer20_PU200_t114/results/muCorrelatorTTAnalysis1.root");
   //makePlots("JPsiToMuMu_t113", "Summer20",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_L1TkMuonBayes_MC_analysis_JPsiToMuMu_Summer20_PU200_t113/results/muCorrelatorTTAnalysis1.root");
   //makePlots("JPsiToMuMu_t114", "Summer20",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_L1TkMuonBayes_MC_analysis_JPsiToMuMu_Summer20_PU200_t114/results/muCorrelatorTTAnalysis1.root");
-  makePlots("minBias_PU200_t114", "minBias PU200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_L1TkMuonBayes_MC_analysis_MinBias_Summer20_PU200_t114/results/muCorrelatorTTAnalysis1.root");
+  //makePlots("minBias_PU200_t114", "minBias PU200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_L1TkMuonBayes_MC_analysis_MinBias_Summer20_PU200_t114/results/muCorrelatorTTAnalysis1.root");
+
+  //makePlots("DYToLL", "DYToLL",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/L1Trigger/Phase2L1GMT/test/muCorrelatorTTAnalysis1_Test.root");
+
+  //makePlots("DYToLL_PU200_t200", "DYToLL PU200 t200",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
+
+  //makePlots("JPsiToMuMu_PU200_t200", "JPsiToMuMu PU200 t200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
+
+  makePlots("MinBias_PU200_t200", "MinBias PU200 t200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
 
 /*
   c0->cd();
@@ -223,7 +231,7 @@ void makePlots(const char* name, string label, int color, int ptCut, const char*
   //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, 10);
   //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, 20);
 
-  makeRatePlots(omtfTTAnalyzerDir, name, color, ptCut);
+  //makeRatePlots(omtfTTAnalyzerDir, name, color, ptCut);
 }
 
 void savePlot(string name, TVirtualPad* orgianlPad) {
@@ -531,8 +539,8 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
 
   TH2I* ptGenPtTTMuonEv0= (TH2I*)omtfTTAnalyzerDir->Get("ptGenPtTTMuonEv0");
 
-  TH1D* ptGenPtTTMuonNomEv0 = ptGenPtTTMuonEv0->ProjectionX("ptGenPtTTMuonNomEv0", ptGenPtTTMuonEv0->GetYaxis()->FindBin(ptCut), -1);
-  TH1D* ptGenPtTTMuonDenomEv0 = ptGenPtTTMuonEv0->ProjectionX("ptGenPtTTMuonDenomEv0", 0, -1);
+  TH1* ptGenPtTTMuonNomEv0 = ptGenPtTTMuonEv0->ProjectionX("ptGenPtTTMuonNomEv0", ptGenPtTTMuonEv0->GetYaxis()->FindBin(ptCut), -1);
+  TH1* ptGenPtTTMuonDenomEv0 = ptGenPtTTMuonEv0->ProjectionX("ptGenPtTTMuonDenomEv0", 0, -1);
 
   int binNum = ptGenPtTTMuonEv0->GetYaxis()->FindBin(ptCut);
   cout<<"ptGenPtTTMuonEv0 FindBin("<<ptCut<<") = "<<binNum<<" GetBinLowEdge "<<ptGenPtTTMuonEv0->GetYaxis()->GetBinLowEdge(binNum)<<"  "<<ptGenPtTTMuonEv0->GetYaxis()->GetBinUpEdge(binNum)<<endl;
@@ -541,6 +549,10 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
   ptGenPtTTMuonNomEv0->GetYaxis()->SetTitle("efficiency");
   ptGenPtTTMuonNomEv0->SetLineColor(kBlue);*/
 
+  if(rebinTurnOn) {
+    ptGenPtTTMuonNomEv0 = ptGenPtTTMuonNomEv0->Rebin(2, (string(ptGenPtTTMuonNomEv0->GetName() )+ "_rebin2").c_str() );
+    ptGenPtTTMuonDenomEv0 = ptGenPtTTMuonDenomEv0->Rebin(2, (string(ptGenPtTTMuonDenomEv0->GetName() )+ "_rebin2").c_str() );
+  }
 
   std::string title = ("ttTrack efficiency, Event 0, pT cut = " + to_string(ptCut) + " GeV" + "; generated p_{T} [GeV]; efficiency");
   TEfficiency* ttMuon_vs_ptGen_Ev0_Eff = makeEfficiency(*ptGenPtTTMuonNomEv0, *ptGenPtTTMuonDenomEv0, title, kBlue);
@@ -604,8 +616,13 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
         canvas1Eff->cd(2)->Update();
         TH2I* ptGenPtMuCandMuonsEv0 = (TH2I*)subdir->Get("ptGenPtMuCandMuonsEv0;1");
 
-        TH1D* ptGenPtMuCandMuonsEv0Nom = ptGenPtMuCandMuonsEv0->ProjectionX("ptGenPtMuCandMuonsEv0Nom", ptGenPtMuCandMuonsEv0->GetYaxis()->FindBin(ptCut), -1);
-        TH1D* ptGenPtMuCandMuonsEv0Denom = ptGenPtMuCandMuonsEv0->ProjectionX("ptGenPtMuCandMuonsEv0Denom", 0, -1);
+        TH1* ptGenPtMuCandMuonsEv0Nom = ptGenPtMuCandMuonsEv0->ProjectionX("ptGenPtMuCandMuonsEv0Nom", ptGenPtMuCandMuonsEv0->GetYaxis()->FindBin(ptCut), -1);
+        TH1* ptGenPtMuCandMuonsEv0Denom = ptGenPtMuCandMuonsEv0->ProjectionX("ptGenPtMuCandMuonsEv0Denom", 0, -1);
+
+        if(rebinTurnOn) {
+          ptGenPtMuCandMuonsEv0Nom = ptGenPtMuCandMuonsEv0Nom->Rebin(2, (string(ptGenPtMuCandMuonsEv0Nom->GetName() )+ "_rebin2").c_str() );
+          ptGenPtMuCandMuonsEv0Denom = ptGenPtMuCandMuonsEv0Denom->Rebin(2, (string(ptGenPtMuCandMuonsEv0Denom->GetName() )+ "_rebin2").c_str() );
+        }
 
         //ptGenPtOMtfMuonNom->Divide(ptGenPtOMtfMuonDenom); //TODO!!!! in principle ptGenPtOMtfMuonDenom and ptGenPtTTMuonDenom should be the same
 /*
@@ -628,7 +645,7 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
 
         {
           TLegend* leg = new TLegend(0.33, 0.13,0.77,0.38);
-          leg->SetHeader("#left|#eta^{gen}#right| < 2.4, L1 p_{T} #geq 20 GeV"); //TODO change according to the plot
+          //leg->SetHeader("#left|#eta^{gen}#right| < 2.4, L1 p_{T} #geq 20 GeV"); //TODO change according to the plot
           //leg->SetBorderSize(0);
           leg->SetFillStyle(0);
           leg->SetBorderSize(0);
