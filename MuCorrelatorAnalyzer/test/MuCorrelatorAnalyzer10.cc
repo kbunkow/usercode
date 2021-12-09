@@ -129,10 +129,10 @@ public:
   }
 };
 
-class SingleMuAlgo2OrMoreStubs: public TriggerAlgo {
+class SingleMuAlgo_2Stubs: public TriggerAlgo {
 public:
-  SingleMuAlgo2OrMoreStubs(double ptCut): TriggerAlgo("SingleMuAlgo2OrMoreStubs" + std::to_string((int)ptCut), ptCut) {};
-  virtual ~SingleMuAlgo2OrMoreStubs() {};
+  SingleMuAlgo_2Stubs(double ptCut): TriggerAlgo("SingleMuAlgo_2Stubs" + std::to_string((int)ptCut), ptCut) {};
+  virtual ~SingleMuAlgo_2Stubs() {};
 
   virtual bool accept(const l1t::TrackerMuon& muCorrelatorTrack){
     if(muCorrelatorTrack.hwQual() >= 0 && muCorrelatorTrack.stubs().size() > 1) //&& muCorrelatorTrack.getCandidateType() == l1t::TrackerMuon::fastTrack //TODO set the quality cut !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -548,9 +548,9 @@ public:
     ptGenPtMuCandMuonsEv0Overlap = subDir.make<TH2I>("ptGenPtMuCandMuonsEv0Overlap", "ptGenPtMuCandMuonsEv0Overlap 0.82 < |#eta| < 1.24; generated p_{T} [GeV]; ttTrack p_{T} [GeV]; #", 100, 0, 100, 100, 0, 100);
     ptGenPtMuCandMuonsEv0Endcap = subDir.make<TH2I>("ptGenPtMuCandMuonsEv0Endcap", "ptGenPtMuCandMuonsEv0Endcap 1.24 < |#eta|; generated p_{T} [GeV]; ttTrack p_{T} [GeV]; #", 100, 0, 100, 100, 0, 100);
 
-    muonsPdfSumFiredPlanes = subDir.make<TH2I>("muonsPdfSumFiredPlanes", "muonsPdfSumFiredPlanes; pdfSum; FiredPlanes; #", 100, 0, 10000, 19, -0.5, 18.5);
+    //muonsPdfSumFiredPlanes = subDir.make<TH2I>("muonsPdfSumFiredPlanes", "muonsPdfSumFiredPlanes; pdfSum; FiredPlanes; #", 100, 0, 10000, 19, -0.5, 18.5);
 
-    betaLikelihoodFiredPlanesMuons = subDir.make<TH2I>("betaLikelihoodFiredPlanesMuons", "betaLikelihoodFiredPlanesMuons; betaLikelihood; firedPlanes; #", 100, 0, 100, 19, -0.5, 18.5);
+    //betaLikelihoodFiredPlanesMuons = subDir.make<TH2I>("betaLikelihoodFiredPlanesMuons", "betaLikelihoodFiredPlanesMuons; betaLikelihood; firedPlanes; #", 100, 0, 100, 19, -0.5, 18.5);
     muCandBetaMuons = subDir.make<TH1I>("muCandBetaMuons", "muCandBetaMuons; beta measured; #events", 22, 0., 1.1);
     betaGenBetaL1Mu = subDir.make<TH2I>("betaGenBetaL1Mu", "betaGenBetaL1Mu, staus; betaGen; Beta L1MuCand; #", 20, 0., 1., 42, -1., 1.1);
 
@@ -593,9 +593,9 @@ private:
   TH2I* ptGenPtMuCandMuonsEv0Overlap = nullptr;
   TH2I* ptGenPtMuCandMuonsEv0Endcap = nullptr;
 
-  TH2I* muonsPdfSumFiredPlanes = nullptr;
+  //TH2I* muonsPdfSumFiredPlanes = nullptr;
 
-  TH2I* betaLikelihoodFiredPlanesMuons = nullptr;
+  //TH2I* betaLikelihoodFiredPlanesMuons = nullptr;
   TH1I* muCandBetaMuons = nullptr;
   TH2I* betaGenBetaL1Mu = nullptr;
 
@@ -736,8 +736,8 @@ public:
     //muCandEtaWrongTag = subDir.make<TH1D>("muCandEtaWrongTag", "muCandEtaWrongTag; eta; #events", etaBins, -2.4, 2.4);
     //muCandPhiWrongTag = subDir.make<TH1D>("muCandPhiWrongTag", "muCandPhiWrongTag; phi; #events", phiBins, -M_PI, M_PI);
 
-    pdfSumFiredPlanesNotMuons = subDir.make<TH2I>("pdfSumFiredPlanesNotMuons", "pdfSumFiredPlanesNotMuons; pdfSum; firedPlanes; #", 100, 0, 10000, 19, -0.5, 18.5);
-    betaLikelihoodFiredPlanesNotMuons = subDir.make<TH2I>("notMuonsBetaLikelihoodFiredPlanes", "notMuonsBetaLikelihoodFiredPlanes; betaLikelihood; FiredPlanes; #", 100, 0, 100, 19, -0.5, 18.5);
+    //pdfSumFiredPlanesNotMuons = subDir.make<TH2I>("pdfSumFiredPlanesNotMuons", "pdfSumFiredPlanesNotMuons; pdfSum; firedPlanes; #", 100, 0, 10000, 19, -0.5, 18.5);
+    //betaLikelihoodFiredPlanesNotMuons = subDir.make<TH2I>("notMuonsBetaLikelihoodFiredPlanes", "notMuonsBetaLikelihoodFiredPlanes; betaLikelihood; FiredPlanes; #", 100, 0, 100, 19, -0.5, 18.5);
     muCandBetaNotMuons = subDir.make<TH1I>("muCandBetaNotMuons", "muCandBetaNotMuons; beta measured; #events", 22, 0., 1.1);
 
     chi2GenuineTTTrackMuCand = subDir.make<TH1D>("chi2GenuineTTTrackMuCand", "chi2GenuineTTTrackMuCand; chi2; #events", 40, 0., 200.);
@@ -773,8 +773,8 @@ private:
   //TH1D* muCandEtaWrongTag = nullptr;
   //TH1D* muCandPhiWrongTag = nullptr;
 
-  TH2I* pdfSumFiredPlanesNotMuons = nullptr;
-  TH2I* betaLikelihoodFiredPlanesNotMuons = nullptr;
+  //TH2I* pdfSumFiredPlanesNotMuons = nullptr;
+  //TH2I* betaLikelihoodFiredPlanesNotMuons = nullptr;
   TH1I* muCandBetaNotMuons = nullptr;
 
   TH1D* chi2GenuineTTTrackMuCand = nullptr;
@@ -891,9 +891,9 @@ public:
     //TH1D* muCandPhi = nullptr;
 
     TH2I* candPt_vertexRho = nullptr; //rho is sqrt(x^2 + y^2)
-    TH2I* pdfSumNFiredLayers = nullptr;
-    TH2I* candPtFiredMuonLayers = nullptr;
-    TH2I* chi2NStubs = nullptr;
+    //TH2I* pdfSumNFiredLayers = nullptr;
+    //TH2I* candPtFiredMuonLayers = nullptr;
+    //TH2I* chi2NStubs = nullptr;
 
     TH2I* ptGenDeltaPt = nullptr;
     TH2I* ptGenDeltaPhi = nullptr;
@@ -912,11 +912,11 @@ public:
 
       candPt_vertexRho = subDir.make<TH2I>( ("candPt_vertexRho_" + name).c_str(), ("candPt_vertexRho_" + name + "; ttTrack pt [GeV]; #rho=#sqrt{x^{2} + y^{2} } [cm]").c_str(), 20, 0., 100., 20, 0., 200.); //fixme is rho in cm?
 
-      pdfSumNFiredLayers = subDir.make<TH2I>( ("pdfSumNFiredLayers_" + name).c_str(), ("pdfSumNFiredLayers "+ name + ptCutStr + "; pdfSum; NFiredLayers; #").c_str(), 100, 0, 10000, 19, -0.5, 18.5);
+      //pdfSumNFiredLayers = subDir.make<TH2I>( ("pdfSumNFiredLayers_" + name).c_str(), ("pdfSumNFiredLayers "+ name + ptCutStr + "; pdfSum; NFiredLayers; #").c_str(), 100, 0, 10000, 19, -0.5, 18.5);
 
-      candPtFiredMuonLayers = subDir.make<TH2I>( ("candPtFiredMuonLayers_" + name).c_str(), ("candPtFiredMuonLayers " + name + "; ttTrack pt [GeV]; muon layer; #").c_str(), 50, 0, 100, 23, -0.5, 22.5);
+      //candPtFiredMuonLayers = subDir.make<TH2I>( ("candPtFiredMuonLayers_" + name).c_str(), ("candPtFiredMuonLayers " + name + "; ttTrack pt [GeV]; muon layer; #").c_str(), 50, 0, 100, 23, -0.5, 22.5);
 
-      chi2NStubs = subDir.make<TH2I>( ("chi2NStubs_" + name).c_str(), ("chi2NStubs "+ name + ptCutStr + "; chi2; #nStubs").c_str(), 30, 0., 300., 8, .5, 8.5);
+      //chi2NStubs = subDir.make<TH2I>( ("chi2NStubs_" + name).c_str(), ("chi2NStubs "+ name + ptCutStr + "; chi2; #nStubs").c_str(), 30, 0., 300., 8, .5, 8.5);
 
       ptGenDeltaPt = subDir.make<TH2I>( ("ptGenDeltaPt_" + name).c_str(), ("ptGenDeltaPt " + name + "; gen pT [GeV]; (gen pT - ttTrack pT)/(gen pT) [GeV]; #").c_str(), 50, 0, 100, 100, -.5, .5);
       ptGenDeltaPhi = subDir.make<TH2I>( ("ptGenDeltaPhi_" + name).c_str(), ("ptGenDeltaPhi " + name +  "; gen pT [GeV]; (gen phi - ttTrack phi); #").c_str(), 50, 0, 100,  60, -0.3, 0.3);
@@ -1146,7 +1146,7 @@ private:
   std::vector<std::unique_ptr<MuCandsMatchingAnalyzer> > muCandsMatchingAnalyzers;
 
   std::unique_ptr<MuCandsMatchingAnalyzer> ttTracksMatchingAnalyzer;
-  std::unique_ptr<MuCandsMatchingAnalyzer> ttTracksMatchingAnalyzerBarrel;
+  //std::unique_ptr<MuCandsMatchingAnalyzer> ttTracksMatchingAnalyzerBarrel;
 
   std::vector<EfficiencyAnalyser> efficiencyAnalysersCorrelatorWithTrackPart; //used when the correlator works with the Tracking particles and not the ttTracks
 
@@ -1360,11 +1360,11 @@ void MuCorrelatorAnalyzer::beginJob()
   std::shared_ptr<TriggerAlgo> singleMuAlgoPtCut0 = std::make_shared<SingleMuAlgo>(0);
   std::shared_ptr<TriggerAlgo> singleMuAlgoPtCut3 = std::make_shared<SingleMuAlgo>(3);
 
-  std::shared_ptr<TriggerAlgo> singleMuAlgo2OrMoreStubs = std::make_shared<SingleMuAlgo2OrMoreStubs>(20);
-  std::shared_ptr<TriggerAlgo> singleMuAlgo2OrMoreStubsPtCut10 = std::make_shared<SingleMuAlgo2OrMoreStubs>(10);
-  std::shared_ptr<TriggerAlgo> singleMuAlgo2OrMoreStubsPtCut5 = std::make_shared<SingleMuAlgo2OrMoreStubs>(5);
-  std::shared_ptr<TriggerAlgo> singleMuAlgo2OrMoreStubsPtCut0 = std::make_shared<SingleMuAlgo2OrMoreStubs>(0);
-  std::shared_ptr<TriggerAlgo> singleMuAlgo2OrMoreStubsPtCut3 = std::make_shared<SingleMuAlgo2OrMoreStubs>(3);
+  std::shared_ptr<TriggerAlgo> singleMuAlgo_2Stubs = std::make_shared<SingleMuAlgo_2Stubs>(20);
+  std::shared_ptr<TriggerAlgo> singleMuAlgo_2StubsPtCut10 = std::make_shared<SingleMuAlgo_2Stubs>(10);
+  std::shared_ptr<TriggerAlgo> singleMuAlgo_2StubsPtCut5 = std::make_shared<SingleMuAlgo_2Stubs>(5);
+  std::shared_ptr<TriggerAlgo> singleMuAlgo_2StubsPtCut0 = std::make_shared<SingleMuAlgo_2Stubs>(0);
+  std::shared_ptr<TriggerAlgo> singleMuAlgo_2StubsPtCut3 = std::make_shared<SingleMuAlgo_2Stubs>(3);
 
 
 /*
@@ -1412,7 +1412,7 @@ void MuCorrelatorAnalyzer::beginJob()
 
   if(analysisType == "rate") {
     rateAnalysers.emplace_back(singleMuAlgo, fs);
-    rateAnalysers.emplace_back(singleMuAlgo2OrMoreStubs, fs);
+    rateAnalysers.emplace_back(singleMuAlgo_2Stubs, fs);
 /*
     rateAnalysers.emplace_back(singleMuAlgoSoftCuts, fs);
     rateAnalysers.emplace_back(singleMuAlgoSoftCuts1, fs);
@@ -1441,9 +1441,9 @@ void MuCorrelatorAnalyzer::beginJob()
     efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 2, 5, fs);
     efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 3, 5, fs);
 
-    efficiencyAnalysers.emplace_back(singleMuAlgo2OrMoreStubs, 25, 10000, fs);
-    efficiencyAnalysers.emplace_back(singleMuAlgo2OrMoreStubsPtCut0, 2, 5, fs);
-    efficiencyAnalysers.emplace_back(singleMuAlgo2OrMoreStubsPtCut0, 3, 5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2Stubs, 25, 10000, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 2, 5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 3, 5, fs);
 
 
 /*
@@ -1493,9 +1493,9 @@ void MuCorrelatorAnalyzer::beginJob()
   muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgoPtCut10, fs));
   muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo, fs));
 
-  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo2OrMoreStubsPtCut0, fs));
-  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo2OrMoreStubsPtCut10, fs));
-  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo2OrMoreStubs, fs));
+  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_2StubsPtCut0, fs));
+  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_2StubsPtCut10, fs));
+  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_2Stubs, fs));
 
 /*  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgoBarrelPtCut10, fs));
 
@@ -1513,8 +1513,8 @@ void MuCorrelatorAnalyzer::beginJob()
   std::shared_ptr<TriggerAlgo> allTTTRacksPtCut10 = std::make_shared<AllTTTRacks>(10);
   ttTracksMatchingAnalyzer = std::make_unique<MuCandsMatchingAnalyzer>(allTTTRacksPtCut10, fs);
 
-  std::shared_ptr<TriggerAlgo> allTTTRacksBarrel = std::make_shared<AllTTTRacksBarrel>(10);
-  ttTracksMatchingAnalyzerBarrel = std::make_unique<MuCandsMatchingAnalyzer>(allTTTRacksBarrel, fs);
+  //std::shared_ptr<TriggerAlgo> allTTTRacksBarrel = std::make_shared<AllTTTRacksBarrel>(10);
+  //ttTracksMatchingAnalyzerBarrel = std::make_unique<MuCandsMatchingAnalyzer>(allTTTRacksBarrel, fs);
 
   //make a new Root file
   /*  string  outRootFile = parameterSet.getParameter<std::string>("outRootFile");
@@ -2414,7 +2414,7 @@ void MuCorrelatorAnalyzer::analyze(
 
     l1t::TrackerMuon dummy(ttTrackPtr, false,0,0,0,0,0,0 ); //very ugly, but should work - the idea is to reuse the MatchingAnalyzer
     ttTracksMatchingAnalyzer->fillHistos(event, MCTruthTTTrackHandle, muonTrackingParticles, dummy);
-    ttTracksMatchingAnalyzerBarrel->fillHistos(event, MCTruthTTTrackHandle, muonTrackingParticles, dummy);
+    //ttTracksMatchingAnalyzerBarrel->fillHistos(event, MCTruthTTTrackHandle, muonTrackingParticles, dummy);
   }
   ttTracksFakesPerEvent->Fill(ttTracksFakesPerEventCnt);
   ttTracksPt10FakesPerEvent->Fill(ttTracksPt10FakesPerEventCnt);

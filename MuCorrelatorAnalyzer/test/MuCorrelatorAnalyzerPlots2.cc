@@ -191,6 +191,14 @@ int MuCorrelatorAnalyzerPlots2() {
 
   makePlots("MinBias_PU200_t200", "MinBias PU200 t200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
 
+
+  //makePlots("DYToLL_PU200_t201", "DYToLL PU200 t201",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t201/results/muCorrelatorTTAnalysis1.root");
+
+   //makePlots("JPsiToMuMu_PU200_t201", "JPsiToMuMu PU200 t201",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t201/results/muCorrelatorTTAnalysis1.root");
+
+  makePlots("MinBias_PU200_t201", "MinBias PU200 t201",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t201/results/muCorrelatorTTAnalysis1.root");
+
+
 /*
   c0->cd();
   legend->Draw();
