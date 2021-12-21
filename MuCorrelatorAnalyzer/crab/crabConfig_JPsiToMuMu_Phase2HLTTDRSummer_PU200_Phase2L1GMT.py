@@ -22,7 +22,7 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 5
 #config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
 config.Data.publication = False
-config.Data.outputDatasetTag = 'Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t202'
+config.Data.outputDatasetTag = 'Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t203'
 config.Data.totalUnits = 49
 config.Data.ignoreLocality = False
 

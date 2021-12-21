@@ -214,16 +214,21 @@ int MuCorrelatorAnalyzerPlots2() {
 
   //makePlots("DYToLL_PU200_t200", "DYToLL PU200 t200",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
   //makePlots("JPsiToMuMu_PU200_t200", "JPsiToMuMu PU200 t200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
-  makePlots("MinBias_PU200_t200", "MinBias PU200 t200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
+  //makePlots("MinBias_PU200_t200", "MinBias PU200 t200",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t200/results/muCorrelatorTTAnalysis1.root");
 
   //makePlots("DYToLL_PU200_t201", "DYToLL PU200 t201",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t201/results/muCorrelatorTTAnalysis1.root");
   //makePlots("JPsiToMuMu_PU200_t201", "JPsiToMuMu PU200 t201",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t201/results/muCorrelatorTTAnalysis1.root");
   //makePlots("MinBias_PU200_t201", "MinBias PU200 t201",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t201/results/muCorrelatorTTAnalysis1.root");
 
   //makePlots("DYToLL_PU200_t202", "DYToLL PU200 t202",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t202/results/muCorrelatorTTAnalysis1.root");
-  //makePlots("JPsiToMuMu_PU200_t201", "JPsiToMuMu PU200 t202",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t202/results/muCorrelatorTTAnalysis1.root");
-  makePlots("MinBias_PU200_t202", "MinBias PU200 t202",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t202/results/muCorrelatorTTAnalysis1.root");
+  makePlots("JPsiToMuMu_PU200_t202", "JPsiToMuMu PU200 t202",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t202/results/muCorrelatorTTAnalysis1.root");
+  //makePlots("MinBias_PU200_t202", "MinBias PU200 t202",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/orginal_gmt/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t202/results/muCorrelatorTTAnalysis1.root");
 
+  //makePlots("DYToLL_PU200_t202", "DYToLL PU200 t202",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t202/results/muCorrelatorTTAnalysis1.root");
+  makePlots("JPsiToMuMu_PU200_t203", "JPsiToMuMu PU200 t203",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t203/results/muCorrelatorTTAnalysis1.root");
+  //makePlots("MinBias_PU200_t203", "MinBias PU200 t203",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t202/results/muCorrelatorTTAnalysis1.root");
+
+  // /afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab
 /*
   c0->cd();
   legend->Draw();
@@ -258,9 +263,9 @@ void makePlots(const char* name, string label, int color, int ptCut, const char*
 
   //makeEffVsBeta(omtfTTAnalyzerDir, name);
 
-  makeCandidatesMatchingPlots(omtfTTAnalyzerDir, name, eventsCnt);
+  //makeCandidatesMatchingPlots(omtfTTAnalyzerDir, name, eventsCnt);
 
-  //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, ptCut);
+  makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, ptCut);
 
   //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, 2);
   //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, 10);
@@ -634,7 +639,7 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
 
         ttMuon_vs_ptGen_Ev0_Eff->Draw("APZ");
         canvas1Eff->cd(2)->Update();
-        ttMuon_vs_ptGen_Ev0_Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.7, 1.01);
+        ttMuon_vs_ptGen_Ev0_Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.8, 1.01);
         ttMuon_vs_ptGen_Ev0_Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(0, 100);
         cout<<"ttMuon_vs_ptGen_Ev0_Eff->GetPaintedGraph()->GetName() "<<ttMuon_vs_ptGen_Ev0_Eff->GetPaintedGraph()->GetName()<<endl;
         canvas1Eff->cd(2)->Update();
@@ -796,7 +801,7 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
             ttMuonEta_ptCut_Eff->Draw("APZ");
             ttMuonEta_ptCut_Eff->SetTitle((title + "; generated #eta; efficiency").c_str());
             canvas1Eff->Update();
-            ttMuonEta_ptCut_Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.95, 1.01);
+            ttMuonEta_ptCut_Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.8, 1.05);
             ttMuonEta_ptCut_Eff->GetPaintedGraph()->GetXaxis()->SetRangeUser(-2.4, 2.4);
 
             leg->AddEntry(ttMuonEta_ptCut_Eff , "Tracking Trigger Track", "lep");

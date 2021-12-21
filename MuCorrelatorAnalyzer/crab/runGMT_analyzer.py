@@ -166,6 +166,10 @@ process.gmtMuons.verbose=0
 process.gmtMuons.trackConverter.verbose=0
 process.gmtMuons.isolation.IsodumpForHLS = 0
 
+process.gmtMuons.trackingParticleInputTag = cms.InputTag("mix", "MergedTrackTruth")
+process.gmtMuons.mcTruthTrackInputTag = cms.InputTag("TTTrackAssociatorFromPixelDigis", "Level1TTTracks")
+process.gmtMuons.dataDumpRootFile = cms.string("dataDump.root")
+
 process.TFileService = cms.Service("TFileService", fileName = cms.string('muCorrelatorTTAnalysis1.root'), closeFileFast = cms.untracked.bool(True))
 
 analysisType = "efficiency" # or rate
