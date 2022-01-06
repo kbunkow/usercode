@@ -111,7 +111,7 @@ public:
   virtual ~AllTTTRacksBarrel() {};
 
   virtual bool accept(const l1t::TrackerMuon& muCorrelatorTrack){
-    if(abs(muCorrelatorTrack.eta() ) < 0.82)
+    if(fabs(muCorrelatorTrack.eta() ) < 0.82)
       return true;
     return false;
   }
@@ -161,7 +161,7 @@ public:
 
   virtual bool accept(const l1t::TrackerMuon& muCorrelatorTrack){
     if(muCorrelatorTrack.hwQual() >= 12 && muCorrelatorTrack.getCandidateType() == l1t::TrackerMuon::fastTrack &&
-        abs(muCorrelatorTrack.getEta() ) < 0.82)
+        fabs(muCorrelatorTrack.getEta() ) < 0.82)
       return true;
     return false;
   }
@@ -174,7 +174,7 @@ public:
 
   virtual bool accept(const l1t::TrackerMuon& muCorrelatorTrack){
     if(muCorrelatorTrack.hwQual() >= 12 && muCorrelatorTrack.getCandidateType() == l1t::TrackerMuon::fastTrack &&
-        abs(muCorrelatorTrack.getEta() ) >= 0.82 && abs(muCorrelatorTrack.getEta() ) < 1.24 )
+        fabs(muCorrelatorTrack.getEta() ) >= 0.82 && fabs(muCorrelatorTrack.getEta() ) < 1.24 )
       return true;
     return false;
   }
@@ -187,7 +187,7 @@ public:
 
   virtual bool accept(const l1t::TrackerMuon& muCorrelatorTrack){
     if(muCorrelatorTrack.hwQual() >= 12 && muCorrelatorTrack.getCandidateType() == l1t::TrackerMuon::fastTrack &&
-        abs(muCorrelatorTrack.getEta() ) >= 1.24 )
+        fabs(muCorrelatorTrack.getEta() ) >= 1.24 )
       return true;
     return false;
   }
@@ -230,7 +230,7 @@ public:
             ((muCorrelatorTrack.getTtTrackPtr()->getStubRefs().size() == 4 && muCorrelatorTrack.getTtTrackPtr()->chi2() < 100 ) ||
               muCorrelatorTrack.getTtTrackPtr()->getStubRefs().size() > 4) ) ||
            muCorrelatorTrack.getTtTrackPtr().isNull() ) &&
-        (abs(muCorrelatorTrack.getEta() ) >= 0.82 && abs(muCorrelatorTrack.getEta() ) < 1.24 )
+        (fabs(muCorrelatorTrack.getEta() ) >= 0.82 && fabs(muCorrelatorTrack.getEta() ) < 1.24 )
     )
       return true;
     return false;
@@ -268,7 +268,7 @@ public:
           (muCorrelatorTrack.getFiredLayerCnt() == 3 && muCorrelatorTrack.pdfSum() > 1400) ||
            muCorrelatorTrack.getFiredLayerCnt() >= 4) &&
         ( (muCorrelatorTrack.getTtTrackPtr().isNonnull() && muCorrelatorTrack.getTtTrackPtr()->chi2() < 200 ) || muCorrelatorTrack.getTtTrackPtr().isNull() ) &&
-        (abs(muCorrelatorTrack.getEta() ) >= 0.82 && abs(muCorrelatorTrack.getEta() ) < 1.24 )
+        (fabs(muCorrelatorTrack.getEta() ) >= 0.82 && fabs(muCorrelatorTrack.getEta() ) < 1.24 )
     )
       return true;
     return false;
@@ -641,7 +641,7 @@ void EfficiencyAnalyser::fillHistos(const edm::Event& event, edm::Ptr< TrackingP
     }
   }
 
-  int minMuPt = 3; //3 GeV
+  int minMuPt = 1; //3 GeV
   if(ptOfBestL1MuCand > 0) {
     LogTrace("l1tMuBayesEventPrint")<<"\n"<<std::setw(32)<<triggerAlgo->name<<" best muCand track: "<<toString(*bestL1MuCand)<<endl<<endl;
 
@@ -657,11 +657,11 @@ void EfficiencyAnalyser::fillHistos(const edm::Event& event, edm::Ptr< TrackingP
       ptGenPtMuCandMuonsEv0->Fill(trackParticle->pt(), muCandPt);
       ptGenPtMuCandMuonsEv0HighPt->Fill(trackParticle->pt(), muCandPt);
 
-      if( abs(trackParticle->eta() ) < 0.82)
+      if( fabs(trackParticle->eta() ) < 0.82)
         ptGenPtMuCandMuonsEv0Barrel->Fill(trackParticle->pt(), muCandPt);
-      else if( abs(trackParticle->eta() ) < 1.24)
+      else if( fabs(trackParticle->eta() ) < 1.24)
         ptGenPtMuCandMuonsEv0Overlap->Fill(trackParticle->pt(), muCandPt);
-      else if( abs(trackParticle->eta() ) < 2.4)
+      else if( fabs(trackParticle->eta() ) < 2.4)
         ptGenPtMuCandMuonsEv0Endcap->Fill(trackParticle->pt(), muCandPt);
     }
     else {
@@ -673,11 +673,11 @@ void EfficiencyAnalyser::fillHistos(const edm::Event& event, edm::Ptr< TrackingP
       ptGenPtMuCandMuonsEv0->Fill(trackParticle->pt(), 0);
       ptGenPtMuCandMuonsEv0HighPt->Fill(trackParticle->pt(), 0);
 
-      if( abs(trackParticle->eta() ) < 0.82)
+      if( fabs(trackParticle->eta() ) < 0.82)
         ptGenPtMuCandMuonsEv0Barrel->Fill(trackParticle->pt(), 0);
-      else if( abs(trackParticle->eta() ) < 1.24)
+      else if( fabs(trackParticle->eta() ) < 1.24)
         ptGenPtMuCandMuonsEv0Overlap->Fill(trackParticle->pt(), 0);
-      else if( abs(trackParticle->eta() ) < 2.4)
+      else if( fabs(trackParticle->eta() ) < 2.4)
         ptGenPtMuCandMuonsEv0Endcap->Fill(trackParticle->pt(), 0);
 
       if(trackParticle->pt() > ptGenFrom) {
@@ -1156,7 +1156,7 @@ private:
   double etaCutFrom = 0;
   double etaCutTo = 2.4;
 
-  int minMuPt = 3; //3 GeV
+  int minMuPt = 1; //3 GeV
 
   //TkMuBayesProcConfig muCorrConfig;
 
@@ -1931,7 +1931,7 @@ void MuCorrelatorAnalyzer::analyze(
     if (fabs(tpPtr->eta()) > TP_maxEta)
       continue;
 
-    if(abs(tpPtr->eta()) >= etaCutFrom && abs(tpPtr->eta()) <= etaCutTo) { //TODO it duplicates the above condition,
+    if(fabs(tpPtr->eta()) >= etaCutFrom && fabs(tpPtr->eta()) <= etaCutTo) { //TODO it duplicates the above condition,
     }
     else
       continue;
@@ -2240,9 +2240,9 @@ void MuCorrelatorAnalyzer::analyze(
 
         for(auto& matchedTTTrack : matchedTracks) {
           LogTrace("l1tMuBayesEventPrint")<<"L:"<<__LINE__<<" "<<printTTTRack(matchedTTTrack, false, false) << endl;
-          if( abs(matchedTTTrack->momentum().phi() - tpPtr->phi()) < 0.01 &&
-              abs(matchedTTTrack->momentum().eta() - tpPtr->eta()) < 0.01 &&
-              abs( (matchedTTTrack->momentum().perp() - tpPtr->pt() ) / tpPtr->pt()) < 0.1)
+          if( fabs(matchedTTTrack->momentum().phi() - tpPtr->phi()) < 0.01 &&
+              fabs(matchedTTTrack->momentum().eta() - tpPtr->eta()) < 0.01 &&
+              fabs( (matchedTTTrack->momentum().perp() - tpPtr->pt() ) / tpPtr->pt()) < 0.1)
           {
             if(MCTruthTTTrackHandle->findTrackingParticlePtr(matchedTTTrack).isNull() ) { //we require that this ttTrack is not well matched to other particle
               ttMuonVeryLoosePt->Fill(tpPtr->pt());
@@ -2281,7 +2281,7 @@ void MuCorrelatorAnalyzer::analyze(
           if (MCTruthTTTrackHandle->isCombinatoric(l1track_ptr)) tmp_trk_combinatoric = 1;
 
           //TODO for phi  around -pi and +pi the problem is with the delta, ignoring for the moment
-          if(tpPtr->pt() > tpMinPt && abs(ttTrkPhi -  tpPtr->phi()) < 0.2 && abs(ttTrkEta - tpPtr->eta()) < 0.05) {
+          if(tpPtr->pt() > tpMinPt && fabs(ttTrkPhi -  tpPtr->phi()) < 0.2 && fabs(ttTrkEta - tpPtr->eta()) < 0.05) {
             edm::Ptr< TrackingParticle > my_tp = MCTruthTTTrackHandle->findTrackingParticlePtr(l1track_ptr);
 
             //if (DebugMode )
@@ -2344,7 +2344,7 @@ void MuCorrelatorAnalyzer::analyze(
         continue;
     }*/
 
-    if(abs(itL1MuCand->eta()) >= etaCutFrom && abs(itL1MuCand->eta() ) <= etaCutTo) {
+    if(fabs(itL1MuCand->eta()) >= etaCutFrom && fabs(itL1MuCand->eta() ) <= etaCutTo) {
     }
     else
       continue;
@@ -2385,7 +2385,7 @@ void MuCorrelatorAnalyzer::analyze(
     ttTrackEta_Pt->Fill(ttTrkEta, ttTrkPt);
 
     //do we really need the cut on the eta?
-    if(abs(ttTrkEta) >= etaCutFrom && abs(ttTrkEta) <= etaCutTo) {
+    if(fabs(ttTrkEta) >= etaCutFrom && fabs(ttTrkEta) <= etaCutTo) {
     }
     else
       continue;

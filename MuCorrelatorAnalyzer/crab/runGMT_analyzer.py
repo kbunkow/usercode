@@ -194,7 +194,7 @@ process.muCorrelatorAnalyzer= cms.EDAnalyzer("MuCorrelatorAnalyzer",
                                        L1Tk_minNStub = cms.int32(4),     # L1 tracks with >= 4 stubs
                                        TP_minNStub = cms.int32(4),       # require TP to have >= X number of stubs associated with it
                                        TP_minNStubLayer = cms.int32(4),  # require TP to have stubs in >= X layers/disks
-                                       TP_minPt = cms.double(2.0),       # only save TPs with pt > X GeV
+                                       TP_minPt = cms.double(1.0),       # only save TPs with pt > X GeV
                                        TP_maxEta = cms.double(2.4),      # only save TPs with |eta| < X
                                        TP_maxZ0 = cms.double(30.0),      # only save TPs with |z0| < X cm
                                        TP_maxRho = cms.double(30.0),     # for efficiency analysis, to not inlude the muons from the far decays 
