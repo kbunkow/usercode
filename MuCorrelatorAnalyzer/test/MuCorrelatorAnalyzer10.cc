@@ -141,6 +141,18 @@ public:
   }
 };
 
+class SingleMuAlgo_3Stubs: public TriggerAlgo {
+public:
+  SingleMuAlgo_3Stubs(double ptCut): TriggerAlgo("SingleMuAlgo_3Stubs" + std::to_string((int)ptCut), ptCut) {};
+  virtual ~SingleMuAlgo_3Stubs() {};
+
+  virtual bool accept(const l1t::TrackerMuon& muCorrelatorTrack){
+    if(muCorrelatorTrack.hwQual() >= 0 && muCorrelatorTrack.stubs().size() > 2) //&& muCorrelatorTrack.getCandidateType() == l1t::TrackerMuon::fastTrack //TODO set the quality cut !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      return true;
+    return false;
+  }
+};
+
 /*
 class SingleMuAlgo: public TriggerAlgo {
 public:
@@ -522,7 +534,17 @@ public:
     const int etaBins = 240;//96;
     const int phiBins = 360;
 
-    TFileDirectory subDir = fs->mkdir( ("EfficiencyAnalyser_" + triggerAlgo->name + "_ptGenFrom_" + std::to_string( (int)ptGenFrom) + "_ptGenTo_" + std::to_string( (int)ptGenTo)).c_str());
+    std::ostringstream ostr;
+    ostr<<ptGenFrom;
+    std::string ptGenFromStr = ostr.str();
+    std::replace(ptGenFromStr.begin(), ptGenFromStr.end(), '.', '_');
+
+    ostr.str("");
+    ostr<<ptGenTo;
+    std::string ptGenToStr = ostr.str();
+    std::replace(ptGenToStr.begin(), ptGenToStr.end(), '.', '_');
+
+    TFileDirectory subDir = fs->mkdir( ("EfficiencyAnalyser_" + triggerAlgo->name + "_ptGenFrom_" + ptGenFromStr + "_ptGenTo_" + ptGenToStr).c_str());
     //versus gen (tracking particle) pt, eta, phi
     muCandGenPtMuons = subDir.make<TH1I>("muCandGenPtMuons", "muCandGenPtMuons; pt gen; #events", ptBins, 0., 500.);
     muCandGenEtaMuons = subDir.make<TH1D>("muCandGenEtaMuons", "muCandGenEtaMuons; eta gen; #events", etaBins, -2.4, 2.4);
@@ -1366,6 +1388,7 @@ void MuCorrelatorAnalyzer::beginJob()
   std::shared_ptr<TriggerAlgo> singleMuAlgo_2StubsPtCut0 = std::make_shared<SingleMuAlgo_2Stubs>(0);
   std::shared_ptr<TriggerAlgo> singleMuAlgo_2StubsPtCut3 = std::make_shared<SingleMuAlgo_2Stubs>(3);
 
+  std::shared_ptr<TriggerAlgo> singleMuAlgo_3StubsPtCut0 = std::make_shared<SingleMuAlgo_3Stubs>(0);
 
 /*
   std::shared_ptr<TriggerAlgo> singleMuAlgoSoftCuts = std::make_shared<SingleMuAlgoSoftCuts>(20);
@@ -1440,12 +1463,26 @@ void MuCorrelatorAnalyzer::beginJob()
     efficiencyAnalysers.emplace_back(singleMuAlgo, 25, 10000, fs);
     efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 2, 5, fs);
     efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 3, 5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 2, 2.5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 2.5, 3, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 3, 4, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 4, 5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgoPtCut0, 5, 10, fs);
 
     efficiencyAnalysers.emplace_back(singleMuAlgo_2Stubs, 25, 10000, fs);
     efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 2, 5, fs);
     efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 3, 5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 2, 2.5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 2.5, 3, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 3, 4, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 4, 5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_2StubsPtCut0, 5, 10, fs);
 
-
+    efficiencyAnalysers.emplace_back(singleMuAlgo_3StubsPtCut0, 2, 2.5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_3StubsPtCut0, 2.5, 3, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_3StubsPtCut0, 3, 4, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_3StubsPtCut0, 4, 5, fs);
+    efficiencyAnalysers.emplace_back(singleMuAlgo_3StubsPtCut0, 5, 10, fs);
 /*
     efficiencyAnalysers.emplace_back(singleMuAlgoSoftCuts, 25, 10000, fs);
     efficiencyAnalysers.emplace_back(singleMuAlgoSoftCuts1, 25, 10000, fs);

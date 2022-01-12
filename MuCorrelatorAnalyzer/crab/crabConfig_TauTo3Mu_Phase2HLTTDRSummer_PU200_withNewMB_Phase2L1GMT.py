@@ -1,7 +1,7 @@
 from CRABClient.UserUtilities import config #, getUsernameFromSiteDB
 config = config()
 
-config.General.requestName = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_t207'
+config.General.requestName = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_t208'
 #config.General.workArea = 'crab_projects'
 config.General.transferOutputs = True
 config.General.transferLogs = True
@@ -22,7 +22,7 @@ config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 20
 #config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
 config.Data.publication = False
-config.Data.outputDatasetTag = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_t207'
+config.Data.outputDatasetTag = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_t208'
 config.Data.totalUnits = 247
 config.Data.ignoreLocality = False
 

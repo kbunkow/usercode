@@ -41,7 +41,8 @@ TEfficiency* makeEfficiency(const TH1& passed, const TH1& total, std::string tit
 
 void makePlots(const char* name, string label, int color, int ptCut, const char* rootFileName);
 
-int alogNumToCompare = 2; //1; //4;
+int alogNumToCompare1 = 2; //1; //4;
+int alogNumToCompare2 = 5;
 
 float ptMaxRange = 50; //for the rate plots
 
@@ -56,7 +57,7 @@ double lhcFreq = 40144896; //11264 * 3564
 
 double eventsCnt = 0;
 
-bool rebinTurnOn = true; //TODO
+bool rebinTurnOn = false; //TODO
 bool rebinEtaEff = true; //TODO
 
 int MuCorrelatorAnalyzerPlots2() {
@@ -71,6 +72,10 @@ int MuCorrelatorAnalyzerPlots2() {
   legendCompare->SetBorderSize(1);
   legendCompare->SetTextSize(0.03);
   legendCompare->SetMargin(0.2);
+
+  canvasCompare->cd(1);
+  canvasCompare->cd(1)->SetGridx();
+  canvasCompare->cd(1)->SetGridy();
 
   canvasCompare->cd(2);
   canvasCompare->cd(2)->SetGridx();
@@ -232,7 +237,7 @@ int MuCorrelatorAnalyzerPlots2() {
 
   //makePlots("DYToLL_PU200_t204", "DYToLL PU200 t204",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t204/results/muCorrelatorTTAnalysis1.root");
   //makePlots("JPsiToMuMu_PU200_t204", "JPsiToMuMu PU200 t204",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t204/results/muCorrelatorTTAnalysis1.root");
-  makePlots("MinBias_PU200_t204", "MinBias PU200 t204",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t204/results/muCorrelatorTTAnalysis1.root");
+  //makePlots("MinBias_PU200_t204", "MinBias PU200 t204",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_MinBias_Summer20_PU200_t204/results/muCorrelatorTTAnalysis1.root");
 
   //makePlots("DYToLL_PU200_t205", "DYToLL PU200 t205",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t205/results/muCorrelatorTTAnalysis1.root");
   //makePlots("JPsiToMuMu_PU200_t205", "JPsiToMuMu PU200 t205",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t205/results/muCorrelatorTTAnalysis1.root");
@@ -241,10 +246,10 @@ int MuCorrelatorAnalyzerPlots2() {
   //makePlots("TauTo3Mu_PU140_t206", "TauTo3Mu PU200 t206",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU140_withNewMB_t206/results/muCorrelatorTTAnalysis1.root");
   //makePlots("TauTo3Mu_PU200_t206", "TauTo3Mu PU200 t206",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_t206/results/muCorrelatorTTAnalysis1.root");
 
-  //makePlots("DYToLL_PU200_t205", "DYToLL PU200 t205",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t205/results/muCorrelatorTTAnalysis1.root");
+  //makePlots("DYToLL_PU200_t207", "DYToLL PU200 t207",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org_MC_analysis_DYToLL_M-50_Summer20_PU200_t207/results/muCorrelatorTTAnalysis1.root");
   //makePlots("JPsiToMuMu_PU200_t207", "JPsiToMuMu PU200 t207",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_org__MC_analysis_JPsiToMuMu_Summer20_PU200_t207/results/muCorrelatorTTAnalysis1.root");
-  makePlots("MinBias_PU200_t207", "MinBias PU200 t207",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_MC_analysis_MinBias_Summer20_PU200_t207/results/muCorrelatorTTAnalysis1.root");
-  //makePlots("TauTo3Mu_PU200_t207", "TauTo3Mu PU200 t207",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_t207/results/muCorrelatorTTAnalysis1.root");
+  //makePlots("MinBias_PU200_t207", "MinBias PU200 t207",   kRed,       ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_MC_analysis_MinBias_Summer20_PU200_t207/results/muCorrelatorTTAnalysis1.root");
+  makePlots("TauTo3Mu_PU200_t207", "TauTo3Mu PU200 t207",   kRed, ptCut,  "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/usercode/MuCorrelatorAnalyzer/crab/crab_Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_t207/results/muCorrelatorTTAnalysis1.root");
 
 
 /*
@@ -281,15 +286,15 @@ void makePlots(const char* name, string label, int color, int ptCut, const char*
 
   //makeEffVsBeta(omtfTTAnalyzerDir, name);
 
-  makeCandidatesMatchingPlots(omtfTTAnalyzerDir, name, eventsCnt);
+  //makeCandidatesMatchingPlots(omtfTTAnalyzerDir, name, eventsCnt);
 
-  //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, ptCut);
+  makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, ptCut);
 
   //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, 2);
   //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, 10);
   //makeEfficiencyPlots(omtfTTAnalyzerDir, name, label, color, 20);
 
-  makeRatePlots(omtfTTAnalyzerDir, name, color, ptCut);
+  //makeRatePlots(omtfTTAnalyzerDir, name, color, ptCut);
 }
 
 void savePlot(string name, TVirtualPad* orgianlPad) {
@@ -707,12 +712,12 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
 
         canvasCompare->cd(2);
 
-        if(compareFirst) {
+        if( (algoNum == alogNumToCompare1) && compareFirst)  {
           ttMuon_vs_ptGen_Ev0_Eff->Draw("APZ");
           legendCompare->AddEntry(ttMuon_vs_ptGen_Ev0_Eff , "Tracking Trigger Track", "lep");
         }
 
-        if(algoNum == alogNumToCompare)
+        if(algoNum == alogNumToCompare1 || algoNum == alogNumToCompare2)
         {
           //muCand_vs_ptGen_Ev0_Eff->SetMarkerColor(colorCompare);
           muCand_vs_ptGen_Ev0_Eff->Draw("same PZ");
@@ -745,18 +750,24 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
         canvas1Eff->cd(3)->SetGridx();
         canvas1Eff->cd(3)->SetGridy();
 
-        TH2I* ptGenPtMuCandMuonsEv0Overlap = (TH2I*)subdir->Get("ptGenPtMuCandMuonsEv0Overlap;1");
-        TH1* ptGenPtMuCandMuonsEv0OverlapNom = ptGenPtMuCandMuonsEv0Overlap->ProjectionX("ptGenPtMuCandMuonsEv0OverlapNom", ptGenPtMuCandMuonsEv0Overlap->GetYaxis()->FindBin(ptCut), -1);
-        TH1* ptGenPtMuCandMuonsEv0OverlapDenom = ptGenPtMuCandMuonsEv0Overlap->ProjectionX("ptGenPtMuCandMuonsEv0OverlapDenom", 0, -1);
+        std::string region = "Endcap";
+        TH2I* ptGenPtMuCandMuonsEv0Overlap = (TH2I*)subdir->Get( ("ptGenPtMuCandMuonsEv0" + region + ";1").c_str() );
+        TH1* ptGenPtMuCandMuonsEv0OverlapNom = ptGenPtMuCandMuonsEv0Overlap->ProjectionX(("ptGenPtMuCandMuonsEv0" + region + "Nom").c_str(), ptGenPtMuCandMuonsEv0Overlap->GetYaxis()->FindBin(ptCut), -1);
+        TH1* ptGenPtMuCandMuonsEv0OverlapDenom = ptGenPtMuCandMuonsEv0Overlap->ProjectionX(("ptGenPtMuCandMuonsEv0" + region + "pDenom").c_str(), 0, -1);
 
         if(rebinTurnOn) {
           ptGenPtMuCandMuonsEv0OverlapNom = ptGenPtMuCandMuonsEv0OverlapNom->Rebin(2, (string(ptGenPtMuCandMuonsEv0OverlapNom->GetName() )+ "_rebin2").c_str() );
           ptGenPtMuCandMuonsEv0OverlapDenom = ptGenPtMuCandMuonsEv0OverlapDenom->Rebin(2, (string(ptGenPtMuCandMuonsEv0OverlapDenom->GetName() )+ "_rebin2").c_str() );
         }
 
-        title = ("muCand efficiency overlap region, Event 0, pT cut = " + to_string(ptCut) + " GeV" + "; generated p_{T} [GeV]; efficiency");
+        title = ("muCand efficiency " + region + " region, Event 0, pT cut = " + to_string(ptCut) + " GeV" + "; generated p_{T} [GeV]; efficiency");
         TEfficiency* muCandEv0Overlap_EffVsPtGen = makeEfficiency(*ptGenPtMuCandMuonsEv0OverlapNom, *ptGenPtMuCandMuonsEv0OverlapDenom, title, kRed);
-        muCandEv0Overlap_EffVsPtGen->Draw("APZ");
+
+        muCandEv0Overlap_EffVsPtGen->SetMarkerStyle(23);
+        muCandEv0Overlap_EffVsPtGen->SetMarkerSize(0.7);
+        muCandEv0Overlap_EffVsPtGen->SetMarkerColor(colorCompare);
+        muCandEv0Overlap_EffVsPtGen->SetLineColor(colorCompare);
+        muCandEv0Overlap_EffVsPtGen->Draw("same PZ");
 
         DrawLabel(canvas1Eff->cd(3), label);
         savePlot(canvasName + "_effVsPt", canvas1Eff->cd(3) );
@@ -765,6 +776,15 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
         string fileName1 = (plotsDir + "/" + dirName + "_" + muCandEv0Overlap_EffVsPtGen->GetName() + "_ptCut_" + to_string(ptCut) + string(".root"));
         cout<<"saving hist as "<<fileName1<<endl;
         muCandEv0Overlap_EffVsPtGen->SaveAs(fileName1.c_str() );
+
+        if(algoNum == alogNumToCompare1 || algoNum == alogNumToCompare2)
+        {
+          canvasCompare->cd(1);
+          if(compareFirst)
+            muCandEv0Overlap_EffVsPtGen->Draw("APZ");
+          else
+            muCandEv0Overlap_EffVsPtGen->Draw("same PZ");
+        }
 
         //--------------------------------
 
@@ -820,7 +840,7 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
             ttMuonEta_ptCut_Eff->SetTitle((title + "; generated #eta; efficiency").c_str());
             canvas1Eff->Update();
 
-            if(alogNumToCompare == 1 || alogNumToCompare == 4)
+            if(alogNumToCompare1 == 1 || alogNumToCompare1 == 4)
               ttMuonEta_ptCut_Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.8, 1.05);
             else
               ttMuonEta_ptCut_Eff->GetPaintedGraph()->GetYaxis()->SetRangeUser(0.0, 1.05);
@@ -830,7 +850,7 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
 
             leg->AddEntry(ttMuonEta_ptCut_Eff , "Tracking Trigger Track", "lep");
 
-            if(algoNum == alogNumToCompare && compareFirst) {
+            if( (algoNum == alogNumToCompare1 || algoNum == alogNumToCompare2) && compareFirst) {
               canvasCompare->cd(4);
               ttMuonEta_ptCut_Eff->Draw("APZ");
               //legendCompare->AddEntry(ttMuonEta_ptCut_Eff , "Tracking Trigger Track", "lep");
@@ -855,10 +875,14 @@ void makeEfficiencyPlots(TDirectory* omtfTTAnalyzerDir, const char* nameLegend, 
             cout<<"saving hist as "<<fileName1<<endl;
             muCandGenEtaMuons_ptCut_Eff->SaveAs(fileName1.c_str() );
 
-            if(algoNum == alogNumToCompare) {
+            if(algoNum == alogNumToCompare1 || algoNum == alogNumToCompare2) {
               canvasCompare->cd(4);
               muCandGenEtaMuons_ptCut_Eff->Draw("same PZ");
               //legendCompare->AddEntry(muCandGenEtaMuons_ptCut_Eff , (string("Track + Stubs ") + label).c_str(), "lep");
+
+              colorCompare++;
+              if(colorCompare == 4)
+                colorCompare+=2;
             }
 
             {
