@@ -201,6 +201,7 @@ void MuonMatcher::saveHists() {
 
 
 TrajectoryStateOnSurface MuonMatcher::atStation2(FreeTrajectoryState ftsStart, float eta) const {
+  eta = 0; //fix me!!!!! in case of displaced muon the vertex eta has no sense
   ReferenceCountingPointer<Surface> rpc;
   if (eta < -1.24)  //negative endcap, RE2
     rpc = ReferenceCountingPointer<Surface>(
@@ -337,7 +338,7 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
   MatchingResult result(simTrack);
 
   double candGloablEta  = muonCand->hwEta() * 0.010875;
-  //if( abs(simTrack.momentum().eta() - candGloablEta ) < 0.3 ) TODO  in principle can be replaced by using atMB1 !!!!!!!!!!!!!!!!!!!!!!!! check!!!!!!!!!!!!!!!
+  //if( abs(simTrack.momentum().eta() - candGloablEta ) < 0.3 ) TODO  in principle is replaced by using atMB1 !!!!!!!!!!!!!!!!!!!!!!!! check!!!!!!!!!!!!!!!
   {
     double candGlobalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( muonCand->hwPhi(), muonCand->trackFinderType(), muonCand->processor() );
     candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
@@ -369,6 +370,9 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
     if(simTrack.momentum().pt() > 100)
       treshold = 20. * sigma;
 
+    if(simTrack.momentum().pt() > 20) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!!
+      treshold = 0.6;
+
     if( abs(result.deltaPhi - mean) < treshold)
       result.result = MatchingResult::ResultType::matched;
 
@@ -396,7 +400,8 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const T
   MatchingResult result(trackingParticle);
 
   double candGloablEta  = muonCand->hwEta() * 0.010875;
-  if( abs(trackingParticle.momentum().eta() - candGloablEta ) < 0.3 ) {
+  //if( abs(trackingParticle.momentum().eta() - candGloablEta ) < 0.3 ) TODO  in principle is replaced by using atMB1 !!!!!!!!!!!!!!!!!!!!!!!! check!!!!!!!!!!!!!!!
+  {
     double candGlobalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( muonCand->hwPhi(), muonCand->trackFinderType(), muonCand->processor() );
     candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
 
@@ -565,6 +570,16 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
       continue; //no sense to do matching
     }
 
+    //checking if the propagated track is inside the OMTF range, TODO - tune the range!!!!!!!!!!!!!!!!!
+    //eta 0.7 is the beginning of the MB2,
+    //this complates the cut from atMB1
+    if( (fabs( tsof.globalPosition().eta()) >= 0.7 ) && (fabs( tsof.globalPosition().eta()) <= 1.3) ) {
+      LogTrace("l1tOmtfEventPrint") << "CandidateSimMuonMatcher::match trackingParticle IS in OMTF region, matching to the omtfCands";
+    }
+    else {
+      LogTrace("l1tOmtfEventPrint") << "trackingParticle NOT in OMTF region ";
+      continue;
+    }
 
     double ptGen = simTrack.momentum().pt();
     if(ptGen >= deltaPhiVertexProp->GetXaxis()->GetXmax())
@@ -602,6 +617,9 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
       trackingParticle->addG4Track(simTrack);
       result.trackingParticle = trackingParticle;*/
 
+      result.propagatedPhi = tsof.globalPosition().phi() ;
+      result.propagatedEta = tsof.globalPosition().eta() ;
+
       int vtxInd = simTrack.vertIndex();
       if (vtxInd >= 0) {
         result.simVertex = &(simVertices->at(vtxInd));
@@ -637,6 +655,16 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
       MatchingResult result;
       result.result = MatchingResult::ResultType::propagationFailed;
       continue; //no sense to do matching
+    }
+
+    //checking if the propagated track is inside the OMTF range, TODO - tune the range!!!!!!!!!!!!!!!!!
+    //eta 0.7 is the beginning of the MB2,
+    if( (fabs( tsof.globalPosition().eta()) >= 0.7 ) && (fabs( tsof.globalPosition().eta()) <= 1.3) ) {
+      LogTrace("l1tOmtfEventPrint") << "CandidateSimMuonMatcher::match trackingParticle IS in OMTF region, matching to the omtfCands";
+    }
+    else {
+      LogTrace("l1tOmtfEventPrint") << "trackingParticle NOT in OMTF region ";
+      continue;
     }
 
     double ptGen = trackingParticle.pt();

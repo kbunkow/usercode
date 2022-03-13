@@ -88,8 +88,8 @@ else :
 
 
 #histFile = TFile( '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis2_eff_SingleMu_tt10_displ_test.root' ) # displaced
-histFile = TFile( '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis2_eff_SingleMu_tt10_test_50files.root' )
-
+#histFile = TFile( '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis2_eff_SingleMu_tt10_test_50files.root' )
+histFile = TFile( '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis2_eff_SingleMu_t115_allFiles.root' )
 
 #if "_t1" in version :
 #    omtf_type = 2018
@@ -190,13 +190,20 @@ def makeEfficiencyPlots(ptCutGev, platCutGev, lineColor) :
     #omtf_q12_allCandsEta__qualityCut_12_ptGenCut_10
 #omtf_q12_allCandsEta__qualityCut_12_ptGenCut_25
 #omtf_q12_aceptedCandsEta__qualityCut_12_ptGenCut_25_ptL1Cut_20
-    
+#omtf_q12_allCandsEta__qualityCut_12_ptGenCut_25
+#omtf_q12_aceptedCandsEta__qualityCut_12_ptGenCut_25_ptL1Cut_18
+#omtf_q12_aceptedCandsEta__qualityCut_12_ptGenCut_25_ptL1Cut_20    
     ####################eff vs eta
-    allCandsEtaName = ptGenVsPtCand.GetName().replace("ptGenVsPtCand_eta_0.82_1.24", "allCandsEta_") + "_ptGenCut_25"
-    #print ("allCandsEtaName " + allCandsEtaName)
+    allCandsEtaName = ptGenVsPtCand.GetName().replace("ptGenVsPtCand_eta_0.82_1.24", "allCandsEta_")
+    allCandsEtaName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_eta_0_3", "allCandsEta_")
+    allCandsEtaName = allCandsEtaName + "_ptGenCut_25"
+    print ("allCandsEtaName " + allCandsEtaName)
     allCandsEta = efficiencyDir.Get(allCandsEtaName)
     
-    aceptedCandsEtaName = ptGenVsPtCand.GetName().replace("ptGenVsPtCand_eta_0.82_1.24", "aceptedCandsEta_") + "_ptGenCut_25_ptL1Cut_20"
+    aceptedCandsEtaName = ptGenVsPtCand.GetName().replace("ptGenVsPtCand_eta_0.82_1.24", "aceptedCandsEta_")   
+    aceptedCandsEtaName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_eta_0_3", "aceptedCandsEta_")   
+    aceptedCandsEtaName = aceptedCandsEtaName + "_ptGenCut_25_ptL1Cut_18"
+    print ("aceptedCandsEtaName " + aceptedCandsEtaName)
         
     aceptedCandsEta = efficiencyDir.Get(aceptedCandsEtaName)
     if not aceptedCandsEta :
@@ -314,8 +321,9 @@ for iAlgo, canvas in enumerate(canvases ) :
     efficienciesHist2[iAlgo].Write()
     #if outFile.FindObject(efficienciesVsEta[iAlgo].GetName() ) == None :
     if efficienciesVsEta.__len__() > 0:
-        if (iAlgo == 0) or (efficienciesVsEta[iAlgo].GetName() != efficienciesVsEta[iAlgo -1].GetName() ) :
-            efficienciesVsEta[iAlgo].Write()
+        if(iAlgo < efficienciesVsEta.__len__() ):
+            if (iAlgo == 0) or (efficienciesVsEta[iAlgo].GetName() != efficienciesVsEta[iAlgo -1].GetName() ) :
+                efficienciesVsEta[iAlgo].Write( )
         
     canvas.Write()
     

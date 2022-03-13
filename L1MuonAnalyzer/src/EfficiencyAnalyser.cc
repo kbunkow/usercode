@@ -131,8 +131,10 @@ void EfficiencyVsEta::fill(double ptGen, double etaGen, double phiGen, double dx
 
 
 
-EfficiencyPtGenVsDxy::EfficiencyPtGenVsDxy(TFileDirectory& subDir, std::string name, int qualityCut, double ptL1Cut, int nBinsPt, int nBinsDxy, bool ifPtBelowCut, bool useUpt):
-    EfficiencyAnalyser(useUpt), qualityCut(qualityCut), ptL1Cut(ptL1Cut), ifPtBelowCut(ifPtBelowCut) {
+EfficiencyPtGenVsDxy::EfficiencyPtGenVsDxy(TFileDirectory& subDir, std::string name, //double etaFrom, double etaTo,
+    int qualityCut, double ptL1Cut, int nBinsPt, int nBinsDxy, bool ifPtBelowCut, bool useUpt):
+    EfficiencyAnalyser(useUpt), //etaFrom(etaFrom), etaTo(etaTo),
+    qualityCut(qualityCut), ptL1Cut(ptL1Cut), ifPtBelowCut(ifPtBelowCut) {
   std::ostringstream histName;
 
   string ptPrefix = this->useUpt ? "upt" : "pt";
@@ -175,16 +177,19 @@ void EfficiencyPtGenVsDxy::fill(double ptGen, double etaGen, double phiGen, doub
   if(ptGen >= allCands->GetXaxis()->GetXmax())
     ptGen = allCands->GetXaxis()->GetXmax() - 0.01;
 
-  allCands->Fill(ptGen, dxyGen);
+  //if( (etaFrom <= fabs(etaGen) ) && (fabs(etaGen) <= etaTo) )
+  {
+    allCands->Fill(ptGen, dxyGen);
 
-  double candPt = useUpt ? l1MuonCand.uptGev : l1MuonCand.ptGev;
-  if(l1MuonCand.hwQual >= qualityCut && candPt >=  ptL1Cut) {
-    if(ifPtBelowCut) {
-      if(l1MuonCand.ptGev < ptL1Cut)
+    double candPt = useUpt ? l1MuonCand.uptGev : l1MuonCand.ptGev;
+    if(l1MuonCand.hwQual >= qualityCut && candPt >=  ptL1Cut) {
+      if(ifPtBelowCut) {
+        if(l1MuonCand.ptGev < ptL1Cut)
+          aceptedCands->Fill(ptGen, dxyGen);
+      }
+      else
         aceptedCands->Fill(ptGen, dxyGen);
     }
-    else
-      aceptedCands->Fill(ptGen, dxyGen);
   }
 }
 
