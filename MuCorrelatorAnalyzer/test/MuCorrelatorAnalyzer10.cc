@@ -153,6 +153,18 @@ public:
   }
 };
 
+class SingleMuAlgo_4Stubs: public TriggerAlgo {
+public:
+  SingleMuAlgo_4Stubs(double ptCut): TriggerAlgo("SingleMuAlgo_4Stubs" + std::to_string((int)ptCut), ptCut) {};
+  virtual ~SingleMuAlgo_4Stubs() {};
+
+  virtual bool accept(const l1t::TrackerMuon& muCorrelatorTrack){
+    if(muCorrelatorTrack.hwQual() >= 0 && muCorrelatorTrack.stubs().size() > 3) //&& muCorrelatorTrack.getCandidateType() == l1t::TrackerMuon::fastTrack //TODO set the quality cut !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      return true;
+    return false;
+  }
+};
+
 /*
 class SingleMuAlgo: public TriggerAlgo {
 public:
@@ -1389,6 +1401,7 @@ void MuCorrelatorAnalyzer::beginJob()
   std::shared_ptr<TriggerAlgo> singleMuAlgo_2StubsPtCut3 = std::make_shared<SingleMuAlgo_2Stubs>(3);
 
   std::shared_ptr<TriggerAlgo> singleMuAlgo_3StubsPtCut0 = std::make_shared<SingleMuAlgo_3Stubs>(0);
+  std::shared_ptr<TriggerAlgo> singleMuAlgo_4StubsPtCut0 = std::make_shared<SingleMuAlgo_4Stubs>(0);
 
 /*
   std::shared_ptr<TriggerAlgo> singleMuAlgoSoftCuts = std::make_shared<SingleMuAlgoSoftCuts>(20);
@@ -1436,6 +1449,8 @@ void MuCorrelatorAnalyzer::beginJob()
   if(analysisType == "rate") {
     rateAnalysers.emplace_back(singleMuAlgo, fs);
     rateAnalysers.emplace_back(singleMuAlgo_2Stubs, fs);
+    rateAnalysers.emplace_back(singleMuAlgo_3StubsPtCut0, fs);
+    rateAnalysers.emplace_back(singleMuAlgo_4StubsPtCut0, fs);
 /*
     rateAnalysers.emplace_back(singleMuAlgoSoftCuts, fs);
     rateAnalysers.emplace_back(singleMuAlgoSoftCuts1, fs);
@@ -1533,6 +1548,10 @@ void MuCorrelatorAnalyzer::beginJob()
   muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_2StubsPtCut0, fs));
   muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_2StubsPtCut10, fs));
   muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_2Stubs, fs));
+
+
+  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_3StubsPtCut0, fs));
+  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgo_4StubsPtCut0, fs));
 
 /*  muCandsMatchingAnalyzers.emplace_back(std::make_unique<MuCandsMatchingAnalyzer>(singleMuAlgoBarrelPtCut10, fs));
 

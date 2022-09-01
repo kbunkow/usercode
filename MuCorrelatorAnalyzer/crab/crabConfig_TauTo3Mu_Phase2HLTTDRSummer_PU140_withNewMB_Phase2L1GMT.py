@@ -1,7 +1,7 @@
 from CRABClient.UserUtilities import config #, getUsernameFromSiteDB
 config = config()
 
-config.General.requestName = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU140_withNewMB_t206'
+config.General.requestName = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU140_withNewMB_t208'
 #config.General.workArea = 'crab_projects'
 config.General.transferOutputs = True
 config.General.transferLogs = True
@@ -19,10 +19,10 @@ config.Data.inputDataset = '/DsToTauTo3Mu_TuneCP5_14TeV-pythia8/Phase2HLTTDRSumm
 
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 50
+config.Data.unitsPerJob = 30
 #config.Data.outLFNDirBase = '/store/user/%s/' % (getUsernameFromSiteDB())
 config.Data.publication = False
-config.Data.outputDatasetTag = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU140_withNewMB_t206'
+config.Data.outputDatasetTag = 'Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU140_withNewMB_t208'
 config.Data.totalUnits = 534
 config.Data.ignoreLocality = False
 
