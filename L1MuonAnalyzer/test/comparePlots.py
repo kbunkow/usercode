@@ -36,7 +36,7 @@ gStyle.SetOptTitle(0);
 # leg -> SetHeader("here is a beautiful header")
 
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/usercode/L1MuonAnalyzer/test/'
-plotsDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre3/src/usercode/L1MuonAnalyzer/test/'
+plotsDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/usercode/L1MuonAnalyzer/test/'
 
 first = True
 
@@ -58,7 +58,8 @@ def drawEff(canvas, effFile, type, quality, ptCut, lineColor, legend, pTresh = "
         if type == "nn_omtf" :
             histName = type + "_q" + quality + "_pTresh_" + pTresh + "_efficiency_eta_0_3_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"
         elif type == "omtf_extrp" :
-            histName = type + "_q" + quality + "_pTresh_" + pTresh + "_efficiency_eta_0.82_1.24_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"    
+            #histName = type + "_q" + quality + "_pTresh_" + pTresh + "_efficiency_eta_0.82_1.24_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"
+            histName = "omtf" + "_q" + quality + "_pt_efficiency_eta_0_3_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"    
         else :
             histName = type + "_q" + quality + "_efficiency_eta_0.82_1.24_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"    
             #omtf_q12_efficiency_eta_0.82_1.24_qualityCut_12_ptCut_18_GeV
@@ -69,7 +70,9 @@ def drawEff(canvas, effFile, type, quality, ptCut, lineColor, legend, pTresh = "
     effHist = effFile.Get(histName)
     if effHist is None :
         print ("no histogram found: ", histName)
-    
+    else :
+        print ("ploting histogram: ", histName)
+        
     canvas.cd(1)       
     
     effHist.SetLineColor(lineColor)
@@ -164,6 +167,8 @@ def drawEffVsEta(effFile, type, quality, lineColor, pTresh = "0.5") :
     
     if type == "nn_omtf" :
         effHistName = type + "_q" + quality + "_pTresh_" + pTresh + "_efficiencyVsEta__qualityCut_" + quality + "_ptGenCut_25"
+    elif type == "omtf_extrp" :
+        effHistName = "omtf" + "_q" + quality + "_efficiencyVsEta__qualityCut_" + quality + "_ptGenCut_25"
     else :
         effHistName = type + "_q" + quality + "_efficiencyVsEta__qualityCut_" + quality + "_ptGenCut_25"
         #omtf_q12_eta_0.82_1.24_qualityCut_12_effOnPtCut_20_GeV_1
@@ -450,6 +455,7 @@ doLogScale = False
 #drawEffs('SingleMu_t125/', "omtf", "12", kGreen+1)
 #drawEffs('SingleMu_t126/', "omtf", "12", kRed)
 drawEffs('SingleMu_t127/', "omtf", "12", kBlue)
+drawEffs('SingleMu_t115/', "omtf_extrp", "12", kRed)
 
 
 #drawEffs('SingleMu_Extr_t10/', "omtf_extrp", "12", kRed)
@@ -576,8 +582,8 @@ legend.SetMargin(0.2)
 #drawRate('run3_ZeroBias_Run2018D_t115_HW/', "omtf", "12", kBlack)
 #drawRate('run3_ZeroBias_Run2018D_t115_Phase1/', "omtf", "12", kBlue)
 
-drawRate('run3_ZeroBias_Run2018D_t127_HW/', "omtf", "12", kBlack)
-drawRate('run3_ZeroBias_Run2018D_t127_Phase1/', "omtf", "12", kRed)
+#drawRate('run3_ZeroBias_Run2018D_t127_HW/', "omtf", "12", kBlack)
+#drawRate('run3_ZeroBias_Run2018D_t127_Phase1/', "omtf", "12", kRed)
 
 
 legend.Draw()

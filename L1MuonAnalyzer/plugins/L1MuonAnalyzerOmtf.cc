@@ -324,7 +324,9 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
       std::bitset<18> layerHitBits(layerHits);
 
       LogTrace("l1MuonAnalyzerOmtf")<<" bx "<<bx
-          << " hwPt " <<std::setw(3)<< finalCandidate.hwPt() << " hwSign " << finalCandidate.hwSign() << " hwQual "
+          << " hwPt " <<std::setw(3)<< finalCandidate.hwPt()
+          << " hwUPt " <<std::setw(3)<< finalCandidate.hwPtUnconstrained()
+          << " hwSign " << finalCandidate.hwSign() << " hwQual "
           <<std::setw(2)<< finalCandidate.hwQual() << " hwEta " << std::setw(4) << finalCandidate.hwEta() << std::setw(4) << " hwPhi "
           << finalCandidate.hwPhi() << "    eta " << std::setw(9) << (finalCandidate.hwEta() * 0.010875) << " phi "
           //<< std::setw(9) << globalPhi << " "
@@ -369,10 +371,11 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
     }
 
     if(matchUsingPropagation) {
+      bool checkIsInW2MB1 =  true; //TODO!!!!!!!!!!!!!!!!
       if(!trackingParticleToken.isUninitialized())
         matchingResults = muonMatcher.match(ghostBustedCands, trackingParticleHandle.product(), trackParticleFilter);
       else if(!simTrackToken.isUninitialized())
-        matchingResults = muonMatcher.match(ghostBustedCands, simTraksHandle.product(), simVertices.product(), simTrackFilter, true);
+        matchingResults = muonMatcher.match(ghostBustedCands, simTraksHandle.product(), simVertices.product(), simTrackFilter, checkIsInW2MB1);
     }
     else {
       if(fillMatcherHists) {
@@ -448,17 +451,17 @@ void L1MuonAnalyzerOmtf::analyzeEfficiency(const edm::Event& event, std::vector<
 
       muDxy = abs(muDxy);
       LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze, sim track type "<<matchingResult.pdgId<<" simTrack pt "<<matchingResult.genPt
-          <<" muDxy "<<muDxy<<std::endl;
+          <<" muDxy "<<muDxy<<" propagatedEta "<<matchingResult.propagatedEta<<std::endl;
 
       for(auto& efficiencyAnalyser : omtfEfficiencyAnalysers) {
-        efficiencyAnalyser->fill(matchingResult.genPt, matchingResult.genEta, matchingResult.genPhi, muDxy, l1MuonCand);
+        efficiencyAnalyser->fill(matchingResult.genPt, matchingResult.propagatedEta, matchingResult.propagatedPhi, muDxy, l1MuonCand); //TODO
       }
 
       for(unsigned int i = 0; i < omtfNNEfficiencyAnalysers.size(); i++) {
         if(matchingResult.muonCand) {
           l1MuonCand.ptGev = fabs(hwPtToPtGeV(matchingResult.muonCand->trackAddress().at(10 + i/9) ) ); //TODO check if abs is in the proper place, TODO i/2 because there are 2 Analysers, change if toehre addeds
         }
-        omtfNNEfficiencyAnalysers[i]->fill(matchingResult.genPt, matchingResult.genEta, matchingResult.genPhi, muDxy, l1MuonCand);
+        omtfNNEfficiencyAnalysers[i]->fill(matchingResult.genPt, matchingResult.propagatedEta, matchingResult.propagatedPhi, muDxy, l1MuonCand); //TODO
       }
     }
   }

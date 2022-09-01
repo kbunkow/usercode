@@ -96,7 +96,8 @@ private:
 
 class EfficiencyPtGenVsDxy : public EfficiencyAnalyser {
 public:
-  EfficiencyPtGenVsDxy(TFileDirectory& subDir, std::string name, int qualityCut, double ptL1Cut, int nBinsPt, int nBinsDxy, bool ifPtBelowCut, bool useUpt = false);
+  EfficiencyPtGenVsDxy(TFileDirectory& subDir, std::string name, //double etaFrom, double etaTo,
+      int qualityCut, double ptL1Cut, int nBinsPt, int nBinsDxy, bool ifPtBelowCut, bool useUpt = false);
 
   virtual ~EfficiencyPtGenVsDxy();
 
@@ -104,6 +105,9 @@ public:
 
   virtual void write();
 private:
+  double etaFrom = 0;
+  double etaTo = 0;
+
   int qualityCut = 0;
 
   double ptL1Cut = 0;
