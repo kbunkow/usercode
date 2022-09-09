@@ -1908,6 +1908,8 @@ void MuCorrelatorAnalyzer::analyze(
   event.getByToken(inputMuCorr, muCorrTracksHandle);
   auto muCorrTracks = muCorrTracksHandle.product();
 
+  edm::LogImportant("l1tMuBayesEventPrint")<<"muCorrTracks->size() "<<muCorrTracks->size();
+
   //int bxNumber = 0;
 
   //hscpAnalysis(trackingParticleHandle, muCorrTracksHandle);

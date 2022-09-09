@@ -42,7 +42,7 @@ if verbose:
        categories        = cms.untracked.vstring('gmtDataDumper', 'phase2L1GMT', 'MuonStub', "TrackerMuon", 'ConvertedTTTrack', "l1tMuBayesEventPrint"), #, "l1tMuBayesEventPrint"
        muCorrelatorEventPrint = cms.untracked.PSet(    
                          extension = cms.untracked.string('.txt'),                
-                         threshold = cms.untracked.string('INFO'),
+                         threshold = cms.untracked.string('DEBUG'),
                          default = cms.untracked.PSet( limit = cms.untracked.int32(0) ), 
                          #INFO   =  cms.untracked.int32(0),
                          #DEBUG   = cms.untracked.int32(0),
@@ -54,7 +54,7 @@ if verbose:
                          l1tMuBayesEventPrint = cms.untracked.PSet( limit = cms.untracked.int32(100000000) ),
                        ),
        #debugModules = cms.untracked.vstring('gmtMuons', 'gmtMuons.trackMatching', 'trackMatching', 'Phase2L1TGMTProducer:gmtMuons', 'Phase2L1TGMTProducer') 
-       debugModules = cms.untracked.vstring('*')
+       debugModules = cms.untracked.vstring('muCorrelatorAnalyzer')
     )
 
     #process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
@@ -82,11 +82,41 @@ process.source = cms.Source("PoolSource",
 #'/store/mc/Phase2HLTTDRWinter20DIGI/DYToLL_M-50_TuneCP5_14TeV-pythia8/GEN-SIM-DIGI-RAW/PU200_pilot_110X_mcRun4_realistic_v3-v2/10000/01708416-15F1-5B47-A8A0-B32D355622DB.root'
    
 #"/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/DYToLL_M-50_TuneCP5_14TeV-pythia8/FEVT/NoPU_pilot_111X_mcRun4_realistic_T15_v1-v1/100000/0018FD1C-F75F-9E4A-A329-1E671A1CA267.root"   
-'file:///afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/L1Trigger/Phase2L1GMT/test/Phase2HLTTDRSummer20_DYToLL_M-50_noPU_0018FD1C-F75F-9E4A-A329-1E671A1CA267_1000Ev.root'
+#'file:///afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/L1Trigger/Phase2L1GMT/test/Phase2HLTTDRSummer20_DYToLL_M-50_noPU_0018FD1C-F75F-9E4A-A329-1E671A1CA267_1000Ev.root'
+'file:///eos/home-k/kbunkow/cms_data/mc/PhaseIISpring22/PhaseIISpring22DRMiniAOD_DYToLL_M-10To50_noPU_40000_04216b41-07a8-4ec9-a1c3-a24cda929b74_2000Ev.root'
      
       ) ),
-    secondaryFileNames = cms.untracked.vstring()
+    secondaryFileNames = cms.untracked.vstring(),
 #                            skipEvents=cms.untracked.uint32(36)
+    inputCommands=cms.untracked.vstring(
+          'keep *',
+          # 'drop l1tEMTFHit2016Extras_simEmtfDigis_CSC_HLT',
+          # 'drop l1tEMTFHit2016Extras_simEmtfDigis_RPC_HLT',
+          # 'drop l1tEMTFHit2016s_simEmtfDigis__HLT',
+          # 'drop l1tEMTFTrack2016Extras_simEmtfDigis__HLT',
+          # 'drop l1tEMTFTrack2016s_simEmtfDigis__HLT',
+          # 'drop l1tHGCalClusterBXVector_hgcalTriggerPrimitiveDigiProducer_cluster2D_HLT',
+          # 'drop *HGCal*_*_*_*',
+          # 'drop *hgcal*_*_*_*',
+          # 'drop *Ecal*_*_*_*',
+          # 'drop *Hcal*_*_*_*',
+          # 'drop *Calo*_*_*_*',
+          #
+          # 'drop *_*HGCal*_*_*',
+          # 'drop *_*hgcal*_*_*',
+          # 'drop *_*Ecal*_*_*',
+          # 'drop *_*Hcal*_*_*',
+          # 'drop *_*Calo*_*_*',
+          #
+          # 'drop *_*_*HGCal*_*',
+          # 'drop *_*_*hgcal*_*',
+          # 'drop *_*_*Ecal*_*',
+          # 'drop *_*_*Hcal*_*',
+          # 'drop *_*_*Calo*_*',
+          #
+          # 'drop l1tPFCandidates_*_*_*',
+          'drop l1tTkPrimaryVertexs_L1TkPrimaryVertex__RECO'
+          )
 )
 
 process.options = cms.untracked.PSet(
@@ -179,7 +209,7 @@ for a in sys.argv :
         analysisType = a
         break;
 
-print "analysisType=" + analysisType
+print ("analysisType=" + analysisType)
 
 process.muCorrelatorAnalyzer= cms.EDAnalyzer("MuCorrelatorAnalyzer", 
                                  outRootFile = cms.string("muCorrelatorTTAnalysis1.root"),
@@ -229,7 +259,7 @@ process.L1TrackTrigger_step = cms.Path(process.L1TrackTrigger)
 #process.pL1TkElectronsLooseCrystal = cms.Path(process.L1TkElectronsLooseCrystal)
 #process.pL1TkElectronsLooseHGC = cms.Path(process.L1TkElectronsLooseHGC)
 #process.pL1TkElectronsHGC = cms.Path(process.L1TkElectronsHGC)
-process.pL1TkMuon = cms.Path(process.L1TkMuons+process.L1TkMuonsTP)
+#process.pL1TkMuon = cms.Path(process.L1TkMuons+process.L1TkMuonsTP)
 #process.pL1TkElectronsEllipticMatchHGC = cms.Path(process.L1TkElectronsEllipticMatchHGC)
 #process.pL1TkElectronsCrystal = cms.Path(process.L1TkElectronsCrystal)
 #process.pL1TkPhotonsHGC = cms.Path(process.L1TkPhotonsHGC)
