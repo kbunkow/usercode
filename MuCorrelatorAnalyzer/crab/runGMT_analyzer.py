@@ -66,7 +66,7 @@ if not verbose:
 
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1),
+    input = cms.untracked.int32(100),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet),
 )
 
@@ -198,7 +198,8 @@ process.gmtMuons.isolation.IsodumpForHLS = 0
 
 process.gmtMuons.trackingParticleInputTag = cms.InputTag("mix", "MergedTrackTruth")
 process.gmtMuons.mcTruthTrackInputTag = cms.InputTag("TTTrackAssociatorFromPixelDigis", "Level1TTTracks")
-process.gmtMuons.dataDumpRootFile = cms.string("dataDump.root")
+process.gmtMuons.dumpToRoot = cms.bool(False)
+process.gmtMuons.dumpToXml = cms.bool(False)
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string('muCorrelatorTTAnalysis1.root'), closeFileFast = cms.untracked.bool(True))
 
