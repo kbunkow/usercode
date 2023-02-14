@@ -88,8 +88,11 @@ public:
   virtual ~L1MuonAnalyzerOmtf();
 
   //edm filter plugin specific functions
-  virtual void beginJob();
-  virtual void analyze(const edm::Event&, const edm::EventSetup&);
+  void beginJob() override;
+
+  void beginRun(edm::Run const&, edm::EventSetup const&) override;
+
+  void analyze(const edm::Event&, const edm::EventSetup&) override;
 
   virtual void analyzeEfficiency(const edm::Event&, std::vector<MatchingResult>& matchingResults);
 
@@ -98,7 +101,7 @@ public:
 
   virtual void analyzeRate(const edm::Event&, const edm::EventSetup&);
 
-  virtual void endJob();
+  void endJob() override;
 
   //simplified ghost busting
   //only candidates in the bx=0 are included
@@ -124,6 +127,9 @@ private:
   edm::EDGetTokenT<TrackingParticleCollection> trackingParticleToken;
 
   edm::EDGetTokenT<l1t::RegionalMuonCandBxCollection > omtfToken;
+
+  edm::ESGetToken<MagneticField, IdealMagneticFieldRecord> magneticFieldEsToken;
+  edm::ESGetToken<Propagator, TrackingComponentsRecord> propagatorEsToken;
 
 
   MuonMatcher muonMatcher;

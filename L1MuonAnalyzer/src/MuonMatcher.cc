@@ -47,7 +47,12 @@ double foldPhi(double phi) {
   return phi;
 }
 
-MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg) {
+MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg,
+    const edm::ESGetToken<MagneticField, IdealMagneticFieldRecord>& magneticFieldEsToken,
+    const edm::ESGetToken<Propagator, TrackingComponentsRecord>& propagatorEsToken):
+          magneticFieldEsToken(magneticFieldEsToken),
+          propagatorEsToken(propagatorEsToken)
+{
   edm::Service<TFileService> fs;
   TFileDirectory subDir =  fs->mkdir("MuonMatcher");
 
@@ -98,12 +103,18 @@ MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg) {
 
 }
 
-void MuonMatcher::setup(const edm::EventSetup& eventSetup) {
+void MuonMatcher::beginRun(const edm::EventSetup& eventSetup) {
+  //TODO use edm::ESWatcher<MagneticField> magneticFieldRecordWatcher;
+  magField = eventSetup.getHandle(magneticFieldEsToken);
+  propagator = eventSetup.getHandle(propagatorEsToken);
+}
+
+/*void MuonMatcher::setup(const edm::EventSetup& eventSetup) {
   eventSetup.get<GlobalTrackingGeometryRecord>().get(globalGeometry);
   eventSetup.get<IdealMagneticFieldRecord>().get(magField);
 
   eventSetup.get<TrackingComponentsRecord>().get("SteppingHelixPropagatorAlong", propagator);
-}
+}*/
 
 MuonMatcher::~MuonMatcher() {
 
