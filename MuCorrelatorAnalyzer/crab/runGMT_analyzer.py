@@ -6,6 +6,9 @@
 import sys
 import FWCore.ParameterSet.Config as cms
 
+from os import listdir
+from os.path import isfile, join
+
 from Configuration.Eras.Era_Phase2C9_cff import Phase2C9
 
 process = cms.Process('L1',Phase2C9)
@@ -29,6 +32,9 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 verbose = True
 
+#version = "sample2023_pilot"
+version = 'sample_14_02_2023_1'
+
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
        #suppressInfo       = cms.untracked.vstring('AfterSource', 'PostModule'),
@@ -41,8 +47,9 @@ if verbose:
                     ),
        categories        = cms.untracked.vstring('gmtDataDumper', 'phase2L1GMT', 'MuonStub', "TrackerMuon", 'ConvertedTTTrack', "l1tMuBayesEventPrint"), #, "l1tMuBayesEventPrint"
        muCorrelatorEventPrint = cms.untracked.PSet(    
-                         extension = cms.untracked.string('.txt'),                
-                         threshold = cms.untracked.string('DEBUG'),
+                         extension = cms.untracked.string('.txt'),  
+                         filename  = cms.untracked.string('muCorrelatorEventPrint_' + version),              
+                         threshold = cms.untracked.string('INFO'), #
                          default = cms.untracked.PSet( limit = cms.untracked.int32(0) ), 
                          #INFO   =  cms.untracked.int32(0),
                          #DEBUG   = cms.untracked.int32(0),
@@ -66,10 +73,31 @@ if not verbose:
 
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100),
+    input = cms.untracked.int32(-1),
     output = cms.optional.untracked.allowed(cms.int32,cms.PSet),
 )
 
+#path = "/eos/user/j/jwiechni/HSCP/23_01_2023/SingleMu_ch0_OneOverPt_23_01_2023/23_01_2023/230123_144305/0000/"
+path = "/eos/user/a/akalinow/Data/SingleMu/SingleMu_ch0_OneOverPt_test_14_02_2023_1/test_14_02_2023_1/230214_084703/0000/"
+
+onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+
+chosenFiles = []
+
+#for i in range(1, 10, 1):
+#    chosenFiles.append('file://' + path + "SingleMu_OneOverPt_1_100_m_" + str(i) + ".root") 
+
+filesNameLike = "1_100_m"
+
+for i in range(1, 101, 1):
+    for f in onlyfiles:
+        #if (( filesNameLike + '_' + str(i) + '_') in f):  #TODO for 721_FullEta_v4/
+        if (( filesNameLike + '_' + str(i) + '.') in f): #TODO for 9_3_14_FullEta_v2
+            print(f)
+            chosenFiles.append('file://' + path + f) 
+            
+print("chosenFiles\n", chosenFiles)
+                 
 # Input source
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring( (
@@ -83,9 +111,15 @@ process.source = cms.Source("PoolSource",
    
 #"/store/mc/Phase2HLTTDRSummer20ReRECOMiniAOD/DYToLL_M-50_TuneCP5_14TeV-pythia8/FEVT/NoPU_pilot_111X_mcRun4_realistic_T15_v1-v1/100000/0018FD1C-F75F-9E4A-A329-1E671A1CA267.root"   
 #'file:///afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_7/src/L1Trigger/Phase2L1GMT/test/Phase2HLTTDRSummer20_DYToLL_M-50_noPU_0018FD1C-F75F-9E4A-A329-1E671A1CA267_1000Ev.root'
-'file:///eos/home-k/kbunkow/cms_data/mc/PhaseIISpring22/PhaseIISpring22DRMiniAOD_DYToLL_M-10To50_noPU_40000_04216b41-07a8-4ec9-a1c3-a24cda929b74_2000Ev.root'
-     
+#'file:///eos/home-k/kbunkow/cms_data/mc/PhaseIISpring22/PhaseIISpring22DRMiniAOD_DYToLL_M-10To50_noPU_40000_04216b41-07a8-4ec9-a1c3-a24cda929b74_2000Ev.root'
+
+#'file:///eos/user/k/kbunkow/cms_data/mc/mcWaw2022/HSCPppstau_M_432_TuneZ2star_13TeV_pythia6.root'     
+#'file:///eos/user/k/kbunkow/cms_data/mc/mcWaw2022/DoubleMuPt1to100Eta24_1kevents.root'  
+#'file:///eos/user/k/kbunkow/cms_data/mc/mcWaw2022/DoubleMuPt1to100Eta24_1kevents.root'  
+#'file:///eos/user/j/jwiechni/HSCP/23_01_2023/SingleMu_ch0_OneOverPt_23_01_2023/23_01_2023/230123_144305/0000/SingleMu_OneOverPt_1_100_m_1.root'
+chosenFiles
       ) ),
+    
     secondaryFileNames = cms.untracked.vstring(),
 #                            skipEvents=cms.untracked.uint32(36)
     inputCommands=cms.untracked.vstring(
@@ -201,7 +235,8 @@ process.gmtMuons.mcTruthTrackInputTag = cms.InputTag("TTTrackAssociatorFromPixel
 process.gmtMuons.dumpToRoot = cms.bool(False)
 process.gmtMuons.dumpToXml = cms.bool(False)
 
-process.TFileService = cms.Service("TFileService", fileName = cms.string('muCorrelatorTTAnalysis1.root'), closeFileFast = cms.untracked.bool(True))
+
+process.TFileService = cms.Service("TFileService", fileName = cms.string("muCorrelatorTTAnalysis1_"  + version + ".root"), closeFileFast = cms.untracked.bool(True))
 
 analysisType = "efficiency" # or rate
     

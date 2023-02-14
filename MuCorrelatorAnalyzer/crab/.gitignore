@@ -1,4 +1,4 @@
-/crab.log
+/*.log
 /*.txt
 /*.root
 /*.pyc
@@ -10,3 +10,4 @@
 /crab_Phase2L1GMT_org_MC_analysis_DoubleMuon_gun_FlatPt-1To100_Summer20_PU200_*/
 /crab_Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU200_withNewMB_*/
 /crab_Phase2L1GMT_MC_analysis_TauTo3Mu_Summer20_PU140_withNewMB_*/
+/__pycache__/
