@@ -85,15 +85,17 @@ canvases = []
 legend1 = TLegend(0.8, 0.01, 0.99, 0.9)
 #legend1.SetFillStyle(0)
 
-patternFileDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/'
-displacePatternFile = TFile(patternFileDir + 'Patterns_dispalced_test_displHighPt_t10_200files.root' )
+patternFileDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/'
+#displacePatternFile = TFile(patternFileDir + 'Patterns_dispalced_test_displHighPt_t10_200files.root' )
+displacePatternFile = TFile(patternFileDir + 'Patterns_dispalced_test_displHighPt_t14_displSampl.root' )
+
 inputFiles.append(displacePatternFile)
 displacePatternFile.ls()
 
 layersStatDirDispl = displacePatternFile.Get("layerStats")
 #layersStatDirDispl.ls()
 
-refLayer_layer = 'refLayer_0_Layer_7'
+refLayer_layer = 'refLayer_0_Layer_15'
 
 displHist = layersStatDirDispl.Get("histLayerStat_PatNum_18_" + refLayer_layer)
 
@@ -107,7 +109,7 @@ canvases.append(c1)
 displHist.SetMarkerStyle(6)
 displHist.SetMarkerColor(kBlack)
 
-if "Layer_1" in refLayer_layer or "Layer_3" in refLayer_layer:
+if "Layer_1_" in refLayer_layer or "Layer_3" in refLayer_layer:
     displHist.GetYaxis().SetRangeUser(-300, 300)
 else : 
     displHist.GetYaxis().SetRangeUser(-60, 60)
@@ -118,7 +120,9 @@ displHist.GetYaxis().SetTitle("#Delta#phi_{2} - #Delta#phi_{2extrpol}")
 displHist.Draw()
 
 
-promptPatternFile = TFile(patternFileDir + 'Patterns_dispalced_test_allPt_t10.root' )
+#promptPatternFile = TFile(patternFileDir + 'Patterns_dispalced_test_allPt_t13.root' )
+promptPatternFile = TFile(patternFileDir + 'Patterns_dispalced_test_allPt_t13_fixedStubRInEndcap.root' )
+
 inputFiles.append(promptPatternFile)
 promptPatternFile.ls()
 

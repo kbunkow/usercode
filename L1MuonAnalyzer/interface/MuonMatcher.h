@@ -17,6 +17,9 @@
 #include "MagneticField/Engine/interface/MagneticField.h"
 #include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
 
+#include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
+#include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
+
 #include "TrackPropagation/SteppingHelixPropagator/interface/SteppingHelixPropagator.h"
 #include "TrackPropagation/SteppingHelixPropagator/interface/SteppingHelixStateInfo.h"
 
@@ -91,9 +94,11 @@ public:
 
 class MuonMatcher {
 public:
-  MuonMatcher(const edm::ParameterSet& edmCfg);
+  MuonMatcher(const edm::ParameterSet& edmCfg,
+      const edm::ESGetToken<MagneticField, IdealMagneticFieldRecord>& magneticFieldEsToken,
+      const edm::ESGetToken<Propagator, TrackingComponentsRecord>& propagatorEsToken);
 
-  void setup(const edm::EventSetup& eventSetup);
+  void beginRun(edm::EventSetup const& eventSetup);
 
   virtual ~MuonMatcher();
 
@@ -138,10 +143,11 @@ public:
 
 private:
   //const edm::EventSetup& eventSetup;
+  const edm::ESGetToken<MagneticField, IdealMagneticFieldRecord>& magneticFieldEsToken;
+  const edm::ESGetToken<Propagator, TrackingComponentsRecord>& propagatorEsToken;
 
-  edm::ESHandle<GlobalTrackingGeometry> globalGeometry;
+  //edm::ESHandle<GlobalTrackingGeometry> globalGeometry;
   edm::ESHandle<MagneticField> magField;
-
   edm::ESHandle<Propagator> propagator;
 
   TH2F* deltaPhiPropCand = nullptr; //delta phi between propagated track and muon candidate, stores the likelihood

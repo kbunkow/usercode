@@ -16,7 +16,11 @@
 namespace L1MuAn {
 
 
-L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg): muonMatcher(edmCfg) {
+L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
+          magneticFieldEsToken(esConsumes<MagneticField, IdealMagneticFieldRecord, edm::Transition::BeginRun>()),
+          propagatorEsToken(esConsumes<Propagator, TrackingComponentsRecord, edm::Transition::BeginRun>(
+              edm::ESInputTag("", "SteppingHelixPropagatorAlong"))),
+          muonMatcher(edmCfg, magneticFieldEsToken, propagatorEsToken) {
   fillMatcherHists = !edmCfg.exists("muonMatcherFile");
   edm::LogImportant("l1MuonAnalyzerOmtf") <<" L1MuonAnalyzerOmtf: line "<<__LINE__<<" fillMatcherHists "<<fillMatcherHists<<std::endl;
 
@@ -162,6 +166,12 @@ L1MuonAnalyzerOmtf::~L1MuonAnalyzerOmtf() {
 
 void L1MuonAnalyzerOmtf::beginJob() {
 
+}
+
+void L1MuonAnalyzerOmtf::beginRun(edm::Run const&, edm::EventSetup const& es) {
+  if(useMatcher) {
+    muonMatcher.beginRun(es);
+  }
 }
 
 std::vector<const l1t::RegionalMuonCand*> L1MuonAnalyzerOmtf::ghostBust(const l1t::RegionalMuonCandBxCollection* mtfCands) {
@@ -355,9 +365,6 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
       event.getByToken(trackingParticleToken, trackingParticleHandle);
       LogTrace("l1MuonAnalyzerOmtf")<<"trackingParticleHandle size "<<trackingParticleHandle.product()->size()<<std::endl;;
     }
-
-    //todo do little better, move this assignment to constructor
-    muonMatcher.setup(es);
 
     //std::function<bool(const SimTrack& )> const& simTrackFilter = simTrackIsMuonInOmtfBx0;
     std::function<bool(const SimTrack& )> const& simTrackFilter = simTrackIsMuonInBx0; //use this one if checkIsInW2MB1 = true
@@ -687,9 +694,6 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, const edm::EventSe
 
 
 }
-
-
-
 
 void L1MuonAnalyzerOmtf::endJob() {
   if(useMatcher) {
