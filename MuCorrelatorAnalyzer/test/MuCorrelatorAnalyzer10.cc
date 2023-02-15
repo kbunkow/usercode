@@ -1319,7 +1319,7 @@ MuCorrelatorAnalyzer::MuCorrelatorAnalyzer(const edm::ParameterSet& conf)
 : parameterSet(conf), eventCount(0)
 {
   LogTrace("l1tMuBayesEventPrint") <<__FUNCTION__<<":"<<__LINE__<<std::endl;
-  inputMuCorr = consumes<l1t::TrackerMuonCollection>(edm::InputTag("gmtMuons")); //
+  inputMuCorr = consumes<l1t::TrackerMuonCollection>(edm::InputTag("l1tGMTMuons")); //
 
   simTrackToken =  consumes<edm::SimTrackContainer>(edm::InputTag("g4SimHits")); //TODO which is correct?
   //simTrackToken =  consumes<edm::SimTrackContainer>(edm::InputTag("g4SimTrackSrc"));

@@ -19,7 +19,9 @@ process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D49Reco_cff')
+#process.load('Configuration.Geometry.GeometryExtended2026D49Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2026D86_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.load('Configuration.StandardSequences.L1TrackTrigger_cff')
@@ -33,7 +35,7 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 verbose = True
 
 #version = "sample2023_pilot"
-version = 'sample_14_02_2023_1'
+version = 'sample_14_02_2023_2'
 
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
@@ -60,7 +62,7 @@ if verbose:
                          ConvertedTTTrack = cms.untracked.PSet( limit = cms.untracked.int32(100000000) ),
                          l1tMuBayesEventPrint = cms.untracked.PSet( limit = cms.untracked.int32(100000000) ),
                        ),
-       #debugModules = cms.untracked.vstring('gmtMuons', 'gmtMuons.trackMatching', 'trackMatching', 'Phase2L1TGMTProducer:gmtMuons', 'Phase2L1TGMTProducer') 
+       #debugModules = cms.untracked.vstring('l1tGMTMuons', 'l1tGMTMuons.trackMatching', 'trackMatching', 'Phase2L1TGMTProducer:l1tGMTMuons', 'Phase2L1TGMTProducer') 
        debugModules = cms.untracked.vstring('muCorrelatorAnalyzer')
     )
 
@@ -78,7 +80,8 @@ process.maxEvents = cms.untracked.PSet(
 )
 
 #path = "/eos/user/j/jwiechni/HSCP/23_01_2023/SingleMu_ch0_OneOverPt_23_01_2023/23_01_2023/230123_144305/0000/"
-path = "/eos/user/a/akalinow/Data/SingleMu/SingleMu_ch0_OneOverPt_test_14_02_2023_1/test_14_02_2023_1/230214_084703/0000/"
+#path = "/eos/user/a/akalinow/Data/SingleMu/SingleMu_ch0_OneOverPt_test_14_02_2023_1/test_14_02_2023_1/230214_084703/0000/"
+path = "/eos/user/a/akalinow/Data/OMTF/test_14_02_2023_2/SingleMu_ch0_OneOverPt_test_14_02_2023_2/test_14_02_2023_2/230214_165448/0000/"
 
 onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
 
@@ -197,11 +200,11 @@ process.FEVTDEBUGHLToutput = cms.OutputModule("PoolOutputModule",
     fileName = cms.untracked.string('reprocess.root'),
     outputCommands = cms.untracked.vstring(
         "drop *_*_*_*",
-        "keep *_gmtMuons_*_*",
-        "keep *_gmtStubs_*_*",
+        "keep *_l1tGMTMuons_*_*",
+        "keep *_l1tGMTStubs_*_*",
         "keep *_genParticles_*_*",
-        "keep *_TTTracksFromTrackletEmulation_Level1TTTracks_*",
-        "keep *_L1TkMuons_*_*"
+        "keep *_l1tTTTracksFromTrackletEmulation_Level1TTTracks_*",
+        "keep *_l1tTkMuons_*_*"
     ),
     splitLevel = cms.untracked.int32(0)
 )
@@ -225,15 +228,14 @@ process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
 
 process.load("L1Trigger.Phase2L1GMT.gmt_cff")
-process.gmtMuons.trackMatching.verbose=0
-process.gmtMuons.verbose=0
-process.gmtMuons.trackConverter.verbose=0
-process.gmtMuons.isolation.IsodumpForHLS = 0
+process.l1tGMTMuons.trackMatching.verbose=0
+process.l1tGMTMuons.verbose=0
+process.l1tGMTMuons.trackConverter.verbose=0
 
-process.gmtMuons.trackingParticleInputTag = cms.InputTag("mix", "MergedTrackTruth")
-process.gmtMuons.mcTruthTrackInputTag = cms.InputTag("TTTrackAssociatorFromPixelDigis", "Level1TTTracks")
-process.gmtMuons.dumpToRoot = cms.bool(False)
-process.gmtMuons.dumpToXml = cms.bool(False)
+process.l1tGMTMuons.trackingParticleInputTag = cms.InputTag("mix", "MergedTrackTruth")
+process.l1tGMTMuons.mcTruthTrackInputTag = cms.InputTag("TTTrackAssociatorFromPixelDigis", "Level1TTTracks")
+process.l1tGMTMuons.dumpToRoot = cms.bool(False)
+process.l1tGMTMuons.dumpToXml = cms.bool(False)
 
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string("muCorrelatorTTAnalysis1_"  + version + ".root"), closeFileFast = cms.untracked.bool(True))
@@ -264,7 +266,7 @@ process.muCorrelatorAnalyzer= cms.EDAnalyzer("MuCorrelatorAnalyzer",
                                        TP_maxEta = cms.double(2.4),      # only save TPs with |eta| < X
                                        TP_maxZ0 = cms.double(30.0),      # only save TPs with |z0| < X cm
                                        TP_maxRho = cms.double(30.0),     # for efficiency analysis, to not inlude the muons from the far decays 
-                                       L1TrackInputTag = cms.InputTag("TTTracksFromTrackletEmulation", "Level1TTTracks") ,               ## TTTrack input
+                                       L1TrackInputTag = cms.InputTag("l1tTTTracksFromTrackletEmulation", "Level1TTTracks") ,               ## TTTrack input
                                        MCTruthTrackInputTag = cms.InputTag("TTTrackAssociatorFromPixelDigis", "Level1TTTracks"), ## MCTruth input 
                                        # other input collections
                                        L1StubInputTag = cms.InputTag("TTStubsFromPhase2TrackerDigis","StubAccepted"),
