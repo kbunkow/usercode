@@ -75,9 +75,13 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyVsPhi(subDir, name, etaFrom, etaTo, qualityCut, ptGenCut, ptL1Cut, 100));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyVsEta(subDir, name, qualityCut, ptGenCut, ptL1Cut, 210));
 
-      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 12, 100, 300/20, false, false));
-      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 12, 100, 300/20, false, true));
-      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 12, 100, 300/20, true, true));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, false, false));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, false, true));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, true, true));
+
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 10, 100, 300/20, false, false));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 10, 100, 300/20, false, true));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 10, 100, 300/20, true, true));
 
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 22, 100, 300/20, false, false));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 22, 100, 300/20, false, true));
