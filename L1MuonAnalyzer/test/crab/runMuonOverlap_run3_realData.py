@@ -126,7 +126,6 @@ process.simOmtfPhase1Digis.bxMin = cms.int32(0)
 process.simOmtfPhase1Digis.bxMax = cms.int32(0)
 
 process.simOmtfPhase1Digis.dumpResultToXML = cms.bool(False)
-process.simOmtfPhase1Digis.dumpResultToROOT = cms.bool(False)
 process.simOmtfPhase1Digis.eventCaptureDebug = cms.bool(False)
 
 #process.simOmtfPhase1Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_0x0009_oldSample_3_10Files.xml")

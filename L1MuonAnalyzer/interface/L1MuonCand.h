@@ -24,7 +24,7 @@ public:
 
   L1MuonCand(const l1t::RegionalMuonCand& muCand):
     ptGev( muCand.hwPt() > 0 ? (muCand.hwPt()-1)/2. : 0), //TODO watch out!!!!
-    uptGev(muCand.hwPtUnconstrained() > 0 ? (muCand.hwPtUnconstrained()-1)/2. : 0), //TODO watch out!!!!
+    uptGev(muCand.hwPtUnconstrained() > 0 ? (muCand.hwPtUnconstrained()-1) : 0), //TODO watch out!!!! The hwPtUnconstrained() has different scale than hwPt()!!!
 
     hwPt(muCand.hwPt()),
     hwUPt(muCand.hwPtUnconstrained()),

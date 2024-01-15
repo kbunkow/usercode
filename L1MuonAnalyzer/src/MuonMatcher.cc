@@ -38,6 +38,15 @@ double hwGmtPhiToGlobalPhi(int phi) {
   return phi * phiGmtUnit;
 }
 
+int calcGlobalPhi(int locPhi, int proc, int nProcessors) {
+  int globPhi = 0;
+  //60 degree sectors = 96 in int-scale
+  globPhi = (proc)*96 * 6/nProcessors + locPhi;
+  // first processor starts at CMS phi = 15 degrees (24 in int)... Handle wrap-around with %. Add 576 to make sure the number is positive
+  globPhi = (globPhi + 24 + 576) % 576;
+  return globPhi;
+}
+
 double foldPhi(double phi) {
   if(phi > M_PI)
     return (phi - 2 * M_PI );
@@ -59,6 +68,14 @@ MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg,
   deltaPhiPropCand   =      subDir.make<TH2F>("deltaPhiPropCand",         "delta Phi propagated track - muonCand Vs Pt", 200, 0, 1000, 100, -0.5 -0.005, 0.5 -0.005); //delta phi between propagated track and muon candidate,
   deltaPhiPropCandMatched = subDir.make<TH2F>("deltaPhiPropCandMatched",  "delta Phi matched propagated track - muonCand Vs Pt", 200, 0, 1000, 100, -0.5 -0.005, 0.5 -0.005); //delta phi between propagated track and muon candidate,
   deltaPhiVertexProp = subDir.make<TH2F>("deltaPhiVertexProp", "delta Phi vertex - propagated track Vs Pt", 200, 0, 1000, 100, -1, 1);; //delta phi between phi at vertex and propagated track phi)
+
+  muonsPerEvent = fs->make<TH1D>("muonsPerEvent", "muonsPerEvent", 21, -0.5, 20.5);
+  muonsPerEventInOmtf = fs->make<TH1D>("muonsPerEventInOmtf", "muonsPerEventInOmtf", 21, -0.5, 20.5);
+
+  if(edmCfg.exists("phase") ) {
+    if(edmCfg.getParameter<int>("phase") == 2)
+      nProcessors = 3;
+  }
 
   if(edmCfg.exists("matchUsingPropagation") )
     matchUsingPropagation = edmCfg.getParameter<bool>("matchUsingPropagation");
@@ -351,7 +368,7 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
   double candGloablEta  = muonCand->hwEta() * 0.010875;
   //if( abs(simTrack.momentum().eta() - candGloablEta ) < 0.3 ) TODO  in principle is replaced by using atMB1 !!!!!!!!!!!!!!!!!!!!!!!! check!!!!!!!!!!!!!!!
   {
-    double candGlobalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( muonCand->hwPhi(), muonCand->trackFinderType(), muonCand->processor() );
+    double candGlobalPhi = calcGlobalPhi( muonCand->hwPhi(), muonCand->processor(), nProcessors );
     candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
 
     if(candGlobalPhi > M_PI)
@@ -381,8 +398,10 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
     if(simTrack.momentum().pt() > 100)
       treshold = 20. * sigma;
 
-    if(simTrack.momentum().pt() > 20) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!!
+    if(simTrack.momentum().pt() > 20) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!! - it is very big, why like that?
       treshold = 0.6;
+
+    treshold = 0.3; //should be good for all pts in Displaced_Dxy3m_pT0To1000_condPhase2_realistic
 
     if( abs(result.deltaPhi - mean) < treshold)
       result.result = MatchingResult::ResultType::matched;
@@ -413,7 +432,7 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const T
   double candGloablEta  = muonCand->hwEta() * 0.010875;
   //if( abs(trackingParticle.momentum().eta() - candGloablEta ) < 0.3 ) TODO  in principle is replaced by using atMB1 !!!!!!!!!!!!!!!!!!!!!!!! check!!!!!!!!!!!!!!!
   {
-    double candGlobalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( muonCand->hwPhi(), muonCand->trackFinderType(), muonCand->processor() );
+    double candGlobalPhi = calcGlobalPhi( muonCand->hwPhi(), muonCand->processor(), nProcessors );
     candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
 
     if(candGlobalPhi > M_PI)
@@ -554,7 +573,12 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
 {
   std::vector<MatchingResult> matchingResults;
 
+  int muonCnt = 0;
+  int muonCntInOmtf = 0;
   for (auto& simTrack : *simTracks ) {
+
+    if (abs(simTrack.type()) == 13 || abs(simTrack.type()) == 1000015 )
+      muonCnt++;
 
     if(!simTrackFilter(simTrack))
       continue;
@@ -591,6 +615,8 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
       LogTrace("l1tOmtfEventPrint") << "trackingParticle NOT in OMTF region ";
       continue;
     }
+
+    muonCntInOmtf++;
 
     double ptGen = simTrack.momentum().pt();
     if(ptGen >= deltaPhiVertexProp->GetXaxis()->GetXmax())
@@ -640,6 +666,9 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
       LogTrace("l1MuonAnalyzerOmtf") <<__FUNCTION__<<":"<<__LINE__<<" no matching candidate found"<<std::endl;
     }
   }
+
+  muonsPerEvent->Fill(muonCnt);
+  muonsPerEventInOmtf->Fill(muonCntInOmtf);
 
   return cleanMatching(matchingResults, muonCands);
 }
@@ -738,7 +767,7 @@ void MuonMatcher::fillHists(std::vector<const l1t::RegionalMuonCand*>& muonCands
 
       double candGloablEta  = muonCand->hwEta() * 0.010875;
       if( abs(simTrack.momentum().eta() - candGloablEta ) < 0.3 ) {
-        double candGlobalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( muonCand->hwPhi(), muonCand->trackFinderType(), muonCand->processor() );
+        double candGlobalPhi = calcGlobalPhi( muonCand->hwPhi(), muonCand->processor(), nProcessors );
         candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
 
         if(candGlobalPhi > M_PI)
@@ -770,7 +799,7 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const T
 
   result.deltaEta = trackingParticle.momentum().eta() - candGloablEta;
   if( abs(result.deltaEta) < 0.3 ) {
-    double candGlobalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( muonCand->hwPhi(), muonCand->trackFinderType(), muonCand->processor() );
+    double candGlobalPhi = calcGlobalPhi( muonCand->hwPhi(), muonCand->processor(), nProcessors );
     candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
 
     if(candGlobalPhi > M_PI)

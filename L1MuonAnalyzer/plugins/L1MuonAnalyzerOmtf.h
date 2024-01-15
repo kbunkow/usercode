@@ -12,7 +12,7 @@
 // FRAMEWORK HEADERS
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
+#include "FWCore/Framework/interface/one/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
@@ -82,7 +82,7 @@
 
 namespace L1MuAn {
 
-class L1MuonAnalyzerOmtf: public edm::EDAnalyzer {
+class L1MuonAnalyzerOmtf: public edm::one::EDAnalyzer<edm::one::WatchRuns> {
 public:
   explicit L1MuonAnalyzerOmtf(const edm::ParameterSet& conf);
   virtual ~L1MuonAnalyzerOmtf();
@@ -91,6 +91,8 @@ public:
   void beginJob() override;
 
   void beginRun(edm::Run const&, edm::EventSetup const&) override;
+
+  void endRun(edm::Run const& run, edm::EventSetup const& iSetup) override{};
 
   void analyze(const edm::Event&, const edm::EventSetup&) override;
 
@@ -166,6 +168,10 @@ private:
   TH1* firedLayersEventCntNN = nullptr;
 
   TH1* ptGenHist = nullptr;
+
+  TH1* candsDeltaPhi = nullptr;
+
+  int nProcessors = 6;
  };
 
 }

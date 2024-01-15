@@ -33,6 +33,9 @@ inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedF
 #dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tt16_extrapolFul_displ.root' )
 
+dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
+inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedFP_t19_v16_test_bits_HTo2LongLivedTo2mu2jets_allFiles.root' )
+
 
 inputFiles.append(inputFile)
 inputFile.ls()
@@ -51,7 +54,15 @@ c1.cd(1).SetGridy()
 
 ptL1Cut = "10"
 
-effHist = efficiencyDir.Get("omtf_q12_effPtGenVsDxy_qualityCut_12_ptL1Cut_" + ptL1Cut)
+qualityCut = "qualityCut_8"
+q = "q8"
+
+ptL1Cut = "5"
+
+qualityCut = "qualityCut_12"
+q = "q12"
+
+effHist = efficiencyDir.Get("omtf_" + q + "_effPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut)
 effHist.GetXaxis().SetRangeUser(0, 100)
 effHist.Draw("colz")
 hists.append(effHist)
@@ -59,8 +70,8 @@ hists.append(effHist)
 c1.cd(4).SetGridx()
 c1.cd(4).SetGridy()
 
-allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_q12_allCandsPtGenVsDxy_qualityCut_12_ptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_q12_aceptedCandsPtGenVsDxy_qualityCut_12_ptL1Cut_" + ptL1Cut).ProjectionY()
+allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY()
+aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY()
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 0.8)
@@ -70,7 +81,7 @@ hists.append(aceptedCandsPtGenVsDxyProj)
 
 c1.cd(2).SetGridx()
 c1.cd(2).SetGridy()
-effHist = efficiencyDir.Get("omtf_q12_effPtGenVsDxy_qualityCut_12_uptL1Cut_" + ptL1Cut)
+effHist = efficiencyDir.Get("omtf_" + q + "_effPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut)
 effHist.GetXaxis().SetRangeUser(0, 100)
 effHist.Draw("colz")
 hists.append(effHist)
@@ -78,8 +89,8 @@ hists.append(effHist)
 c1.cd(5).SetGridx()
 c1.cd(5).SetGridy()
 
-allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_q12_allCandsPtGenVsDxy_qualityCut_12_uptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_q12_aceptedCandsPtGenVsDxy_qualityCut_12_uptL1Cut_" + ptL1Cut).ProjectionY()
+allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
+aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 0.8)
@@ -88,7 +99,7 @@ hists.append(aceptedCandsPtGenVsDxyProj)
 
 c1.cd(3).SetGridx()
 c1.cd(3).SetGridy()
-effHist = efficiencyDir.Get("omtf_q12_effPtGenVsDxy_ifPtBelowCut_qualityCut_12_uptL1Cut_" + ptL1Cut)
+effHist = efficiencyDir.Get("omtf_" + q + "_effPtGenVsDxy_ifPtBelowCut_" + qualityCut + "_uptL1Cut_" + ptL1Cut)
 effHist.GetXaxis().SetRangeUser(0, 100)
 effHist.Draw("colz")
 hists.append(effHist)
@@ -96,8 +107,8 @@ hists.append(effHist)
 c1.cd(6).SetGridx()
 c1.cd(6).SetGridy()
 
-allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_q12_allCandsPtGenVsDxy_ifPtBelowCut_qualityCut_12_uptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_q12_aceptedCandsPtGenVsDxy_ifPtBelowCut_qualityCut_12_uptL1Cut_" + ptL1Cut).ProjectionY()
+allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_ifPtBelowCut_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
+aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_ifPtBelowCut_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 0.8)

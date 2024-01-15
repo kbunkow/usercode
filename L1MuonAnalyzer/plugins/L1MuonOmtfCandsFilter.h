@@ -12,7 +12,7 @@
 // FRAMEWORK HEADERS
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
-#include "FWCore/Framework/interface/EDFilter.h"
+#include "FWCore/Framework/interface/one/EDFilter.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
@@ -26,7 +26,7 @@
 #include "TH1I.h"
 
 namespace L1MuAn {
-class L1MuonOmtfCandsFilter: public edm::EDFilter {
+class L1MuonOmtfCandsFilter: public edm::one::EDFilter<> {
 public:
   L1MuonOmtfCandsFilter(const edm::ParameterSet& edmCfg);
   virtual ~L1MuonOmtfCandsFilter();

@@ -21,6 +21,11 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
           propagatorEsToken(esConsumes<Propagator, TrackingComponentsRecord, edm::Transition::BeginRun>(
               edm::ESInputTag("", "SteppingHelixPropagatorAlong"))),
           muonMatcher(edmCfg, magneticFieldEsToken, propagatorEsToken) {
+  if(edmCfg.exists("phase") ) {
+    if(edmCfg.getParameter<int>("phase") == 2)
+      nProcessors = 3;
+  }
+
   fillMatcherHists = !edmCfg.exists("muonMatcherFile");
   edm::LogImportant("l1MuonAnalyzerOmtf") <<" L1MuonAnalyzerOmtf: line "<<__LINE__<<" fillMatcherHists "<<fillMatcherHists<<std::endl;
 
@@ -60,6 +65,8 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
   firedLayersEventCntOmtf = fs->make<TH1S>("firedLayersEventCntOmtf", "firedLayersEventCntOmtf", binsCnt, 0, binsCnt);
   firedLayersEventCntNN = fs->make<TH1S>("firedLayersEventCntNN", "firedLayersEventCntNN", binsCnt, 0, binsCnt);
 
+  candsDeltaPhi = fs->make<TH1I>("candsDeltaPhi", "candsDeltaPhi - uGMT units (2pi/576)", 576, -576/2 -0.5, 576/2 - 0.5);
+
   if(edmCfg.exists("nn_pThresholds") )
     nn_pThresholds = edmCfg.getParameter<vector<double> >("nn_pThresholds");
 
@@ -79,9 +86,17 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, false, true));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, true, true));
 
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 7, 100, 300/20, false, false));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 7, 100, 300/20, false, true));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 7, 100, 300/20, true, true));
+
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 10, 100, 300/20, false, false));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 10, 100, 300/20, false, true));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 10, 100, 300/20, true, true));
+
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 15, 100, 300/20, false, false));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 15, 100, 300/20, false, true));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 15, 100, 300/20, true, true));
 
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 22, 100, 300/20, false, false));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 22, 100, 300/20, false, true));
@@ -187,12 +202,17 @@ std::vector<const l1t::RegionalMuonCand*> L1MuonAnalyzerOmtf::ghostBust(const l1
       auto& mtfCand2 = mtfCands->at( 0, i2 );
 
       if( abs( mtfCand1.hwEta() - mtfCand2.hwEta()) < (0.3 / 0.010875) ) {
-        int gloablHwPhi1 = l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand1.hwPhi(), mtfCand1.trackFinderType(), mtfCand1.processor() ) ;
-        int gloablHwPhi2 = l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand2.hwPhi(), mtfCand2.trackFinderType(), mtfCand2.processor() ) ;
+        int gloablHwPhi1 = calcGlobalPhi( mtfCand1.hwPhi(), mtfCand1.processor(), nProcessors ) ; //0...(576-1)
+        int gloablHwPhi2 = calcGlobalPhi( mtfCand2.hwPhi(), mtfCand2.processor(), nProcessors ) ;
         //double globalPhi1 = hwGmtPhiToGlobalPhi(l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand1.hwPhi(), mtfCand1.trackFinderType(), mtfCand1.processor() ) );
         //double globalPhi2 = hwGmtPhiToGlobalPhi(l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand2.hwPhi(), mtfCand2.trackFinderType(), mtfCand2.processor() ) );
 
-        if(abs(gloablHwPhi1 - gloablHwPhi2) < 8) {//0.0872664626 = 5 deg, i.e. the same window as in the OMTF ghost buster
+        //folding phi
+        int deltaPhi = abs(gloablHwPhi1 - gloablHwPhi2);
+        if(deltaPhi > 576/2)
+          deltaPhi = abs(deltaPhi - 576);
+
+        if(abs(deltaPhi) < 8) {//0.0872664626 = 5 deg, i.e. the same window as in the OMTF ghost buster
           if(mtfCand1.hwQual() > mtfCand2.hwQual()) {
             isKilled[i2] = true;
           }
@@ -213,7 +233,7 @@ std::vector<const l1t::RegionalMuonCand*> L1MuonAnalyzerOmtf::ghostBust(const l1
     LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::ghostBust pt "<<std::setw(3)<<mtfCands->at( 0, i1 ).hwPt()<<" qual "<<std::setw(2)<<mtfCands->at( 0, i1 ).hwQual()
             <<" proc "<<std::setw(2)<<mtfCands->at( 0, i1 ).processor()<<" eta "<<std::setw(4)<<mtfCands->at( 0, i1 ).hwEta()<<" gloablEta "<<std::setw(8)<<mtfCands->at( 0, i1 ).hwEta() * 0.010875
             <<" hwPhi "<<std::setw(3)<<mtfCands->at( 0, i1 ).hwPhi()
-            <<" globalPhi "<<std::setw(8)<<hwGmtPhiToGlobalPhi(l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCands->at( 0, i1 ).hwPhi(), mtfCands->at( 0, i1 ).trackFinderType(), mtfCands->at( 0, i1 ).processor() ) )
+            <<" globalPhi "<<std::setw(8)<<hwGmtPhiToGlobalPhi(calcGlobalPhi( mtfCands->at( 0, i1 ).hwPhi(), mtfCands->at( 0, i1 ).processor(), nProcessors ))
             <<" fireadLayers "<<std::bitset<18>(mtfCands->at( 0, i1 ).trackAddress().at(0) )
             <<" isKilled "<<isKilled.test(i1)<<std::endl;
   }
@@ -341,11 +361,13 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
           << " hwPt " <<std::setw(3)<< finalCandidate.hwPt()
           << " hwUPt " <<std::setw(3)<< finalCandidate.hwPtUnconstrained()
           << " hwSign " << finalCandidate.hwSign() << " hwQual "
-          <<std::setw(2)<< finalCandidate.hwQual() << " hwEta " << std::setw(4) << finalCandidate.hwEta() << std::setw(4) << " hwPhi "
-          << finalCandidate.hwPhi() << "    eta " << std::setw(9) << (finalCandidate.hwEta() * 0.010875) << " phi "
-          //<< std::setw(9) << globalPhi << " "
-          << layerHitBits << " processor "
-          << OmtfName(finalCandidate.processor(), finalCandidate.trackFinderType())
+          <<std::setw(2)<< finalCandidate.hwQual() << " hwEta " << std::setw(4) << finalCandidate.hwEta()
+          << std::setw(4) << " hwPhi " << finalCandidate.hwPhi()
+          << "    eta " << std::setw(9) << (finalCandidate.hwEta() * 0.010875)
+          //<< " phi "<< std::setw(9) << globalPhi << " "
+          <<" firedLayers " << layerHitBits << " processor " <<finalCandidate.processor()
+          << " trackFinderType "<<finalCandidate.trackFinderType()
+          //<< OmtfName(finalCandidate.processor(), finalCandidate.trackFinderType())
           << std::endl;
     }
   }
@@ -417,6 +439,39 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
     analyzeRate(event, matchingResults);
   }
 
+
+  //Analyzing ghosts - in this verison they are afer the ghostBust()
+  for(unsigned int i1 = 0; i1 < matchingResults.size(); i1++) {
+    if(matchingResults[i1].result == MatchingResult::ResultType::matched) {
+      for(unsigned int i2 = 0; i2 < matchingResults.size(); i2++) {
+        if(i1 == i2)
+          continue;
+
+        if (matchingResults[i2].result == MatchingResult::ResultType::duplicate) {
+          //should not be present
+        } else if (matchingResults[i2].result != MatchingResult::ResultType::matched
+            && matchingResults[i2].muonCand != nullptr) {
+          auto& mtfCand1 = matchingResults[i1].muonCand;
+          auto& mtfCand2 = matchingResults[i2].muonCand;
+
+          int gloablHwPhi1 = calcGlobalPhi( mtfCand1->hwPhi(), mtfCand1->processor(), nProcessors ) ; //0...(576-1)
+          int gloablHwPhi2 = calcGlobalPhi( mtfCand2->hwPhi(), mtfCand2->processor(), nProcessors ) ;
+          //double globalPhi1 = hwGmtPhiToGlobalPhi(l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand1.hwPhi(), mtfCand1.trackFinderType(), mtfCand1.processor() ) );
+          //double globalPhi2 = hwGmtPhiToGlobalPhi(l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand2.hwPhi(), mtfCand2.trackFinderType(), mtfCand2.processor() ) );
+
+          //folding phi
+          int deltaPhi = (gloablHwPhi1 - gloablHwPhi2);
+          if(deltaPhi > 576/2)
+            deltaPhi = deltaPhi - 576;
+          else if(deltaPhi < -576/2)
+            deltaPhi = deltaPhi + 576;
+
+          candsDeltaPhi->Fill(deltaPhi);
+        }
+      }
+    }
+  }
+
   LogTrace("l1MuonAnalyzerOmtf")<<std::endl;
 }
 
@@ -486,7 +541,8 @@ double L1MuonAnalyzerOmtf::getDeltaR(const edm::Ptr< SimTrack >& simTrackPtr, co
 
 bool L1MuonAnalyzerOmtf::matched(const edm::Ptr< SimTrack >& simTrackPtr, const l1t::RegionalMuonCand& omtfCand) {
   if( (simTrackPtr->momentum().eta() * omtfCand.hwEta() ) > 0 ) { //eta has the same sign
-    double globalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( omtfCand.hwPhi(), omtfCand.trackFinderType(), omtfCand.processor() );
+    double globalPhi = calcGlobalPhi( omtfCand.hwPhi(), omtfCand.processor(), nProcessors );
+
     globalPhi = hwGmtPhiToGlobalPhi(globalPhi );
 
     if(globalPhi > M_PI)
@@ -630,7 +686,9 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, const edm::EventSe
     int layerHits = (int)omtfCand->trackAddress().at(0);
     std::bitset<18> layerHitBits(layerHits);
 
-    double globalPhi = l1t::MicroGMTConfiguration::calcGlobalPhi( omtfCand->hwPhi(), omtfCand->trackFinderType(), omtfCand->processor() )* 2. * M_PI / 576;
+    double globalPhi = calcGlobalPhi( omtfCand->hwPhi(), omtfCand->processor(), nProcessors );
+    globalPhi = hwGmtPhiToGlobalPhi(globalPhi );
+
     if(globalPhi > M_PI)
       globalPhi = globalPhi -(2.*M_PI);
     LogTrace("l1MuonAnalyzerOmtf") << "L1MuonAnalyzerOmtf::"<<__FUNCTION__<<":"<<__LINE__

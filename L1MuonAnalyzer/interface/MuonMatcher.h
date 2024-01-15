@@ -40,6 +40,8 @@ namespace L1MuAn {
 
 double hwGmtPhiToGlobalPhi(int phi);
 
+int calcGlobalPhi(int locPhi, int proc, int nProcessors);
+
 double foldPhi(double phi);
 
 class MatchingResult {
@@ -166,8 +168,13 @@ private:
   TH1D* deltaPhiVertexCand_Mean_neg = nullptr;
   TH1D* deltaPhiVertexCand_StdDev_neg = nullptr;
 
+  TH1* muonsPerEvent = nullptr;
+  TH1* muonsPerEventInOmtf = nullptr;
+
   bool fillMean = false;
   bool matchUsingPropagation = true;
+
+  int nProcessors = 6;
 };
 
 }
