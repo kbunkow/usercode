@@ -36,7 +36,8 @@ gStyle.SetOptTitle(0);
 # leg -> SetHeader("here is a beautiful header")
 
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/usercode/L1MuonAnalyzer/test/'
-plotsDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/usercode/L1MuonAnalyzer/test/'
+#plotsDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/usercode/L1MuonAnalyzer/test/'
+plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/'
 
 first = True
 
@@ -60,6 +61,8 @@ def drawEff(canvas, effFile, type, quality, ptCut, lineColor, legend, pTresh = "
         elif type == "omtf_extrp" :
             #histName = type + "_q" + quality + "_pTresh_" + pTresh + "_efficiency_eta_0.82_1.24_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"
             histName = "omtf" + "_q" + quality + "_pt_efficiency_eta_0_3_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"    
+        elif type == "omtf_v1" :
+            histName = "omtf" + "_q" + quality + "_pt_efficiency_eta_0.82_1.24_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV" 
         else :
             histName = type + "_q" + quality + "_efficiency_eta_0.82_1.24_qualityCut_" + quality + "_ptCut_" + ptCut + "_GeV"    
             #omtf_q12_efficiency_eta_0.82_1.24_qualityCut_12_ptCut_18_GeV
@@ -168,6 +171,8 @@ def drawEffVsEta(effFile, type, quality, lineColor, pTresh = "0.5") :
     if type == "nn_omtf" :
         effHistName = type + "_q" + quality + "_pTresh_" + pTresh + "_efficiencyVsEta__qualityCut_" + quality + "_ptGenCut_25"
     elif type == "omtf_extrp" :
+        effHistName = "omtf" + "_q" + quality + "_efficiencyVsEta__qualityCut_" + quality + "_ptGenCut_25"
+    elif type == "omtf_v1" :
         effHistName = "omtf" + "_q" + quality + "_efficiencyVsEta__qualityCut_" + quality + "_ptGenCut_25"
     else :
         effHistName = type + "_q" + quality + "_efficiencyVsEta__qualityCut_" + quality + "_ptGenCut_25"
@@ -312,7 +317,7 @@ def drawEffs(fileDir, type, quality, lineColor, pTresh = "0.5" ) :
     print ("first " + str(first) )
     effFile = TFile(plotsDir + fileDir + 'efficiencyPlots.root' )
     effFiles.append(effFile)
-    if type == "omtf" or type == "omtf_extrp":
+    if type == "omtf" or type == "omtf_extrp" or type == "omtf_v1":
         print (c1.GetName() )
         logScalePadNum = 0
         drawEff(c1, effFile, type, quality, "20", lineColor, legendEff1)
@@ -422,7 +427,7 @@ doLogScale = False
 
 #drawEffs('SingleMu_t80/', "omtf_patsKB", "12", kCyan)
 
-drawEffs('SingleMu_0x0006_t79/', "omtf", "12", kBlack)
+#drawEffs('SingleMu_0x0006_t79/', "omtf", "12", kBlack)
  #drawEffs('SingleMu_t74/', "omtf_patsKB", "12", kGreen)
 #drawEffs('SingleMu_t76/', "omtf_patsKB", "12", kRed)
 #drawEffs('SingleMu_t77/', "omtf_patsKB", "12", kBlue)
@@ -454,10 +459,11 @@ doLogScale = False
 #drawEffs('SingleMu_t120/', "omtf", "12", kRed)
 #drawEffs('SingleMu_t125/', "omtf", "12", kGreen+1)
 #drawEffs('SingleMu_t126/', "omtf", "12", kRed)
-drawEffs('SingleMu_t127/', "omtf", "12", kBlue)
-drawEffs('SingleMu_t115/', "omtf_extrp", "12", kRed)
-
-
+#drawEffs('SingleMu_t127/', "omtf", "12", kBlue)
+#drawEffs('SingleMu_t115/', "omtf_extrp", "12", kRed)
+drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
+drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kGreen)
+drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize11/', "omtf_v1", "12", kRed)
 #drawEffs('SingleMu_Extr_t10/', "omtf_extrp", "12", kRed)
 
 

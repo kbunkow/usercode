@@ -1,8 +1,8 @@
-from ROOT import TCanvas, TPad, TFile, TPaveLabel, TPaveText, TH1D, TEfficiency, TH2D
+from ROOT import TCanvas, TPad, TFile, TPaveLabel, TPaveText, TH1D, TEfficiency, TH2D, TDirectory
 from ROOT import gROOT
 from ROOT import gStyle
 
-from libPyROOT import TDirectory
+#from libPyROOT import TDirectory
 import os
 import sys
 

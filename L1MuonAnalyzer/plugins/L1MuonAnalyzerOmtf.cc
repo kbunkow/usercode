@@ -52,12 +52,16 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
 
   analysisType = edmCfg.getParameter< string >("analysisType");
 
-  //double etaFrom = 0.82;
-  //double etaTo = 1.24;
+  //without propagation we cut on genEta at histograms filling.
+  //if MuonMatcher::matchSimple is used, than the simTrackFilter = simTrackIsMuonInOmtfBx0, which has wider range 0.72-1.3 to match all omtf cands coming from any muon (at least those with quality >= 1)
+  double etaFrom = 0.82;
+  double etaTo = 1.24;
 
-  //TODO for the displaced cutting on eta has no sens, therefore the MuonMatcher::atMB1
-  double etaFrom = 0; //abs eta is used , so here must be 0
-  double etaTo = 3;
+  if(matchUsingPropagation) {
+    //for the displaced cutting on gen eta has no sense, therefore the the propagation should be used, with MuonMatcher::atMB1
+    etaFrom = 0; //abs eta is used , so here must be 0
+    etaTo = 3;
+  }
 
   //TODO set all of thsi from one place!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -259,8 +263,8 @@ bool simTrackIsMuonInOmtf(const SimTrack& simTrack) {
   LogTrace("l1MuonAnalyzerOmtf") <<"simTrackIsMuonInOmtf, simTrack type "<<std::setw(3)<<simTrack.type()<<" pt "<<std::setw(9)<<simTrack.momentum().pt()<<" eta "<<std::setw(9)<<simTrack.momentum().eta()<<" phi "<<std::setw(9)<<simTrack.momentum().phi()<<std::endl;
 
 
-  //if( (fabs(simTrack.momentum().eta()) >= 0.82 ) && (fabs(simTrack.momentum().eta()) <= 1.24) ) {
-  if( (fabs(simTrack.momentum().eta()) >= 0.72 ) && (fabs(simTrack.momentum().eta()) <= 1.3) ) { //higher margin for matching, otherwise many candidates are marked as ghosts
+  //if( (std::abs(simTrack.momentum().eta()) >= 0.82 ) && (std::abs(simTrack.momentum().eta()) <= 1.24) ) {
+  if( (std::abs(simTrack.momentum().eta()) >= 0.72 ) && (std::abs(simTrack.momentum().eta()) <= 1.3) ) { //higher margin for matching, otherwise many candidates are marked as ghosts
   }
   else
     return false;;
@@ -393,9 +397,9 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
     }
 
     //std::function<bool(const SimTrack& )> const& simTrackFilter = simTrackIsMuonInOmtfBx0;
-    std::function<bool(const SimTrack& )> const& simTrackFilter = simTrackIsMuonInBx0; //use this one if checkIsInW2MB1 = true
+    std::function<bool(const SimTrack& )> simTrackFilter = simTrackIsMuonInBx0; //use this one if checkIsInW2MB1 = true
     if(analysisType == "rate") {
-      std::function<bool(const SimTrack& )> const& simTrackFilter = simTrackIsMuonInOmtf;
+      simTrackFilter = simTrackIsMuonInOmtf;
     }
 
     std::function<bool(const TrackingParticle& )> trackParticleFilter = trackingParticleIsMuonInOmtfEvent0;
@@ -415,8 +419,14 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
         std::function<bool(const SimTrack& )> simTrackFilter = simTrackIsMuonInOmtfBx0;
         muonMatcher.fillHists(ghostBustedCands, simTraksHandle.product(), simTrackFilter);
       }
-      else
-        matchingResults = muonMatcher.matchWithoutPorpagation(ghostBustedCands, trackingParticleHandle.product(), trackParticleFilter);
+      else {
+        if(!trackingParticleToken.isUninitialized())
+          matchingResults = muonMatcher.matchWithoutPorpagation(ghostBustedCands, trackingParticleHandle.product(), trackParticleFilter);
+        else if(!simTrackToken.isUninitialized()) {
+          simTrackFilter = simTrackIsMuonInOmtfBx0;
+          matchingResults = muonMatcher.matchSimple(ghostBustedCands, simTraksHandle.product(), simVertices.product(), simTrackFilter);
+        }
+      }
     }
 
   }

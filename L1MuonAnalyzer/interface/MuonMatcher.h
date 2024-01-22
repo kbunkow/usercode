@@ -139,6 +139,11 @@ public:
 
   MatchingResult match(const l1t::RegionalMuonCand* omtfCand, const TrackingParticle& trackingParticle);
 
+  std::vector<MatchingResult> matchSimple(std::vector<const l1t::RegionalMuonCand*>& muonCands,
+      const edm::SimTrackContainer* simTracks,
+      const edm::SimVertexContainer* simVertices,
+      std::function<bool(const SimTrack&)> const& simTrackFilter);
+
   //propagations is not used, but inseted the histograms deltaPhiVertexCand_Mean_pos and deltaPhiVertexCand_StdDev_pos
   std::vector<MatchingResult> matchWithoutPorpagation(std::vector<const l1t::RegionalMuonCand*>& muonCands, const TrackingParticleCollection* trackingParticles,
       std::function<bool(const TrackingParticle& )> const& simTrackFilter);

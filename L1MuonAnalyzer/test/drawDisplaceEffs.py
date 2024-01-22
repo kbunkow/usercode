@@ -9,7 +9,9 @@ from array import array
 from ROOT import TDirectory
 import os
 import sys
-from matplotlib import legend
+#from matplotlib import legend
+
+print("asfdafafa")
 
 gStyle.SetOptStat(0)
 #gStyle.SetOptTitle(0);
@@ -26,15 +28,18 @@ hists = []
 #dir = "/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tt15_displ_test_allfiles.root' )
 
-dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
+#dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tt14_extrapolSimpl_displ_allfiles.root' )
-inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedFP_t17_v2.root' )
+#inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedFP_t17_v2.root' )
 
 #dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tt16_extrapolFul_displ.root' )
 
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
-inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedFP_t19_v16_test_bits_HTo2LongLivedTo2mu2jets_allFiles.root' )
+#inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedFP_t19_v16_test_bits_HTo2LongLivedTo2mu2jets_allFiles.root' )
+inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_0x00012__MH-1000_MFF-150_CTau-1000mm_allFiles.root' )
+#inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
+#inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
 
 
 inputFiles.append(inputFile)
@@ -57,7 +62,7 @@ ptL1Cut = "10"
 qualityCut = "qualityCut_8"
 q = "q8"
 
-ptL1Cut = "5"
+ptL1Cut = "22"
 
 qualityCut = "qualityCut_12"
 q = "q12"
@@ -74,7 +79,7 @@ allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" 
 aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY()
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
-aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 0.8)
+aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
 
@@ -93,7 +98,7 @@ allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" 
 aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
-aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 0.8)
+aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
 
@@ -111,7 +116,7 @@ allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_if
 aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_ifPtBelowCut_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
-aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 0.8)
+aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
 

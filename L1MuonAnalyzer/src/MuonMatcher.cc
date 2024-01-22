@@ -65,7 +65,7 @@ MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg,
   edm::Service<TFileService> fs;
   TFileDirectory subDir =  fs->mkdir("MuonMatcher");
 
-  deltaPhiPropCand   =      subDir.make<TH2F>("deltaPhiPropCand",         "delta Phi propagated track - muonCand Vs Pt", 200, 0, 1000, 100, -0.5 -0.005, 0.5 -0.005); //delta phi between propagated track and muon candidate,
+  deltaPhiPropCand   =      subDir.make<TH2F>("deltaPhiPropCand",         "delta Phi propagated track - muonCand Vs Pt", 200, 0, 1000, 100, -1.5, 1.5); //delta phi between propagated track and muon candidate,
   deltaPhiPropCandMatched = subDir.make<TH2F>("deltaPhiPropCandMatched",  "delta Phi matched propagated track - muonCand Vs Pt", 200, 0, 1000, 100, -0.5 -0.005, 0.5 -0.005); //delta phi between propagated track and muon candidate,
   deltaPhiVertexProp = subDir.make<TH2F>("deltaPhiVertexProp", "delta Phi vertex - propagated track Vs Pt", 200, 0, 1000, 100, -1, 1);; //delta phi between phi at vertex and propagated track phi)
 
@@ -874,6 +874,127 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const T
 
   return result;
 }
+
+/*
+ * Using this matching has sense only for the prompt muons.
+ */
+std::vector<MatchingResult> MuonMatcher::matchSimple(std::vector<const l1t::RegionalMuonCand*>& muonCands,
+    const edm::SimTrackContainer* simTracks,
+    const edm::SimVertexContainer* simVertices,
+    std::function<bool(const SimTrack&)> const& simTrackFilter) {
+  std::vector<MatchingResult> matchingResults;
+
+  int muonCnt = 0;
+  int muonCntInOmtf = 0;
+
+  for (auto& simTrack : *simTracks) {
+    if (abs(simTrack.type()) == 13 || abs(simTrack.type()) == 1000015 )
+      muonCnt++;
+
+    if (!simTrackFilter(simTrack))
+      continue;
+
+    LogTrace("l1tOmtfEventPrint") << "MuonMatcher::matchSimple: simTrack type " << std::setw(3) << simTrack.type()
+                                          << " pt " << std::setw(9) << simTrack.momentum().pt() << " eta " << std::setw(9)
+                                          << simTrack.momentum().eta() << " phi " << std::setw(9) << simTrack.momentum().phi()
+                                          << std::endl;
+
+    muonCntInOmtf++;
+
+    bool matched = false;
+
+    unsigned int iCand = 0;
+    for (auto& muonCand : muonCands) {
+      //dropping very low quality candidates, as they are fakes usually - but it has no sense, then the results are not conclusive
+      //if(muonCand->hwQual() > 1)
+      {
+        MatchingResult result(simTrack);
+
+        double candGloablEta = muonCand->hwEta() * 0.010875;
+        double candGlobalPhi = calcGlobalPhi( muonCand->hwPhi(), muonCand->processor(), nProcessors );
+        candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
+
+        if (candGlobalPhi > M_PI)
+          candGlobalPhi = candGlobalPhi - (2. * M_PI);
+
+        result.deltaPhi = foldPhi(result.genPhi - candGlobalPhi);
+        result.deltaEta = result.genEta - candGloablEta;
+
+        result.propagatedPhi = result.genPhi;
+        result.propagatedEta = result.genEta;
+
+        result.muonCand = muonCand;
+
+        //TODO histogram can be used, like in the MuonMatcher::matchWithoutPorpagation
+        //for prompt muons
+        double treshold = 0.3;
+        if (simTrack.momentum().pt() < 5)
+          treshold = 1.5;
+        else if (simTrack.momentum().pt() < 8)
+          treshold = 1.0;
+        else if (simTrack.momentum().pt() < 10)
+          treshold = 0.8;
+        else if (simTrack.momentum().pt() < 20)
+          treshold = 0.5;
+
+        //for displaced muons
+        /*double treshold = 0.7;
+        if (simTrack.momentum().pt() < 5)
+          treshold = 1.5;
+        else if (simTrack.momentum().pt() < 10)
+          treshold = 1.0;
+        else if (simTrack.momentum().pt() < 20)
+          treshold = 0.7;*/
+
+        if (std::abs(result.deltaPhi) < treshold && std::abs(result.deltaEta) < 0.5) {
+          result.result = MatchingResult::ResultType::matched;
+          //matchingLikelihood is needed in the cleanMatching, so we put something
+          if(std::abs(result.deltaPhi) < 0.001)
+            result.matchingLikelihood = 1./ 0.001;
+          else
+            result.matchingLikelihood = 1./ std::abs(result.deltaPhi);
+        }
+
+        LogTrace("l1tOmtfEventPrint") << "MuonMatcher::matchSimple: simTrack type " << simTrack.type() << " pt "
+            << std::setw(8) << simTrack.momentum().pt() << " eta " << std::setw(8)
+            << simTrack.momentum().eta() << " phi " << std::setw(8) << simTrack.momentum().phi()
+            << "\n             muonCand pt " << std::setw(8)
+            << muonCand->hwPt() << " candGloablEta " << std::setw(8) << candGloablEta
+            << " candGlobalPhi " << std::setw(8) << candGlobalPhi
+            << " hwQual "<< muonCand->hwQual()
+            << " deltaEta " << std::setw(8) << result.deltaEta
+            << " deltaPhi " << std::setw(8) << result.deltaPhi
+            << " matchingLikelihood " << result.matchingLikelihood
+            << " result " << (short)result.result << std::endl;
+
+
+        int vtxInd = simTrack.vertIndex();
+        if (vtxInd >= 0) {
+          result.simVertex = &(
+              simVertices->at(vtxInd));
+        }
+        if (result.result == MatchingResult::ResultType::matched) {
+          matchingResults.push_back(result);
+          matched = true;
+        }
+      }
+      iCand++;
+    }
+
+
+    if (!matched) {  //we are adding also if it was not matched to any candidate
+      MatchingResult result(simTrack);
+      matchingResults.push_back(result);
+      LogTrace("l1tOmtfEventPrint") << __FUNCTION__ << ":" << __LINE__ << " no matching candidate found" << std::endl;
+    }
+  }
+
+  muonsPerEvent->Fill(muonCnt);
+  muonsPerEventInOmtf->Fill(muonCntInOmtf);
+
+  return cleanMatching(matchingResults, muonCands);
+}
+
 
 /*
  * Using tis matching has sense only for the prompt muons.

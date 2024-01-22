@@ -77,16 +77,25 @@ omtf_type = 2022 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/expert/omtf/omtfAnalysis_newerSAmple_v28_10Files.root' )
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/crab_omtf_nn_MC_analysis_MuFlatPt_PU200_v2_t33/results/omtfAnalysis2.root' )
 
-if "SingleMu_" in version :
-    histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )
-    omtf_type = 2022
 
-elif "t41" in version or "t66" in version :
-    histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/crab_omtf_nn_MC_analysis_' + inputResults + '/results/omtfAnalysis2.root' )
-else :
-    #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_omtf_nn_MC_analysis_' + inputResults + '/results/omtfAnalysis2.root' )
-    #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/usercode/L1MuonAnalyzer/test/crab/omtfAnalysis1.root' )
-    histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/usercode/L1MuonAnalyzer/test/crab/crab_OMTF_NN_Regression_FP_analysis_DYToLL_M-10To50_Summer20_noPU_t230/results/omtfAnalysis3.root')
+histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/"
+
+if version == "t21a__Patterns_0x00012" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t21a__Patterns_0x00012__mcWaw2023_OneOverPt_and_iPt2.root" )
+  
+if version == "t21a__Extrapl_Patterns_t17_gpFinalize11" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize11__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+# if "SingleMu_" in version :
+#     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )
+#     omtf_type = 2022
+#
+# elif "t41" in version or "t66" in version :
+#     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/crab_omtf_nn_MC_analysis_' + inputResults + '/results/omtfAnalysis2.root' )
+# else :
+#     #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_omtf_nn_MC_analysis_' + inputResults + '/results/omtfAnalysis2.root' )
+#     #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/usercode/L1MuonAnalyzer/test/crab/omtfAnalysis1.root' )
+#     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_12_x_x_official/CMSSW_12_6_0_pre4/src/usercode/L1MuonAnalyzer/test/crab/crab_OMTF_NN_Regression_FP_analysis_DYToLL_M-10To50_Summer20_noPU_t230/results/omtfAnalysis3.root')
 
 
 
@@ -200,12 +209,14 @@ def makeEfficiencyPlots(ptCutGev, platCutGev, lineColor) :
     ####################eff vs eta
     allCandsEtaName = ptGenVsPtCand.GetName().replace("ptGenVsPtCand_eta_0.82_1.24", "allCandsEta_")
     allCandsEtaName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_eta_0_3", "allCandsEta_")
+    allCandsEtaName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_eta_0.82_1.24", "allCandsEta_")
     allCandsEtaName = allCandsEtaName + "_ptGenCut_25"
     print ("allCandsEtaName " + allCandsEtaName)
     allCandsEta = efficiencyDir.Get(allCandsEtaName)
     
     aceptedCandsEtaName = ptGenVsPtCand.GetName().replace("ptGenVsPtCand_eta_0.82_1.24", "aceptedCandsEta_")   
     aceptedCandsEtaName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_eta_0_3", "aceptedCandsEta_")   
+    aceptedCandsEtaName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_eta_0.82_1.24", "aceptedCandsEta_")   
     aceptedCandsEtaName = aceptedCandsEtaName + "_ptGenCut_25_ptL1Cut_18"
     print ("aceptedCandsEtaName " + aceptedCandsEtaName)
         
@@ -237,7 +248,7 @@ def makeEfficiencyPlots(ptCutGev, platCutGev, lineColor) :
         
 for iAlgo, obj in enumerate(efficiencyDir.GetListOfKeys() ) :
     ptGenVsPtCand = obj.ReadObj()
-    if isinstance(ptGenVsPtCand, TH2D) and "ptGenVsPtCand" in ptGenVsPtCand.GetName() :
+    if isinstance(ptGenVsPtCand, TH2D) and "pt_ptGenVsPtCand" in ptGenVsPtCand.GetName() :
         #makeEfficiencyPlots(5)
         lineColor = 2
         ptCut = 22
