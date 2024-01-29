@@ -84,13 +84,13 @@ def drawEff(canvas, effFile, type, quality, ptCut, lineColor, legend, pTresh = "
         if not doEff :
             effHist.Draw("hist")
             effHist.GetXaxis().SetRangeUser(0, 200)
-            effHist.GetYaxis().SetRangeUser(0, 1.05)
+            effHist.GetYaxis().SetRangeUser(0, 1.00)
         else :    
             effHist.Draw("AEP")
             effHist.SetMarkerStyle(22)
             effHist.SetMarkerColor(lineColor)
             canvas.cd(2).Update()
-            effHist.GetPaintedGraph().GetYaxis().SetRangeUser(0., 1.05)
+            effHist.GetPaintedGraph().GetYaxis().SetRangeUser(0., 1.00)
 
     else:
         if not doEff :
@@ -120,7 +120,7 @@ def drawEff(canvas, effFile, type, quality, ptCut, lineColor, legend, pTresh = "
                 effHistCopy.GetPaintedGraph().GetXaxis().SetRangeUser(0, 25)
                 effHistCopy.GetPaintedGraph().GetYaxis().SetRangeUser(0.001, 1.05)
             else :
-                effHistCopy.GetPaintedGraph().GetYaxis().SetRangeUser(0.8, 1.05)  
+                effHistCopy.GetPaintedGraph().GetYaxis().SetRangeUser(0.8, 1.00)  
     else:
         if not doEff :
             effHistCopy = effHist.Clone(effHist.GetName() + "_log")

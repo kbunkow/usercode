@@ -403,6 +403,13 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
 
     treshold = 0.3; //should be good for all pts in Displaced_Dxy3m_pT0To1000_condPhase2_realistic
 
+    //for displaced muons in H2ll
+    treshold = 0.15; //pt > 30
+    if(simTrack.momentum().pt() < 10) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!! - it is very big, why like that?
+      treshold = 0.3;
+    else if(simTrack.momentum().pt() < 30) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!! - it is very big, why like that?
+      treshold = 0.2;
+
     if( abs(result.deltaPhi - mean) < treshold)
       result.result = MatchingResult::ResultType::matched;
 

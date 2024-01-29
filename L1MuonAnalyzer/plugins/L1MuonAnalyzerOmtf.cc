@@ -216,7 +216,8 @@ std::vector<const l1t::RegionalMuonCand*> L1MuonAnalyzerOmtf::ghostBust(const l1
         if(deltaPhi > 576/2)
           deltaPhi = abs(deltaPhi - 576);
 
-        if(abs(deltaPhi) < 8) {//0.0872664626 = 5 deg, i.e. the same window as in the OMTF ghost buster
+        //0.0872664626 = 5 deg, i.e. the same window as in the OMTF ghost buster
+        if(abs(deltaPhi) < 8) {
           if(mtfCand1.hwQual() > mtfCand2.hwQual()) {
             isKilled[i2] = true;
           }
@@ -451,6 +452,7 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
 
 
   //Analyzing ghosts - in this verison they are afer the ghostBust()
+  //TODO add quality cut!!!
   for(unsigned int i1 = 0; i1 < matchingResults.size(); i1++) {
     if(matchingResults[i1].result == MatchingResult::ResultType::matched) {
       for(unsigned int i2 = 0; i2 < matchingResults.size(); i2++) {

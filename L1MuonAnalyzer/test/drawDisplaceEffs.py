@@ -18,8 +18,12 @@ gStyle.SetOptStat(0)
 
 
 inputFiles = []
+
 canvases = []
 hists = []
+
+algoVersion = "t21a__Patterns_0x00012"
+lineColor = kBlack
 
 #old version, not good
 #dir = "/home/kbunkow/CMSSW/CMSSW_12_1_0_pre3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
@@ -37,10 +41,23 @@ hists = []
 
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedFP_t19_v16_test_bits_HTo2LongLivedTo2mu2jets_allFiles.root' )
-inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_0x00012__MH-1000_MFF-150_CTau-1000mm_allFiles.root' )
-#inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
-#inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
 
+algoVersion = "t21a__Patterns_0x00012"
+lineColor = kBlack
+inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__' + algoVersion + '__MH-1000_MFF-150_CTau-1000mm_allFiles.root' )
+
+algoVersion = "t21a__Extrapl_Patterns_t17_gpFinalize10"
+lineColor = kGreen
+inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
+#
+algoVersion = "t21a__Extrapl_Patterns_t17_gpFinalize11"
+lineColor = kRed
+inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize11.root' )
+
+algoVersion = "phase2_t20__Extrapl_Dxy3m_pT0To1000"
+dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/rootDump/"
+lineColor = kMagenta
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_d1_DTQ0_SingleMu_effAna_rootDump_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
 
 inputFiles.append(inputFile)
 inputFile.ls()
@@ -76,9 +93,11 @@ c1.cd(4).SetGridx()
 c1.cd(4).SetGridy()
 
 allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY()
+aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY(algoVersion + "_" + qualityCut + "_ptL1Cut_" + ptL1Cut)
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
+aceptedCandsPtGenVsDxyProj.SetName(qualityCut + " ptCut " + ptL1Cut +"GeV " + algoVersion)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
+aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
@@ -95,9 +114,11 @@ c1.cd(5).SetGridx()
 c1.cd(5).SetGridy()
 
 allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
+aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY(algoVersion + "_" + qualityCut + "_uptL1Cut_" + ptL1Cut)
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
+aceptedCandsPtGenVsDxyProj.SetName(qualityCut + " uptCut " + ptL1Cut +"GeV " + algoVersion)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
+aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
@@ -113,9 +134,11 @@ c1.cd(6).SetGridx()
 c1.cd(6).SetGridy()
 
 allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_ifPtBelowCut_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_ifPtBelowCut_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
+aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_ifPtBelowCut_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY(algoVersion + "_" + qualityCut + "_uptL1Cut_" + ptL1Cut + "_ifPtBelowCut")
+aceptedCandsPtGenVsDxyProj.SetName(qualityCut + " uptCut " + ptL1Cut +"GeV " + algoVersion+ " ifPtBelowCut")
 aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
+aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
@@ -126,12 +149,14 @@ hists.append(aceptedCandsPtGenVsDxyProj)
 #effHist.GetYaxis().SetTitle("efficiency")
 
 
-
-
-
-
 c1.Modified()
 c1.Update()
+
+
+outFile = TFile(algoVersion + ".root", "RECREATE")
+outFile.cd()
+for hist in hists :
+    hist.Write()
 
 input("Press ENTER to exit")
  
