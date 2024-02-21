@@ -40,7 +40,12 @@ private:
 
   TH1* candEtaPtCut1 = nullptr;
   TH1* candEtaPtCut10 = nullptr;
-  TH1* candEtaPtCut20 = nullptr;
+  TH1* candEtaPtCut22 = nullptr;
+
+  TH1* candPhiPtCut10 = nullptr;
+  TH1* candPhiPtCut22 = nullptr;
+
+  TH1* candUPt = nullptr;
 
 };
 

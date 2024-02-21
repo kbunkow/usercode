@@ -17,10 +17,10 @@ namespace L1MuAn {
 
 
 L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
-          magneticFieldEsToken(esConsumes<MagneticField, IdealMagneticFieldRecord, edm::Transition::BeginRun>()),
-          propagatorEsToken(esConsumes<Propagator, TrackingComponentsRecord, edm::Transition::BeginRun>(
-              edm::ESInputTag("", "SteppingHelixPropagatorAlong"))),
-          muonMatcher(edmCfg, magneticFieldEsToken, propagatorEsToken) {
+              magneticFieldEsToken(esConsumes<MagneticField, IdealMagneticFieldRecord, edm::Transition::BeginRun>()),
+              propagatorEsToken(esConsumes<Propagator, TrackingComponentsRecord, edm::Transition::BeginRun>(
+                  edm::ESInputTag("", "SteppingHelixPropagatorAlong"))),
+                  muonMatcher(edmCfg, magneticFieldEsToken, propagatorEsToken) {
   if(edmCfg.exists("phase") ) {
     if(edmCfg.getParameter<int>("phase") == 2)
       nProcessors = 3;
@@ -34,7 +34,7 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
   if(edmCfg.exists("matchUsingPropagation") )
     matchUsingPropagation = edmCfg.getParameter<bool>("matchUsingPropagation");
 
-  edm::LogImportant("l1MuonAnalyzerOmtf") <<" L1MuonAnalyzerOmtf: line "<<__LINE__<<" matchUsingPropagation "<<matchUsingPropagation<<std::endl;
+  edm::LogImportant("l1MuonAnalyzerOmtf") <<" L1MuonAnalyzerOmtf: line "<<__LINE__<<" matchUsingPropagation "<<matchUsingPropagation<<" useMatcher "<<useMatcher<<std::endl;
 
   omtfToken = consumes<l1t::RegionalMuonCandBxCollection >(edmCfg.getParameter<edm::InputTag>("L1OMTFInputTag"));
 
@@ -236,11 +236,11 @@ std::vector<const l1t::RegionalMuonCand*> L1MuonAnalyzerOmtf::ghostBust(const l1
     }
 
     LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::ghostBust pt "<<std::setw(3)<<mtfCands->at( 0, i1 ).hwPt()<<" qual "<<std::setw(2)<<mtfCands->at( 0, i1 ).hwQual()
-            <<" proc "<<std::setw(2)<<mtfCands->at( 0, i1 ).processor()<<" eta "<<std::setw(4)<<mtfCands->at( 0, i1 ).hwEta()<<" gloablEta "<<std::setw(8)<<mtfCands->at( 0, i1 ).hwEta() * 0.010875
-            <<" hwPhi "<<std::setw(3)<<mtfCands->at( 0, i1 ).hwPhi()
-            <<" globalPhi "<<std::setw(8)<<hwGmtPhiToGlobalPhi(calcGlobalPhi( mtfCands->at( 0, i1 ).hwPhi(), mtfCands->at( 0, i1 ).processor(), nProcessors ))
-            <<" fireadLayers "<<std::bitset<18>(mtfCands->at( 0, i1 ).trackAddress().at(0) )
-            <<" isKilled "<<isKilled.test(i1)<<std::endl;
+                <<" proc "<<std::setw(2)<<mtfCands->at( 0, i1 ).processor()<<" eta "<<std::setw(4)<<mtfCands->at( 0, i1 ).hwEta()<<" gloablEta "<<std::setw(8)<<mtfCands->at( 0, i1 ).hwEta() * 0.010875
+                <<" hwPhi "<<std::setw(3)<<mtfCands->at( 0, i1 ).hwPhi()
+                <<" globalPhi "<<std::setw(8)<<hwGmtPhiToGlobalPhi(calcGlobalPhi( mtfCands->at( 0, i1 ).hwPhi(), mtfCands->at( 0, i1 ).processor(), nProcessors ))
+                <<" fireadLayers "<<std::bitset<18>(mtfCands->at( 0, i1 ).trackAddress().at(0) )
+                <<" isKilled "<<isKilled.test(i1)<<std::endl;
   }
 
   if(resultCands.size() >= 3)
@@ -352,7 +352,7 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
   event.getByToken(omtfToken, l1omtfHandle);
 
   LogTrace("l1MuonAnalyzerOmtf")<<std::endl<<"\nL1MuonAnalyzerOmtf::analyze. run "<<event.id().run()<<" event "<<event.id().event()
-      <<" number of candidates "<<l1omtfHandle.product()->size(0)<<" ---------------------------"<<std::endl;
+          <<" number of candidates "<<l1omtfHandle.product()->size(0)<<" ---------------------------"<<std::endl;
 
   //for(int bx = l1omtfHandle.product()->getFirstBX(); bx <= l1omtfHandle.product()->getLastBX(); bx++) //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!
   int bx = 0;
@@ -432,6 +432,7 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
 
   }
   else {// not useMatcher
+    LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze:"<<__LINE__<<" ghostBustedCands.size() "<<ghostBustedCands.size()<<std::endl;
     for(auto& muonCand : ghostBustedCands) {
       MatchingResult result;
       result.muonCand = muonCand;
@@ -447,6 +448,7 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
   }
   else if(analysisType == "rate") {
     //analyzeRate(event, es);
+    LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze:"<<__LINE__<<" analysisType "<<analysisType<<std::endl;
     analyzeRate(event, matchingResults);
   }
 
@@ -525,7 +527,7 @@ void L1MuonAnalyzerOmtf::analyzeEfficiency(const edm::Event& event, std::vector<
       double muDxy = 0;
       if(matchingResult.simTrack && matchingResult.simVertex)
         muDxy = (-1 * matchingResult.simVertex->position().x() * matchingResult.simTrack->momentum().py()
-          + matchingResult.simVertex->position().y() * matchingResult.simTrack->momentum().px()) / matchingResult.simTrack->momentum().pt();;
+            + matchingResult.simVertex->position().y() * matchingResult.simTrack->momentum().px()) / matchingResult.simTrack->momentum().pt();;
 
       muDxy = abs(muDxy);
       LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze, sim track type "<<matchingResult.pdgId<<" simTrack pt "<<matchingResult.genPt
@@ -584,7 +586,7 @@ bool L1MuonAnalyzerOmtf::matched(const edm::Ptr< SimTrack >& simTrackPtr, const 
 }
 
 void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, std::vector<MatchingResult>& matchingResults) { //, const edm::SimVertexContainer* simVertices
-  LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyzeRate"<<std::endl;
+  LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyzeRate:"<<__LINE__<<" matchingResults.size() "<<matchingResults.size()<<std::endl;
 
   MatchingResult* bestOmtfCand = nullptr;
   for (auto& matchingResult: matchingResults ) {

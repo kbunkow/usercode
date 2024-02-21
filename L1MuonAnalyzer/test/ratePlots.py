@@ -43,17 +43,30 @@ if len(sys.argv) >= 3 :
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_' + version + '/results/omtfAnalysis2.root' )
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/crab_omtf_nn_MC_analysis_' + inputResults + '/results/omtfAnalysis2.root' )
 
-if version < "MuFlatPt_PU200_v3_t73" :
-    histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/' + inputResults + '/results/omtfAnalysis2.root' )
-else :
-    histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_omtf_' + inputResults + '/results/omtfAnalysis2.root' )
+#if version < "MuFlatPt_PU200_v3_t73" :
+#    histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/' + inputResults + '/results/omtfAnalysis2.root' )
+#else :
+#    histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/crab_omtf_' + inputResults + '/results/omtfAnalysis2.root' )
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22__with_extrapolation"
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_0x00012__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22__OMTF2023"
+
+histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_0x00012_DTQ_2_4__NeutrinoGun_PU200_Alibordi.root' )
+version = "t22__OMTF2023_DTQ_2_4"
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_t22/results/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10.root' )
+#version = "t22__with_extrapolation"
 
 
 #histFile.ls()
 
 print (histFile)
 
-lhcFillingRatio = 2760./3564.;
+#lhcFillingRatio = 2760./3564.;
+lhcFillingRatio = 2345./3564.; #run 367883     2023C
 lhcFreq = 40144896; #11264 * 3564
 
 rootDirStr = "L1MuonAnalyzerOmtf" + rootDirPostFix
@@ -98,7 +111,7 @@ def makeRatePlotWithEff(candPt_rateCumul_copy, lineColor, canvasRate1, canvasRat
     candPt_rateCumul_copy.Sumw2(False);
     allEventsHist.Sumw2(False);
     
-    title = ("; ttTrack p_{T} [GeV]; rate [kHz]");
+    title = ("; OMTF p_{T}^{cut} [GeV]; rate [kHz]");
     rateCumul_withTEff = makeEfficiency(candPt_rateCumul_copy, allEventsHist, title, lineColor)
     
     canvasRate1.cd()
@@ -119,7 +132,7 @@ def makeRatePlotWithEff(candPt_rateCumul_copy, lineColor, canvasRate1, canvasRat
     canvasRate2.SetLogy()
     paintedGraph.Draw("APZ")
     canvasRate2.Update();
-    paintedGraph.GetXaxis().SetRangeUser(0, 100);
+    paintedGraph.GetXaxis().SetRangeUser(0, 60);
     #paintedGraph.GetYaxis().SetRangeUser(10 * scalekHz, 50000000 * scalekHz);
     paintedGraph.GetYaxis().SetRangeUser(1, 1000);
     canvasRate2.Update();     
@@ -129,11 +142,11 @@ def makeRatePlotWithEff(candPt_rateCumul_copy, lineColor, canvasRate1, canvasRat
     return rateCumul_withTEff , paintedGraph
 
 
-def makeRatePlots(algoDir, lineColor) :
+def makeRatePlots(algoDir, rateType, lineColor) :
     print (algoDir.GetName())
     algoDir.ls()
     
-    c1 = TCanvas('canvas_' + algoDir.GetName(), algoDir.GetName().replace("_", " "), 200, 10, 700, 900)
+    c1 = TCanvas('canvas_' + algoDir.GetName() + "_" + rateType, algoDir.GetName().replace("_", " ") + " " + rateType, 200, 10, 900, 900)
     c1.Divide(2, 2)
     c1.cd(1).SetGridx()
     c1.cd(1).SetGridy()
@@ -141,8 +154,11 @@ def makeRatePlots(algoDir, lineColor) :
 
     ##########################
     
+    candPtKey = "candPt"
+    if rateType == "UPt" :
+        candPtKey = "candUPt"
     for obj in algoDir.GetListOfKeys():
-        if "candPt" in obj.GetName() :
+        if candPtKey in obj.GetName() :
             candPt = obj.ReadObj()
             candPt.SetLineColor(lineColor)
             candPt.Draw("")
@@ -157,7 +173,7 @@ def makeRatePlots(algoDir, lineColor) :
 #             for iBin in range(0, candPt_rateCumul.GetNbinsX(), 1) : 
 #                 candPt_rateCumul.AddBinContent(iBin, -corr)
             
-            candPt_rateCumul.SetName(algoDir.GetName() + "_" + candPt_rateCumul.GetName().replace("candPt_", "rate") ) #+ "_" + version
+            candPt_rateCumul.SetName(algoDir.GetName() + "_" + candPt_rateCumul.GetName().replace(candPtKey, "rate") ) #+ "_" + version
             candPt_rateCumul.SetTitle(algoDir.GetName().replace("_", " ") + ", " + version + " " + rootDirPostFix)
             
             
@@ -172,7 +188,7 @@ def makeRatePlots(algoDir, lineColor) :
             candPt_rateCumul.Scale(0.001)
             candPt_rateCumul.GetYaxis().SetTitle("rate [kHz]")
             
-            print("candPt: " + obj.GetName() + " candPt_rateCumul " + candPt_rateCumul.GetName() + " " + candPt_rateCumul.GetTitle() )
+            print(candPtKey + ": " + obj.GetName() + " candPt_rateCumul " + candPt_rateCumul.GetName() + " " + candPt_rateCumul.GetTitle() )
             candPt_rateCumul.SetBinContent(1, 0);
             #candPt_rateCumul.Sumw2(False);
             candPt_rateCumul.Scale(scale) #TODO maybe it should be before Sumw2
@@ -185,7 +201,8 @@ def makeRatePlots(algoDir, lineColor) :
             
             rateCumuls.append(candPt_rateCumul)
             print ("created rate plot " + candPt_rateCumul.GetName() + " name: " + candPt_rateCumul.GetTitle() )
-       
+     
+    c1.Update()   
     canvases.append(c1) 
 # makeRatePlots #######################################################################       
 
@@ -198,7 +215,8 @@ for iAlgo, obj in enumerate(rateDir.GetListOfKeys() ) :
             lineColor = 1
         if iAlgo == 1:
             lineColor = 4
-        makeRatePlots(algoDir, lineColor)
+        makeRatePlots(algoDir, "Pt", lineColor)
+        makeRatePlots(algoDir, "UPt", lineColor)
         
         
 ratesOnThreshHist = TH1D("ratesOnThreshHist", inputResults.replace("_", " "), rateCumuls.__len__(), 0, rateCumuls.__len__()) 
@@ -280,6 +298,6 @@ gROOT.GetListOfCanvases().Draw()
 
 #outFile.Close()
 
-raw_input("Press ENTER to exit")
+input("Press ENTER to exit")
 
 #execfile('ratePlots.py')

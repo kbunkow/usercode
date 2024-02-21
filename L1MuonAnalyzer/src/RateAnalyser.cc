@@ -6,6 +6,7 @@
  */
 
 #include "usercode/L1MuonAnalyzer/interface/RateAnalyser.h"
+#include "usercode/L1MuonAnalyzer/interface/MuonMatcher.h"
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
@@ -19,6 +20,14 @@ RateAnalyser::RateAnalyser(TFileDirectory subDir, std::string name, int qualityC
   histTitle<<name<<" cand pt, "<<" quality >= "<<qualityCut<<";cand pt [GeV]; #events";
 
   candPt = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), nBins, binsFrom, binsTo);
+
+  histName.str("");
+  histTitle.str("");
+
+  histName<<"candUPt_"<<"_qualityCut_"<<qualityCut;
+  histTitle<<name<<" cand upt, "<<" quality >= "<<qualityCut<<";cand upt [GeV]; #events";
+
+  candUPt = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), nBins, binsFrom, binsTo);
 
   histName.str("");
   histTitle.str("");
@@ -39,10 +48,26 @@ RateAnalyser::RateAnalyser(TFileDirectory subDir, std::string name, int qualityC
   histName.str("");
   histTitle.str("");
 
-  histName<<"candEta_PtCut20GeV_"<<"_qualityCut_"<<qualityCut;
-  histTitle<<name<<" cand Eta, ptCut 20 GeV "<<" quality >= "<<qualityCut<<";eta; #events";
+  histName<<"candEta_PtCut22GeV_"<<"_qualityCut_"<<qualityCut;
+  histTitle<<name<<" cand Eta, ptCut 22 GeV "<<" quality >= "<<qualityCut<<";eta; #events";
 
-  candEtaPtCut20 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 100, -2.1, 2.1);
+  candEtaPtCut22 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 100, -2.1, 2.1);
+
+  histName.str("");
+  histTitle.str("");
+
+  histName<<"candPhi_PtCut10GeV_"<<"_qualityCut_"<<qualityCut;
+  histTitle<<name<<" cand phi, ptCut 10 GeV "<<" quality >= "<<qualityCut<<";phi [deg]; #events";
+
+  candPhiPtCut10 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 180, 0, 360);
+
+  histName.str("");
+  histTitle.str("");
+
+  histName<<"candPhi_PtCut22GeV_"<<"_qualityCut_"<<qualityCut;
+  histTitle<<name<<" cand phi, ptCut 22 GeV "<<" quality >= "<<qualityCut<<";phi [deg]; #events";
+
+  candPhiPtCut22 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 180, 0, 360);
 
 }
 
@@ -57,33 +82,50 @@ double hwEtaToEta(int hwEta) {
   return (hwEta * etaUnit);
 }
 
+
 void RateAnalyser::fill(L1MuonCand& l1MuonCand) {
   auto candPtGev = l1MuonCand.ptGev;
   if(candPtGev >= candPt->GetXaxis()->GetXmax())
     candPtGev = candPt->GetXaxis()->GetXmax() - 0.01;
 
+  auto candUPtGev = l1MuonCand.uptGev;
+  if(candUPtGev >= candUPt->GetXaxis()->GetXmax())
+    candUPtGev = candUPt->GetXaxis()->GetXmax() - 0.01;
+
   if(l1MuonCand.hwQual >= qualityCut) {
     candPt->Fill(candPtGev);
+    candUPt->Fill(candUPtGev);
 
     auto eta = hwEtaToEta(l1MuonCand.hwEta);
+
+    int nProcessors = 6;
+    double candGlobalPhi = L1MuAn::calcGlobalPhi( l1MuonCand.hwPhi, l1MuonCand.processor, nProcessors );
+    double phi = L1MuAn::hwGmtPhiToGlobalPhi(candGlobalPhi ); //[rad]
+    phi =  phi * 180. / M_PI;
+
     if(candPtGev >= 1.)
       candEtaPtCut1->Fill(eta);
 
-    if(candPtGev >= 10.)
+    if(candPtGev >= 10.) {
       candEtaPtCut10->Fill(eta);
+      candPhiPtCut10->Fill(phi);
+    }
 
-    if(candPtGev >= 20.)
-      candEtaPtCut20->Fill(eta);
+    if(candPtGev >= 22.) {
+      candEtaPtCut22->Fill(eta);
+      candPhiPtCut22->Fill(phi);
+    }
   }
 
 }
 
 void RateAnalyser::write() {
   candPt->Write();
+  candUPt->Write();
 
   candEtaPtCut1->Write();
   candEtaPtCut10->Write();
-  candEtaPtCut20->Write();
+  candEtaPtCut22->Write();
 }
 
 /*

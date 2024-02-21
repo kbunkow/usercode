@@ -59,6 +59,10 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1
 lineColor = kMagenta
 inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_d1_DTQ0_SingleMu_effAna_rootDump_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
 
+algoVersion = "phase2_t20__Extrapl_XTo2LLTo4Mu"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump_Displaced_cTau5m_XTo2LLTo4Mu.root' )
+
 inputFiles.append(inputFile)
 inputFile.ls()
 
@@ -79,7 +83,8 @@ ptL1Cut = "10"
 qualityCut = "qualityCut_8"
 q = "q8"
 
-ptL1Cut = "22"
+#ptL1Cut = "22"
+ptL1Cut = "5"
 
 qualityCut = "qualityCut_12"
 q = "q12"
@@ -99,9 +104,9 @@ aceptedCandsPtGenVsDxyProj.SetName(qualityCut + " ptCut " + ptL1Cut +"GeV " + al
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
 aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
-aceptedCandsPtGenVsDxyProj.Draw("colz")
+aceptedCandsPtGenVsDxyProj.Draw()
 hists.append(aceptedCandsPtGenVsDxyProj)
-
+histPt = aceptedCandsPtGenVsDxyProj
 
 c1.cd(2).SetGridx()
 c1.cd(2).SetGridy()
@@ -122,6 +127,7 @@ aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
+histUPt = aceptedCandsPtGenVsDxyProj
 
 c1.cd(3).SetGridx()
 c1.cd(3).SetGridy()
@@ -152,11 +158,30 @@ hists.append(aceptedCandsPtGenVsDxyProj)
 c1.Modified()
 c1.Update()
 
-
 outFile = TFile(algoVersion + ".root", "RECREATE")
 outFile.cd()
 for hist in hists :
     hist.Write()
+
+c2 = TCanvas('canvas_2' , 'canvas_2', 200, 10, 450, 450)
+c2.cd()
+c2.SetGridx()
+c2.SetGridy()
+histPt.Draw()
+histUPt.SetLineColor(kRed)
+histUPt.Draw("same")
+legend = TLegend(0.5, 0.6, 0.8, 0.8)
+legend.SetBorderSize(0)
+legend.SetTextSize(0.027)
+legend.AddEntry(histPt, "OMTF pT #geq " + str(ptL1Cut) + "GeV, " + q)
+legend.AddEntry(histUPt, "OMTF upT #geq " + str(ptL1Cut) + "GeV, " + q)
+
+legend.Draw()
+
+c2.Modified()
+c2.Update()
+
+
 
 input("Press ENTER to exit")
  

@@ -77,7 +77,7 @@ omtf_type = 2022 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/expert/omtf/omtfAnalysis_newerSAmple_v28_10Files.root' )
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/crab_omtf_nn_MC_analysis_MuFlatPt_PU200_v2_t33/results/omtfAnalysis2.root' )
 
-
+#run3
 histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/"
 
 if version == "t21a__Patterns_0x00012" :
@@ -85,6 +85,13 @@ if version == "t21a__Patterns_0x00012" :
   
 if version == "t21a__Extrapl_Patterns_t17_gpFinalize11" :
     histFile = TFile( histFileDir + "omtfAnalysis2_eff_t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize11__mcWaw2023_OneOverPt_and_iPt2.root" )  
+    
+    
+#phase-2
+histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/"   
+if version == "phase2_t21b_DTQ0_LUTNN_FP_v217" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_LUTNN_FP_v217_effAna_mcWaw_2024_01_04_OneOverPt.root" )  
+    
 
 # if "SingleMu_" in version :
 #     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )

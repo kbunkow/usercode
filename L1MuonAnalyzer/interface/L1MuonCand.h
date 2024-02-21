@@ -35,9 +35,10 @@ public:
     hwSign(muCand.hwSign() ),
     hwBeta(0),
     firedLayerBits(muCand.trackAddress().at(0)),
-    refLayer(muCand.trackAddress().at(1)),
-    likelihood(muCand.trackAddress().at(2)),
-    likelihoodUpt(muCand.trackAddress().at(3))
+    //refLayer(muCand.trackAddress().at(1)),
+    //likelihood(muCand.trackAddress().at(2)),
+    //likelihoodUpt(muCand.trackAddress().at(3)),
+    processor(muCand.processor())
     //firedLayerCnt(firedLayerCnt)
     {
     }
@@ -68,6 +69,8 @@ public:
   int refLayer = 0;
   float likelihood = 0;
   float likelihoodUpt = 0;
+
+  int processor = 0;
 };
 
 } /* namespace L1MuAn */
