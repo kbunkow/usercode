@@ -25,7 +25,7 @@ namespace L1MuAn {
 
 class RateAnalyser {
 public:
-  RateAnalyser(TFileDirectory subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo);
+  RateAnalyser(TFileDirectory subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo, int nProcessors);
   virtual ~RateAnalyser();
 
   virtual void fill(L1MuonCand& l1MuonCand);
@@ -47,11 +47,12 @@ private:
 
   TH1* candUPt = nullptr;
 
+  int nProcessors = 6;
 };
 
 class CandsMatchingAnalyser {
 public:
-  CandsMatchingAnalyser(TFileDirectory& subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo);
+  CandsMatchingAnalyser(TFileDirectory& subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo, int nProcessors);
 
   virtual ~CandsMatchingAnalyser() {};
 
@@ -72,7 +73,7 @@ public:
     PtGenVsPtCand ptGenVsPtCand;
     TH2* simVertexRhoVsPtGen = nullptr;
 
-    CandsMatchingHists(TFileDirectory& parrentSubDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo);
+    CandsMatchingHists(TFileDirectory& parrentSubDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo, int nProcessors);
     virtual ~CandsMatchingHists() {}
 
     virtual void fill(L1MuonCand& l1MuonCand, const TrackingParticle* matchedTrackingParticle, double simVertexRho);

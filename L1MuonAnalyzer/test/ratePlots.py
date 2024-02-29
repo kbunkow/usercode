@@ -51,15 +51,29 @@ if len(sys.argv) >= 3 :
 #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10__NeutrinoGun_PU200_Alibordi.root' )
 #version = "t22__with_extrapolation"
 
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_2__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22__with_extrapolation__DTQ_2_2"
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2FullAlgo_t16_classProb17_recalib2_gpFinalize10__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22__full_extrapolation"
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22__with_extrapolation_patts0"
+
 #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_0x00012__NeutrinoGun_PU200_Alibordi.root' )
-#version = "t22__OMTF2023"
+#version = "t22__OMTF2023_DTQ_2_2"
 
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_0x00012_DTQ_2_4__NeutrinoGun_PU200_Alibordi.root' )
-version = "t22__OMTF2023_DTQ_2_4"
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_0x00012_DTQ_2_4__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22__OMTF2023_DTQ_2_4"
 
-#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_t22/results/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10.root' )
-#version = "t22__with_extrapolation"
+histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_t22/results/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10.root' )
+version = "t22__with_extrapolation_367883"
 
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/omtfAnalysis2_rate_t22__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22_phase2_with_extrapolation"
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/omtfAnalysis2_rate_t22__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_NN_FP_v217__NeutrinoGun_PU200_Alibordi.root' )
+#version = "t22_phase2_with_extrapolation_NN_FP_v217"
 
 #histFile.ls()
 

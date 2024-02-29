@@ -85,7 +85,23 @@ if version == "t21a__Patterns_0x00012" :
   
 if version == "t21a__Extrapl_Patterns_t17_gpFinalize11" :
     histFile = TFile( histFileDir + "omtfAnalysis2_eff_t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize11__mcWaw2023_OneOverPt_and_iPt2.root" )  
-    
+   
+if version == "t22__Extrapl_Patterns_t17_v0_gpFinalize10" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10__mcWaw_2024_01_03_OneOverPt.root" )    
+ 
+ 
+if version == "t21a__Patterns_0x00012_EfeMC_HTo2LongLivedTo2mu2jets" :
+#lineColor = kBlack
+    histFile = TFile(histFileDir + 'omtfAnalysis2_eff__t21a__Patterns_0x00012__MH-1000_MFF-150_CTau-1000mm_allFiles.root' )
+
+if version == "t21a__Extrapl_Patterns_t17_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets" :
+    #lineColor = kGreen
+    histFile = TFile(histFileDir + 'omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
+
+if version == "t22__Extrapl_Patterns_t17_v0_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets" :
+    #lineColor = kMagenta
+    histFile = TFile(histFileDir + 'omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10__EfeMC_HTo2LongLivedTo2mu2jets.root' )
+
     
 #phase-2
 histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/"   

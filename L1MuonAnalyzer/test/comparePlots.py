@@ -463,7 +463,10 @@ doLogScale = False
 #drawEffs('SingleMu_t115/', "omtf_extrp", "12", kRed)
 drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
 drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kGreen)
-drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize11/', "omtf_v1", "12", kRed)
+#drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize11/', "omtf_v1", "12", kRed)
+drawEffs('t22__Extrapl_Patterns_t17_v0_gpFinalize10/', "omtf_v1", "12", kMagenta)
+
+
 #drawEffs('SingleMu_Extr_t10/', "omtf_extrp", "12", kRed)
 
 

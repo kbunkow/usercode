@@ -12,7 +12,8 @@
 
 namespace L1MuAn {
 
-RateAnalyser::RateAnalyser(TFileDirectory subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo): qualityCut(qualityCut) {
+RateAnalyser::RateAnalyser(TFileDirectory subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo, int nProcessors):
+    qualityCut(qualityCut), nProcessors(nProcessors) {
   std::ostringstream histName;
   std::ostringstream histTitle;
 
@@ -98,7 +99,6 @@ void RateAnalyser::fill(L1MuonCand& l1MuonCand) {
 
     auto eta = hwEtaToEta(l1MuonCand.hwEta);
 
-    int nProcessors = 6;
     double candGlobalPhi = L1MuAn::calcGlobalPhi( l1MuonCand.hwPhi, l1MuonCand.processor, nProcessors );
     double phi = L1MuAn::hwGmtPhiToGlobalPhi(candGlobalPhi ); //[rad]
     phi =  phi * 180. / M_PI;
@@ -135,10 +135,10 @@ PtGenVsPtCand nonPromptMuonsPtGenVsPtCand;
 PtGenVsPtCand muonsFromPionsPtGenVsPtCand;
 PtGenVsPtCand muonsFromKaonsPtGenVsPtCand;*/
 
-CandsMatchingAnalyser::CandsMatchingHists::CandsMatchingHists(TFileDirectory& parrentSubDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo):
+CandsMatchingAnalyser::CandsMatchingHists::CandsMatchingHists(TFileDirectory& parrentSubDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo, int nProcessors):
     subDir(parrentSubDir.mkdir(name)),
     qualityCut(qualityCut),
-    rateAn(subDir, name, qualityCut, nBins, binsFrom, binsTo),
+    rateAn(subDir, name, qualityCut, nBins, binsFrom, binsTo, nProcessors),
     ptGenVsPtCand(subDir, "", 0.82, 1.24, qualityCut, 100, 0, 100)
 {
   std::ostringstream histName;
@@ -167,12 +167,12 @@ void CandsMatchingAnalyser::CandsMatchingHists::write() {
   simVertexRhoVsPtGen->Write();
 }
 
-CandsMatchingAnalyser::CandsMatchingAnalyser(TFileDirectory& subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo):
-    promptMuons(subDir, "promptMuons", qualityCut, nBins, binsFrom, binsTo),
-    nonPromptMuons(subDir, "nonPromptMuons", qualityCut, nBins, binsFrom, binsTo),
-    muonsFromPions(subDir, "muonsFromPions", qualityCut, nBins, binsFrom, binsTo),
-    muonsFromKaons(subDir, "muonsFromKaons", qualityCut, nBins, binsFrom, binsTo),
-    notMatchedRateAn(subDir.mkdir("notMatched"), "notMatched", qualityCut, nBins, binsFrom, binsTo),
+CandsMatchingAnalyser::CandsMatchingAnalyser(TFileDirectory& subDir, std::string name, int qualityCut, int nBins, double binsFrom, double binsTo, int nProcessors):
+    promptMuons(subDir, "promptMuons", qualityCut, nBins, binsFrom, binsTo, nProcessors),
+    nonPromptMuons(subDir, "nonPromptMuons", qualityCut, nBins, binsFrom, binsTo, nProcessors),
+    muonsFromPions(subDir, "muonsFromPions", qualityCut, nBins, binsFrom, binsTo, nProcessors),
+    muonsFromKaons(subDir, "muonsFromKaons", qualityCut, nBins, binsFrom, binsTo, nProcessors),
+    notMatchedRateAn(subDir.mkdir("notMatched"), "notMatched", qualityCut, nBins, binsFrom, binsTo, nProcessors),
     likelihoodDistribution(subDir, name, qualityCut, 0, 20, 120)
 {
 

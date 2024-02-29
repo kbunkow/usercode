@@ -42,26 +42,40 @@ lineColor = kBlack
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/"
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_SingleMu_tExtraplMB1nadMB2SimplifiedFP_t19_v16_test_bits_HTo2LongLivedTo2mu2jets_allFiles.root' )
 
-algoVersion = "t21a__Patterns_0x00012"
-lineColor = kBlack
-inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__' + algoVersion + '__MH-1000_MFF-150_CTau-1000mm_allFiles.root' )
+#algoVersion = "t21a__Patterns_0x00012_EfeMC_HTo2LongLivedTo2mu2jets"
+#lineColor = kBlack
+#inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_0x00012__MH-1000_MFF-150_CTau-1000mm_allFiles.root' )
 
-algoVersion = "t21a__Extrapl_Patterns_t17_gpFinalize10"
-lineColor = kGreen
-inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
+#algoVersion = "t21a__Extrapl_Patterns_t17_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets"  small statistics!!!!!!!!
+#lineColor = kGreen
+#inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize10.root' )
+# #
+# algoVersion = "t21a__Extrapl_Patterns_t17_gpFinalize11"
+# lineColor = kRed
+# inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize11.root' )
 #
-algoVersion = "t21a__Extrapl_Patterns_t17_gpFinalize11"
-lineColor = kRed
-inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize11.root' )
-
-algoVersion = "phase2_t20__Extrapl_Dxy3m_pT0To1000"
-dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/rootDump/"
+algoVersion = "t22__Extrapl_Patterns_t17_v0_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets"
 lineColor = kMagenta
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_d1_DTQ0_SingleMu_effAna_rootDump_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
+inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10__EfeMC_HTo2LongLivedTo2mu2jets.root' )
 
-algoVersion = "phase2_t20__Extrapl_XTo2LLTo4Mu"
-lineColor = kBlue
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump_Displaced_cTau5m_XTo2LLTo4Mu.root' )
+algoVersion = "t22__Extrapl_Patterns_t17_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets"
+lineColor = kGreen
+inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10__EfeMC_HTo2LongLivedTo2mu2jets.root' )
+
+
+# algoVersion = "eff_t22__Extrapl_Patterns_t17_gpFinalize10_displMuGun"
+# lineColor = kGreen
+# inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10__Displaced_Dxy5m_pT0To1000_condRun3.root' )
+
+
+# algoVersion = "phase2_t20__Extrapl_Dxy3m_pT0To1000"
+# dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/rootDump/"
+# lineColor = kMagenta
+# inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_d1_DTQ0_SingleMu_effAna_rootDump_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
+#
+# algoVersion = "phase2_t20__Extrapl_XTo2LLTo4Mu"
+# lineColor = kBlue
+# inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump_Displaced_cTau5m_XTo2LLTo4Mu.root' )
 
 inputFiles.append(inputFile)
 inputFile.ls()

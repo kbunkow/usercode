@@ -86,6 +86,10 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyVsPhi(subDir, name, etaFrom, etaTo, qualityCut, ptGenCut, ptL1Cut, 100));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyVsEta(subDir, name, qualityCut, ptGenCut, ptL1Cut, 210));
 
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 1, 100, 300/20, false, false));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 1, 100, 300/20, false, true));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 1, 100, 300/20, true, true));
+
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, false, false));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, false, true));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 5, 100, 300/20, true, true));
@@ -142,41 +146,41 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
     TFileDirectory subDirRate = fs->mkdir("rate");
 
     TFileDirectory subDir = subDirRate.mkdir("omtf_q12");
-    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 12, 200, 0, 100));
-    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 12, 200, 0, 100));
+    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 12, 200, 0, 100, nProcessors));
+    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 12, 200, 0, 100, nProcessors));
 
     subDir = subDirRate.mkdir("omtf_q8");
-    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 8, 200, 0, 100));
-    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 8, 200, 0, 100));
+    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 8, 200, 0, 100, nProcessors));
+    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 8, 200, 0, 100, nProcessors));
 
     subDir = subDirRate.mkdir("omtf_q4");
-    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 4, 200, 0, 100));
-    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 4, 200, 0, 100));
+    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
+    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
 
     subDir = subDirRate.mkdir("omtf_q1");
-    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 1, 200, 0, 100));
-    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 1, 200, 0, 100));
+    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
+    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
 
     for(auto& nn_pThreshold : nn_pThresholds) {
       std::ostringstream ostr;
       ostr<<"nn_omtf_q12_pTresh_"<<nn_pThreshold;
       subDir = subDirRate.mkdir(ostr.str().c_str());
-      omtfNNRateAnalysers.emplace_back(new RateAnalyser(subDir, "", 12, 200, 0, 100));
-      if(useMatcher) omtfNNCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 12, 200, 0, 100));
+      omtfNNRateAnalysers.emplace_back(new RateAnalyser(subDir, "", 12, 200, 0, 100, nProcessors));
+      if(useMatcher) omtfNNCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 12, 200, 0, 100, nProcessors));
       edm::LogImportant("l1MuonAnalyzerOmtf") <<" adding omtfNNRateAnalysers, nn_pThreshold "<<nn_pThreshold<<std::endl;
 
       ostr.str("");
       ostr<<"nn_omtf_q4_pTresh_"<<nn_pThreshold;
       subDir = subDirRate.mkdir(ostr.str().c_str());
-      omtfNNRateAnalysers.emplace_back(new RateAnalyser(subDir, "", 4, 200, 0, 100));
-      if(useMatcher) omtfNNCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 4, 200, 0, 100));
+      omtfNNRateAnalysers.emplace_back(new RateAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
+      if(useMatcher) omtfNNCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
       edm::LogImportant("l1MuonAnalyzerOmtf") <<" adding omtfNNRateAnalysers, nn_pThreshold "<<nn_pThreshold<<std::endl;
 
       ostr.str("");
       ostr<<"nn_omtf_q1_pTresh_"<<nn_pThreshold;
       subDir = subDirRate.mkdir(ostr.str().c_str());
-      omtfNNRateAnalysers.emplace_back(new RateAnalyser(subDir, "", 1, 200, 0, 100));
-      if(useMatcher) omtfNNCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 1, 200, 0, 100));
+      omtfNNRateAnalysers.emplace_back(new RateAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
+      if(useMatcher) omtfNNCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
       edm::LogImportant("l1MuonAnalyzerOmtf") <<" adding omtfNNRateAnalysers, nn_pThreshold "<<nn_pThreshold<<std::endl;
     }
   }
