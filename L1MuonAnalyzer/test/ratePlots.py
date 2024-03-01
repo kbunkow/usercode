@@ -24,8 +24,8 @@ def makeEfficiency(passed, total, title, lineColor):
 
 #version = "PU200_v2_t" + sys.argv[1] #PU200_mtd5_v2_t
 
-inputResults  = sys.argv[1] 
-version = inputResults[inputResults.find("_t") +1 : ]
+#inputResults  = sys.argv[1] 
+#version = inputResults[inputResults.find("_t") +1 : ]
 
 #version = sys.argv[1] 
 #inputResults = 'SingleNeutrino_' + version 
@@ -33,7 +33,7 @@ version = inputResults[inputResults.find("_t") +1 : ]
 rootDirPostFix = ""
 print("sys.argv.__len__", len(sys.argv) )
 if len(sys.argv) >= 3 :
-    rootDirPostFix = sys.argv[2] 
+    rootDirPostFix = sys.argv[1] 
 
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/expert/omtf/omtfAnalysis_newerSAmple_v21_1_10Files_withMatching.root' )
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/expert/omtf/omtfAnalysis_newerSAmple_v21_1.root' )
@@ -66,16 +66,36 @@ if len(sys.argv) >= 3 :
 #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_0x00012_DTQ_2_4__NeutrinoGun_PU200_Alibordi.root' )
 #version = "t22__OMTF2023_DTQ_2_4"
 
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_t22/results/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10.root' )
-version = "t22__with_extrapolation_367883"
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_t22/results/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10.root' )
+#version = "t22__with_extrapolation_367883"
 
 #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/omtfAnalysis2_rate_t22__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0__NeutrinoGun_PU200_Alibordi.root' )
 #version = "t22_phase2_with_extrapolation"
 
-#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/omtfAnalysis2_rate_t22__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_NN_FP_v217__NeutrinoGun_PU200_Alibordi.root' )
-#version = "t22_phase2_with_extrapolation_NN_FP_v217"
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0__MinBias_Phase2Spring23_PU140.root' )
+#version = "t23_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU140"
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+#version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
+
+
+histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4__MinBias_Phase2Spring23_PU140.root' )
+version = "t23_phase2_with_extrapolation_DTQ_2_4__MinBias_Phase2Spring23_PU140"
+
+histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_4__MinBias_Phase2Spring23_PU140"
+
+
+histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2__MinBias_Phase2Spring23_PU140.root' )
+version = "t23_phase2_with_extrapolation_DTQ_0_2__MinBias_Phase2Spring23_PU140"
+
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+#version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_0_2__MinBias_Phase2Spring23_PU140"
+
 
 #histFile.ls()
+
+inputResults = version
 
 print (histFile)
 
@@ -108,7 +128,10 @@ rateCumul_withTEffs = []
 paintedGraphs = []
 #gStyle.SetOptStat(111111111)
 
-outPath = inputResults + "_" + rootDirPostFix
+outPath = inputResults 
+if rootDirPostFix != "":
+    inputResults = inputResults + "_" + rootDirPostFix
+    
 if not os.path.exists(outPath):
     os.mkdir(outPath)
     
@@ -187,7 +210,7 @@ def makeRatePlots(algoDir, rateType, lineColor) :
 #             for iBin in range(0, candPt_rateCumul.GetNbinsX(), 1) : 
 #                 candPt_rateCumul.AddBinContent(iBin, -corr)
             
-            candPt_rateCumul.SetName(algoDir.GetName() + "_" + candPt_rateCumul.GetName().replace(candPtKey, "rate") ) #+ "_" + version
+            candPt_rateCumul.SetName(algoDir.GetName() + "_" + candPt_rateCumul.GetName().replace(candPtKey, "rate_" + rateType) ) #+ "_" + version
             candPt_rateCumul.SetTitle(algoDir.GetName().replace("_", " ") + ", " + version + " " + rootDirPostFix)
             
             
@@ -239,6 +262,8 @@ ratesOnThreshHist.GetYaxis().SetTitle("rate [kHz]")
 relativeRatesOnThreshHist.GetYaxis().SetTitle("rate [kHz]")
 
 referenceRate = 13.679002  #omtf q12, PU200_v2_t35
+
+print(histFile)
 
 for iAlgo, canvas in enumerate(canvases ) :
     if iAlgo >= 1 :

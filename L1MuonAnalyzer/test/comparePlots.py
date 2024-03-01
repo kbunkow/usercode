@@ -37,7 +37,8 @@ gStyle.SetOptTitle(0);
 
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/usercode/L1MuonAnalyzer/test/'
 #plotsDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/usercode/L1MuonAnalyzer/test/'
-plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/'
+#plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/'
+plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/'
 
 first = True
 
@@ -195,22 +196,31 @@ def drawEffVsEta(effFile, type, quality, lineColor, pTresh = "0.5") :
 
 rateFiles = []
 fillPat = 3002
-def drawRate(rateFileDir, type, quality, lineColor, pTresh = "0.5") :
+
+rateHist = []
+def drawRate(rateFileDir, type, label, quality, lineColor, pTresh = "0.5") :
     global first
     global fillPat
-    
+
     rateFile = TFile(plotsDir + rateFileDir + 'ratePlots.root' )
     rateFiles.append(rateFile)
+    print("rateFile.GetName()", rateFile.GetName()) 
+    rateFile.ls()
     
-    withTEff = "" # _copy_allEventsHist_clone_copy"
+    withTEff = "_copy_allEventsHist_clone_copy"
     if type == "nn_omtf" :
-        effHist = rateFile.Get(type + "_q" + quality + "_pTresh_" + pTresh + "_rate_qualityCut_" + quality + "_" + withTEff)
+        effHist = rateFile.Get(type + "_q" + quality + "_pTresh_" + pTresh + "_rate__qualityCut_" + quality +"_"+ withTEff)
     else :
-        effHist = rateFile.Get(type + "_q" + quality + "_rate_qualityCut_" + quality + "_" + withTEff)
+        effHist = rateFile.Get(type + "_q" + quality + "_rate_Pt__qualityCut_" + quality +"_" + withTEff)
         
-    print (rateFile) 
+    print("effHist", type + "_q" + quality + "_rate__qualityCut_" + quality +"_" + withTEff)    
+   
+    effHist = effHist.Clone(effHist.GetName() + "_" + label)
+    effHist.SetTitle(label)
+    
     print ("rateHist", effHist.GetName() )  
     
+    rateHist.append(effHist)
     effHist.SetLineColor(lineColor)
     #effHist.SetFillColor(lineColor);
     #effHist.SetFillStyle(fillPat)
@@ -378,120 +388,17 @@ def drawEffs(fileDir, type, quality, lineColor, pTresh = "0.5" ) :
      
     first = False
 
-doLogScale = False
-#OMTF 2018+
-#c1.cd(1)
-#drawEffs('MuFlatPt_PU200_v2_t44/', "omtf", "12", kBlack)
-#drawEffs('MuFlatPt_PU200_v2_t35/', "omtf", "12", kBlack) #old mathcing
-#drawEffs('MuFlatPt_PU200_0x0006_v3_t100/', "omtf", "12", kBlack) #new, good matching
-
-
-#drawEffs('MuFlatPt_PU200_v2_t51/', "omtf", "12", kGreen+1)
-
-
-#drawEffs('MuFlatPt_PU200_v2_t55/', "omtf_patsKB", "12", kRed)
-#drawEffs('MuFlatPt_PU200_v2_t56/', "omtf_patsKB", "12", kBlue)
-
-#drawEffs('MuFlatPt_PU200_v2_t65/', "omtf_patsKB", "12", kGreen+1) #omtf_patsKB
-
-#drawEffs('MuFlatPt_PU200_v3_t78/', "omtf_patsKB", "12", kBlue) #omtf_patsKB
-#drawEffs('MuFlatPt_PU200_v3_t79/', "omtf_patsKB", "12", kRed)
-#drawEffs('MuFlatPt_PU200_v3_t80/', "omtf_patsKB", "12", kRed)
-#drawEffs('MuFlatPt_PU200_v3_t82/', "omtf_patsKB", "12", kRed)
-
-
-#drawEffs('MuFlatPt_PU200_v2_t46/', "omtf", "12", kGreen+1)
-
-#OMTF 2018
-#drawEffs('MuFlatPt_PU200_v2_t52/', "omtf", "12", kGreen+1)
-#effFile = TFile(plotsDir + 'MuFlatPt_PU200_v2_t56/' + 'efficiencyPlots.root' )
-
-#drawEff(effFile_t42_pu200, "nn_omtf", "12", "21.5", kRed)
-
-#drawEff(eff_t43_pu300, "nn_omtf", "12", "21.5", kRed)
-
-#drawEffs('MuFlatPt_PU200_v3_t70/', "omtf_patsKB", "12", kRed)
-#drawEffs('MuFlatPt_PU200_v3_t71/', "omtf_patsKB", "12", kGreen)
-#drawEffs('MuFlatPt_PU200_v3_t73/', "omtf", "12", kRed)
-
-#drawEffs('MuFlatPt_PU200_v3_t100/', "omtf", "12", kRed)
-
-#drawEffs('MuFlatPt_PU200_v2_t41/', "nn_omtf", "12", kBlue, "0.4")
-#drawEffs('MuFlatPt_PU200_v2_t66/', "nn_omtf", "12", kBlue, "0.4") #this shoudl be good
-
-#drawEffs('MuFlatPt_PU200_v2_t41/', "nn_omtf", "12", kRed, "0.5")
-
-#drawEffs('MuFlatPt_PU200_v3_t128/', "omtf", "12", kRed)
-
-#drawEffs('SingleMu_t85_10f/', "omtf", "12", kGreen) # Arturs' pattern GPs_parametrised_v1_classProb3.xml
-
-#drawEffs('SingleMu_t80/', "omtf_patsKB", "12", kCyan)
-
-#drawEffs('SingleMu_0x0006_t79/', "omtf", "12", kBlack)
- #drawEffs('SingleMu_t74/', "omtf_patsKB", "12", kGreen)
-#drawEffs('SingleMu_t76/', "omtf_patsKB", "12", kRed)
-#drawEffs('SingleMu_t77/', "omtf_patsKB", "12", kBlue)
-
-#drawEffs('SingleMu_t78/', "omtf_patsKB", "12", kBlue)
-#drawEffs('SingleMu_t78_1/', "omtf_patsKB", "12", kRed)
-
-#drawEffs('SingleMu_t81_-16/', "omtf_patsKB", "12", kGreen)
-#drawEffs('SingleMu_t81_-8/', "omtf_patsKB", "12", kBlue)
-#drawEffs('SingleMu_t82/', "omtf_patsKB", "12", kCyan)
-#drawEffs('SingleMu_t82_05GeVBinning/', "omtf_patsKB", "12", kCyan)
-#drawEffs('SingleMu_t83_test/', "omtf_patsKB", "12", kBlue)
-#drawEffs('SingleMu_t83/', "omtf_patsKB", "12", kBlue)
-#drawEffs('SingleMu_t90/', "omtf_patsKB", "12", kBlue)
-#drawEffs('SingleMu_t91/', "omtf_patsKB", "12", kMagenta)
-
-#drawEffs('SingleMu_t92/', "omtf_patsKB", "12", kGreen) 
-#drawEffs('SingleMu_t93/', "omtf_patsKB", "12", kBlue)
-#drawEffs('SingleMu_t94/', "omtf_patsKB", "12", kMagenta) #this one is incomplete
-#drawEffs('SingleMu_t97/', "omtf_patsKB", "12", kGreen)
-#drawEffs('SingleMu_t98/', "omtf_patsKB", "12", kGreen)
 
 doLogScale = False
-#drawEffs('SingleMu_t80/', "omtf_patsKB", "12", kRed)
-#drawEffs('SingleMu_t80_test/', "omtf_patsKB", "12", kBlue) #finalize8 !!!!!!!!!!!!!!!!!!
-#drawEffs('SingleMu_t103/', "omtf_patsKB", "12", kMagenta) #finalize8 !!!!!!!!!!!!!!!!!!!!
-#drawEffs('SingleMu_t100/', "omtf", "12", kBlue)
-#drawEffs('SingleMu_t104/', "omtf", "12", kGreen+1)
-#drawEffs('SingleMu_t120/', "omtf", "12", kRed)
-#drawEffs('SingleMu_t125/', "omtf", "12", kGreen+1)
-#drawEffs('SingleMu_t126/', "omtf", "12", kRed)
-#drawEffs('SingleMu_t127/', "omtf", "12", kBlue)
-#drawEffs('SingleMu_t115/', "omtf_extrp", "12", kRed)
-drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
-drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kGreen)
+
+#drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
+#drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kGreen)
 #drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize11/', "omtf_v1", "12", kRed)
-drawEffs('t22__Extrapl_Patterns_t17_v0_gpFinalize10/', "omtf_v1", "12", kMagenta)
-
-
-#drawEffs('SingleMu_Extr_t10/', "omtf_extrp", "12", kRed)
+#drawEffs('t22__Extrapl_Patterns_t17_v0_gpFinalize10/', "omtf_v1", "12", kMagenta)
 
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False
-#80 ZprimeToMuMu, 82 i 84 - all with finzalize 9 and penalty -16
-#82 and 84 - the same config, but in the 84 fixed muon matching
-
-#drawEffs('ZprimeToMuMu_PU140_0x0006_v3_t84/', "omtf", "12", kBlack)
-#drawEffs('ZprimeToMuMu_PU140_0x0006_v3_t106/', "omtf", "12", kBlack) #no "high pt fix"
-
-#drawEffs('ZprimeToMuMu_PU140_v3_t82/', "omtf_patsKB", "12", kBlue) #before fixing the matching for the hight pt, but this fix was very small, the setup is the same as in the t84
-#drawEffs('ZprimeToMuMu_PU140_v3_t80/', "omtf_patsKB", "12", kCyan) #by mistake "no matching hit penatly" i finalise 9 was -16
-#drawEffs('ZprimeToMuMu_PU140_v3_t84/', "omtf_patsKB", "12", kGreen) #the setup is the same as in the t82, but fix fixed matching for the hight pt
-#drawEffs('ZprimeToMuMu_PU140_v3_t98/', "omtf_patsKB", "12", kBlue)
-
-#drawEffs('ZprimeToMuMu_PU140_v3_t100/', "omtf", "12", kRed)
-#drawEffs('ZprimeToMuMu_PU140_v3_t101/', "omtf", "12", kBlue)
-#drawEffs('ZprimeToMuMu_PU140_v3_t104/', "omtf", "12", kGreen+1)
-#drawEffs('ZprimeToMuMu_PU140_v3_t105/', "omtf", "12", kMagenta)
-
-#drawEffs('ZprimeToMuMu_NoPU_v3_t100/', "omtf", "12", kRed)
-#drawEffs('ZprimeToMuMu_PU140_v3_t125/', "omtf", "12", kBlue)
-#drawEffs('ZprimeToMuMu_PU140_v3_t126/', "omtf", "12", kBlue)
-#drawEffs('ZprimeToMuMu_PU140_v3_t127/', "omtf", "12", kRed)
 
 c1.cd(1)
 legendEff1.Draw()
@@ -532,68 +439,10 @@ legend.SetFillStyle(0)
 legend.SetBorderSize(0)
 legend.SetTextSize(0.03)
 legend.SetMargin(0.2)
- 
-#OMTF 2018+ 
-#drawRate('SingleNeutrino_PU200_mtd5_v2_t44/', "omtf", "12", kBlack)
-#drawRate('SingleNeutrino_PU200_v2_t44/', "omtf", "12", kBlack)
-#drawRate('SingleNeutrino_PU200_v2_t35/', "omtf", 12, kRed)
-
-#drawRate('SingleNeutrino_PU200_v2_t46/', "omtf", "12", kGreen+1) 
-#drawRate('SingleNeutrino_PU200_v2_t51/', "omtf", "12", kGreen+1)
-
-#drawRate('SingleNeutrino_PU200_v2_t68/', "omtf", "12", kBlack)  #this one is good probably
-
-#drawRate('SingleNeutrino_PU200_v2_t55/', "omtf", "12", kRed)
-
-#drawRate('SingleNeutrino_PU200_v2_t56/', "omtf", "12", kBlue)
- 
-#drawRate('SingleNeutrino_PU200_v2_t41/', "nn_omtf", "12", "0.4", kRed)
-
-#drawRate('SingleNeutrino_PU200_v2_t65/', "omtf", "12", kBlue) 
-
-#drawRate('SingleNeutrino_PU200_mtd5_v2_t44/', "omtf", "12", kBlack)
-#drawRate('SingleNeutrino_PU200_v2_t35/', "nn_omtf", 12, kRed)
- 
-#drawRate('SingleNeutrino_PU200_mtd5_v2_t47/', "omtf", "12", kBlue)
-
-#drawRate('SingleNeutrino_PU200_mtd5_v2_t51/', "omtf", "12", kGreen+1)
-
-#drawRate('SingleNeutrino_PU200_mtd5_v2_t55/', "omtf", "12", kRed)
- 
-#drawRate('SingleNeutrino_PU200_mtd5_v2_t41/', "nn_omtf", "12", kBlue, "0.4")
-#drawRate('SingleNeutrino_PU200_mtd5_v2_t41/', "nn_omtf", "12", kRed, "0.5")
 
 
-
-#drawRate('SingleNeutrino_PU200_v3_t74/', "omtf", "12", kGreen+1)
-#drawRate('SingleNeutrino_PU200_v3_t78/', "omtf", "12", kBlue)
-#drawRate('SingleNeutrino_PU200_v3_t80/', "omtf", "12", kCyan)
-#drawRate('SingleNeutrino_PU200_v3_t82/', "omtf", "12", kRed)
-#drawRate('SingleNeutrino_PU200_v3_t100/', "omtf", "12", kRed)
-#drawRate('SingleNeutrino_PU200_v3_t104/', "omtf", "12", kGreen+1) #good, GoldenPatternResult::finalise9() pdfSum -= 16 (first job failed, for the good one there is no commit
-#drawRate('SingleNeutrino_PU200_v3_t126/', "omtf", "12", kGreen+1)
-
-#drawRate('SingleNeutrino_PU200_v2_t41/', "nn_omtf", "12", kBlue, "0.4")
-#drawRate('SingleNeutrino_PU200_v2_t44/', "nn_omtf", "12", kRed, "0.5")
-
-#drawRate('SingleNeutrino_PU200_v2_t67/', "nn_omtf", "12", kRed, "0.4")
-#drawRate('SingleNeutrino_PU200_v2_t66/', "nn_omtf", "12", kGreen, "0.5")
-
-#drawRate('SingleNeutrino_PU200_mtd5_v3_t100/', "omtf", "12", kRed)
-
-#OMTF 2018+
-#drawRate('SingleNeutrino_PU250_v2_t45/', "omtf", "12", kGreen+1)
-
-#drawRate('SingleNeutrino_PU250_v2_t42/', "nn_omtf", "12", kRed)
-
-#drawRate('SingleNeutrino_PU250_v2_t41/', "nn_omtf", "12", kRed)
-
-#drawRate('run3_ZeroBias_Run2018D_t115_HW/', "omtf", "12", kBlack)
-#drawRate('run3_ZeroBias_Run2018D_t115_Phase1/', "omtf", "12", kBlue)
-
-#drawRate('run3_ZeroBias_Run2018D_t127_HW/', "omtf", "12", kBlack)
-#drawRate('run3_ZeroBias_Run2018D_t127_Phase1/', "omtf", "12", kRed)
-
+drawRate('t23_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "OMTF_DTQ_2_2", "12", kBlack)
+drawRate('t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "NN_FP_v217_DTQ_2_2", "12", kRed)
 
 legend.Draw()
 
