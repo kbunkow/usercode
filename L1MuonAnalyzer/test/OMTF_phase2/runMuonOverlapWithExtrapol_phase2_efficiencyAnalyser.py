@@ -15,17 +15,22 @@ verbose = True
 
 useExtraploationAlgo = True
 
-version = 't23__'
+version = 't24d__'
+
+regeneratedL1DT = True
 
 if useExtraploationAlgo :
-    version = version + 'Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2'
+    version = version + 'Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2'
 else :
     version = version + 'Patterns_0x00012'
 
-runDebug = "INFO" # or "INFO" DEBUG
+if not regeneratedL1DT :
+    version = version + "_noDTReGen"
+
+runDebug = "DEBUG" # or "INFO" DEBUG
 #useExtraploationAlgo = True
 
-regeneratedL1DT = False
+
 
 analysisType = "efficiency" # or rate
 
@@ -53,7 +58,7 @@ if "NeutrinoGun" in filesNameLike :
 outFilesName = outFilesName + version + "__" + filesNameLike
 
 if(runDebug == "DEBUG") :
-    outFilesName = outFilesName + "_test4"
+    outFilesName = outFilesName + "_test6"
 
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
@@ -147,16 +152,16 @@ if filesNameLike == 'mcWaw2023_OneOverPt_and_iPt2':
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
              #
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 300}, #500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 300}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
              #
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
              #
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
-              {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 10000}, #500 files
-              {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 10000}, #500 files
+              {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 100}, #500 files
+              {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 100}, #500 files
              ]
 
 if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -201,7 +206,16 @@ if filesNameLike == "MinBias_Phase2Spring23_PU140" :
         {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU140/', "fileCnt" : 10000},
         ]   
     analysisType = "rate"    
-        
+    
+if filesNameLike == "MinBias_Phase2Spring23_PU200" :   
+    cscBx = 8 
+    matchUsingPropagation  = False 
+    regeneratedL1DT = True
+    paths = [
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU200/', "fileCnt" : 10000},
+        ]   
+    analysisType = "rate"    
+            
 print("input data paths", paths)        
 
 if(runDebug == "DEBUG") :
@@ -349,7 +363,7 @@ if useExtraploationAlgo :
     
     #process.simOmtfPhase2Digis.goldenPatternResultFinalizeFunction = cms.int32(10) #valid values are 0, 1, 2, 3, 5
     
-    process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(0)
+    process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(2)
     process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(2) #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!
     
     #process.simOmtfPhase2Digis.useEndcapStubsRInExtr  = cms.bool(True)   #TODO REMOVE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -387,10 +401,25 @@ if matchUsingPropagation :
                                  simVertexesTag = cms.InputTag('g4SimHits'),
                                  
                                  matchUsingPropagation = cms.bool(matchUsingPropagation),
-                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root") #if you want to make this file, remove this entry#if you want to make this file, remove this entry
+                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root"), #if you want to make this file, remove this entry#if you want to make this file, remove this entry
                                  #muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_noPropagation_t74.root")
+                                 phase = cms.int32(2)
                                  )
-else :
+elif analysisType == "efficiency":
+    process.L1MuonAnalyzerOmtf= cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
+                                 etaCutFrom = cms.double(0.82), #OMTF eta range
+                                 etaCutTo = cms.double(1.24),
+                                 L1OMTFInputTag  = cms.InputTag("simOmtfPhase2Digis","OMTF"),
+                                 #nn_pThresholds = cms.vdouble(nn_pThresholds), 
+                                 analysisType = cms.string(analysisType),
+                                                                  
+                                 simTracksTag = cms.InputTag('g4SimHits'),
+                                 simVertexesTag = cms.InputTag('g4SimHits'),
+                                 matchUsingPropagation = cms.bool(matchUsingPropagation), #if this is defined, useMatcher is true, for rate analysis this mus be removed, but for efficiency is needed
+                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root"),
+                                 phase = cms.int32(2)                                     
+                                )
+elif analysisType == "rate":
     process.L1MuonAnalyzerOmtf= cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
                                  etaCutFrom = cms.double(0.82), #OMTF eta range
                                  etaCutTo = cms.double(1.24),
@@ -401,9 +430,10 @@ else :
                                  simTracksTag = cms.InputTag('g4SimHits'),
                                  simVertexesTag = cms.InputTag('g4SimHits'),
                                  #matchUsingPropagation = cms.bool(matchUsingPropagation), #if this is defined, useMatcher is true, for rate analysis this mus be removed, but for efficiency is needed
-                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")                                     
+                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root"),
+                                 phase = cms.int32(2)                                    
                                 )
-
+    
 process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
 
 
@@ -413,9 +443,11 @@ process.L1TMuonSeq = cms.Sequence( process.esProd
                                    #+ process.dumpES
 )
 
-#process.L1TMuonPath = cms.Path(process.L1TMuonSeq) ########################################<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!
-process.L1TMuonPath = cms.Path(process.CalibratedDigis * 
-                            process.dtTriggerPhase2PrimitiveDigis * process.L1TMuonSeq)
+
+if not regeneratedL1DT :
+    process.L1TMuonPath = cms.Path(process.L1TMuonSeq) ########################################<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!
+else :
+    process.L1TMuonPath = cms.Path(process.CalibratedDigis * process.dtTriggerPhase2PrimitiveDigis * process.L1TMuonSeq)
 
 process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath)
 

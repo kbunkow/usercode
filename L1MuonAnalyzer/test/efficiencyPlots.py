@@ -107,7 +107,23 @@ if version == "t22__Extrapl_Patterns_t17_v0_gpFinalize10_EfeMC_HTo2LongLivedTo2m
 histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/"   
 if version == "phase2_t21b_DTQ0_LUTNN_FP_v217" :
     histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_LUTNN_FP_v217_effAna_mcWaw_2024_01_04_OneOverPt.root" )  
-    
+
+histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/"   
+if version == "phase2_t24c_DTQ_2_2_mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "phase2_t24c_DTQ_0_2_noDTReGen_mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2_noDTReGen__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "phase2_t24c_DTQ_2_2_noDTReGen_mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_noDTReGen__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+
+if version == "phase2_t24c_DTQ_2_2_NN_FP_v217_mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "phase2_t24c_DTQ_2_2_NN_FP_v217_noDTReGen_mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_noDTReGen_NN_FP_v217__mcWaw2023_OneOverPt_and_iPt2.root" )  
 
 # if "SingleMu_" in version :
 #     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )

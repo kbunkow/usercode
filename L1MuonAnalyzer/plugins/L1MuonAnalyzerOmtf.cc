@@ -617,7 +617,7 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, std::vector<Matchi
 
     if(l1MuonCand.hwQual > 0) {//removes candidates with abs(eta) > 1.24
       int firedLayers = bestOmtfCand->muonCand->trackAddress().at(0);
-      if(abs(l1MuonCand.ptGev) >= 18) {
+      if(abs(l1MuonCand.ptGev) >= 16) {
         firedLayersEventCntOmtf->AddBinContent(firedLayers +1);
       }
 
@@ -747,7 +747,7 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, const edm::EventSe
 
     if(l1MuonCand.hwQual > 0) {//removes candidates with abs(eta) > 1.24
       int firedLayers = bestOmtfCand->trackAddress().at(0);
-      if(abs(l1MuonCand.ptGev) >= 18) {
+      if(abs(l1MuonCand.ptGev) >= 16) {
         firedLayersEventCntOmtf->AddBinContent(firedLayers +1);
       }
 
