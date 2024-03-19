@@ -125,6 +125,10 @@ if version == "phase2_t24c_DTQ_2_2_NN_FP_v217_mcWaw2023_OneOverPt_and_iPt2" :
 if version == "phase2_t24c_DTQ_2_2_NN_FP_v217_noDTReGen_mcWaw2023_OneOverPt_and_iPt2" :
     histFile = TFile( histFileDir + "omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_noDTReGen_NN_FP_v217__mcWaw2023_OneOverPt_and_iPt2.root" )  
 
+if version == "phase2_t25a_DTQ_2_2__floatPointExtr__NN_FP_v217__mcWaw_2024_01_03_OneOverPt" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t25a__generateExtrFactors_ExtraplMB1nadMB2DTQualAndEta_EtaValueP1Scale_NN_FP_v217__mcWaw_2024_01_03_OneOverPt.root" )  
+
+
 # if "SingleMu_" in version :
 #     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )
 #     omtf_type = 2022

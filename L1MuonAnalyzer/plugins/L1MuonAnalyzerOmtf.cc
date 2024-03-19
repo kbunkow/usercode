@@ -71,6 +71,11 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
 
   candsDeltaPhi = fs->make<TH1I>("candsDeltaPhi", "candsDeltaPhi - uGMT units (2pi/576)", 576, -576/2 -0.5, 576/2 - 0.5);
 
+  candEtaPtCut1 = fs->make<TH1D>("candEta_PtCut_1GeV__qualCut_1", "candEta PtCut 1GeV, qualCut 1;eta; #events", 100, -2.1, 2.1);
+  candEtaPtCut10 = fs->make<TH1D>("candEta_PtCut_1GeV__qualCut_4", "candEta PtCut 10GeV, qualCut 4;eta; #events", 100, -2.1, 2.1);
+
+
+
   if(edmCfg.exists("nn_pThresholds") )
     nn_pThresholds = edmCfg.getParameter<vector<double> >("nn_pThresholds");
 
@@ -456,7 +461,16 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
     analyzeRate(event, matchingResults);
   }
 
+  double etaUnit = 0.010875; //TODO from the interface note, should be defined somewhere globally
+  for (auto& matchingResult: matchingResults ) {
+    if(matchingResult.muonCand != nullptr) {
+      if(matchingResult.muonCand->hwQual() >= 1)
+        candEtaPtCut1->Fill(matchingResult.muonCand->hwEta() * etaUnit); //TODO use some function for eta conversion
 
+      if(matchingResult.muonCand->hwQual() >= 4 && matchingResult.muonCand->hwPt() >= 21) //TODO use some function for pt conversion
+        candEtaPtCut10->Fill(matchingResult.muonCand->hwEta() * etaUnit);
+    }
+  }
   //Analyzing ghosts - in this verison they are afer the ghostBust()
   //TODO add quality cut!!!
   for(unsigned int i1 = 0; i1 < matchingResults.size(); i1++) {

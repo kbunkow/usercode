@@ -171,6 +171,9 @@ private:
 
   TH1* candsDeltaPhi = nullptr;
 
+  TH1* candEtaPtCut1 = nullptr;
+  TH1* candEtaPtCut10 = nullptr;
+
   int nProcessors = 6;
  };
 
