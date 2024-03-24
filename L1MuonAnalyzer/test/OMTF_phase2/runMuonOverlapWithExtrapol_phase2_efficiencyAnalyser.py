@@ -59,7 +59,7 @@ if analysisType == "efficiency" :
 elif analysisType == "rate" :
     outFilesName = outFilesName + "rate_"    
     
-if "NeutrinoGun" in filesNameLike : 
+if "NeutrinoGun" or "MinBias" in filesNameLike : 
     outFilesName = 'omtfAnalysis2_'  + "rate_"
     
 outFilesName = outFilesName + version + "__" + filesNameLike

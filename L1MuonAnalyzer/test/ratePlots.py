@@ -32,7 +32,7 @@ def makeEfficiency(passed, total, title, lineColor):
 
 rootDirPostFix = ""
 print("sys.argv.__len__", len(sys.argv) )
-if len(sys.argv) >= 3 :
+if len(sys.argv) >= 2 :
     rootDirPostFix = sys.argv[1] 
 
 #histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/expert/omtf/omtfAnalysis_newerSAmple_v21_1_10Files_withMatching.root' )
@@ -79,34 +79,38 @@ if len(sys.argv) >= 3 :
 #version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
 
 
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4__MinBias_Phase2Spring23_PU140.root' )
-version = "t23_phase2_with_extrapolation_DTQ_2_4__MinBias_Phase2Spring23_PU140"
-
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
-version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_4__MinBias_Phase2Spring23_PU140"
-
-
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2__MinBias_Phase2Spring23_PU140.root' )
-version = "t23_phase2_with_extrapolation_DTQ_0_2__MinBias_Phase2Spring23_PU140"
-
-#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
-#version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_0_2__MinBias_Phase2Spring23_PU140"
-
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23a__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
-version = "t23a_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
-
-#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23b__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
-#version = "t23b_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
-
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24b__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
-version = "t24b_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
-
-
-histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2__MinBias_Phase2Spring23_PU200.root')
-version = "t24c_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU200"
+# histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4__MinBias_Phase2Spring23_PU140.root' )
+# version = "t23_phase2_with_extrapolation_DTQ_2_4__MinBias_Phase2Spring23_PU140"
+#
+# histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+# version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_4__MinBias_Phase2Spring23_PU140"
+#
+#
+# histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2__MinBias_Phase2Spring23_PU140.root' )
+# version = "t23_phase2_with_extrapolation_DTQ_0_2__MinBias_Phase2Spring23_PU140"
+#
+# #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_0_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+# #version = "t23_phase2_with_extrapolation_NN_FP_v217_DTQ_0_2__MinBias_Phase2Spring23_PU140"
+#
+# histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23a__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+# version = "t23a_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
+#
+# #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t23b__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+# #version = "t23b_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
+#
+# histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24b__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU140.root' )
+# version = "t24b_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
+#
+#
+# histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2__MinBias_Phase2Spring23_PU200.root')
+# version = "t24c_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU200"
 
 #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU200.root' )
 #version = "t24c_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU200"
+
+path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/results/"
+histFile = TFile(path + "omtfAnalysis2_rate_t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__EphemeralZeroBias_Run370580.root")
+version = "t26_phase2_with_extrapolation_DTQ_2_4__EphemeralZeroBias_Run370580"
 
 #histFile.ls()
 

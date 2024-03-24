@@ -15,14 +15,14 @@ verbose = True
 
 useExtraploationAlgo = True
 
-test = True
+test = False
 
 real_data = True
 
-version = 't22__'
+version = 't26__'
 
 if useExtraploationAlgo :
-    version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10'
+    version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4'
 else :
     version = version + 'Patterns_0x00012'
 
@@ -30,7 +30,7 @@ runDebug = "INFO" # or "INFO" DEBUG
 #useExtraploationAlgo = True
 
 
-analysisType = "efficiency" # or rate
+analysisType = "rate" # or rate
   
 for a in sys.argv :
     if a == "efficiency" or a ==  "rate" or a == "withTrackPart" :
@@ -38,9 +38,9 @@ for a in sys.argv :
         break;
     
 #filesNameLike = sys.argv[2]
-filesNameLike = "ZeroBiasRun367883"
+filesNameLike = "ZeroBiasRun370580"
 if test :
-    filesNameLike = "NeutrinoGun_PU200_Alibordi"
+    filesNameLike = "MinBias_Phase2Spring23_PU140"
     
 outFilesName = 'omtfAnalysis2_' 
 if analysisType == "efficiency" :
@@ -101,8 +101,9 @@ process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2017Reco_cff')
-process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
+process.load('Configuration.Geometry.GeometryExtended2023Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2023_cff')
+#process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 #process.load('Configuration.StandardSequences.SimL1Emulator_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
@@ -117,7 +118,9 @@ chosenFiles = []
 
 fileCnt = 100000 #1000 
 
- 
+paths = []
+cscBx = 8
+matchUsingPropagation  = False
        
 if filesNameLike == "SingleMu_9_3_14_FullEta_v2" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     cscBx = 6
@@ -131,8 +134,8 @@ if filesNameLike == 'mcWaw_2024_01_03_OneOverPt' :
     cscBx = 8
     matchUsingPropagation  = False 
     paths = [    
-             "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", #1000 files
-             "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/" #1000 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 500}, #1000 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 500} #1000 files
              ]
     fileCnt = 10 #<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -169,10 +172,18 @@ if filesNameLike == "NeutrinoGun_PU200_Alibordi" :    #<<<<<<<<<<<<<<<<<<<<<<<<<
     cscBx = 8
     matchUsingPropagation  = False 
     paths = [
-        {"path": '/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/NeutrinoGun_PU200_ForRateEstimation/', "fileCnt" : 10},
+        {"path": '/eos/user/a/almuhamm/MuSampleSharedDirectory/simPrivateProduction/NeutrinoGun_PU200_ForRateEstimation/', "fileCnt" : 10}
         ]   
     analysisType = "rate"
     
+
+if filesNameLike == "MinBias_Phase2Spring23_PU140" :   
+    cscBx = 8 
+    matchUsingPropagation  = False 
+    paths = [
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU140/', "fileCnt" : 10},
+        ]   
+    analysisType = "rate"      
         
 print("input data paths", paths)        
 
@@ -260,12 +271,12 @@ if useExtraploationAlgo :
 else :
     process.load('L1Trigger.L1TMuonOverlapPhase1.simOmtfDigis_cfi') 
     
-    
-process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
-process.load('EventFilter.L1TRawToDigi.omtfStage2Digis_cfi') #unpacker
-
 #if running on real collission data
 if real_data :
+    #process.load('Configuration.StandardSequences.RawToDigi_Data_cff') #has alpaka which doeas not work
+    process.load('L1Trigger.Configuration.L1TRawToDigi_cff')  
+    process.load('EventFilter.L1TRawToDigi.omtfStage2Digis_cfi') #unpacker
+
     process.simOmtfDigis.srcDTPh = cms.InputTag('omtfStage2Digis')
     process.simOmtfDigis.srcDTTh = cms.InputTag('omtfStage2Digis')
     process.simOmtfDigis.srcCSC = cms.InputTag('omtfStage2Digis')
@@ -389,7 +400,7 @@ else :
                                  #nn_pThresholds = cms.vdouble(nn_pThresholds), 
                                  analysisType = cms.string(analysisType),
                                  
-                                 #matchUsingPropagation = cms.bool(matchUsingPropagation), if this is defined, useMatcher is true
+                                 #matchUsingPropagation = cms.bool(matchUsingPropagation), if this is defined, useMatcher is true, for rate analysis this mus be removed, but for efficiency is needed
                                  muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")                                     
                                 )
 
@@ -409,15 +420,24 @@ if real_data :
 
     process.l1MuonAnalyzerOmtfPathHW = cms.Path(process.L1MuonAnalyzerOmtfHW)
 
-process.L1TMuonSeq = cms.Sequence( process.esProd +      
+    process.L1TMuonSeq = cms.Sequence( process.esProd +      
                                    process.omtfStage2Digis + process.simOmtfDigis 
                                    #+ process.dumpED
                                    #+ process.dumpES
                                    )
+else :
+    process.L1TMuonSeq = cms.Sequence( process.esProd +      
+                                   process.simOmtfDigis 
+                                   #+ process.dumpED
+                                   #+ process.dumpES
+                                   ) 
 
 process.L1TMuonPath = cms.Path(process.L1TMuonSeq)
 
-process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath, process.l1MuonAnalyzerOmtfPathHW)
+if real_data :
+    process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath, process.l1MuonAnalyzerOmtfPathHW)
+else :
+    process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath)
 
 #process.out = cms.OutputModule("PoolOutputModule", 
 #   fileName = cms.untracked.string("l1tomtf_superprimitives1.root")

@@ -15,16 +15,16 @@ verbose = True
 
 useExtraploationAlgo = True
 
-version = 't25c__'
+version = 't27__'
 
 if useExtraploationAlgo :
-    version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10'
+    version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4'
     #version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10'
     #version = version + 'Patterns_ExtraplMB1nadMB2FullAlgo_t16_classProb17_recalib2_gpFinalize10'
 else :
     version = version + 'Patterns_0x00012'
 
-runDebug = "DEBUG" # or "INFO" DEBUG
+runDebug = "INFO" # or "INFO" DEBUG
 #useExtraploationAlgo = True
 
 
@@ -42,6 +42,9 @@ if analysisType == "efficiency" :
     outFilesName = outFilesName + "eff_"
 elif analysisType == "rate" :
     outFilesName = outFilesName + "rate_"    
+    
+if "NeutrinoGun" or "MinBias" in filesNameLike : 
+    outFilesName = 'omtfAnalysis2_'  + "rate_"
     
 outFilesName = outFilesName + version + "__" + filesNameLike
 
@@ -137,11 +140,11 @@ if filesNameLike == 'mcWaw2023_OneOverPt_and_iPt2':
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
              #
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500}, #500 files
              #
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 300}, #500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 300}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
              #
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
@@ -171,14 +174,23 @@ if filesNameLike == "Displaced_Dxy5m_pT0To1000_condRun3" :    #<<<<<<<<<<<<<<<<<
         {"path": '/eos/user/a/akalinow/Data/SingleMu/Displaced_Dxy5m_pT0To1000_condRun3_131X_mcRun3_2023_realistic_v10/DisplacedMu_ch2_iPt2_Run2023_13_1_0_23_11_2023', "fileCnt" : 100},
         ]   
     
-
-if filesNameLike == "NeutrinoGun_PU200_Alibordi" :   
+if filesNameLike == "MinBias_Phase2Spring23_PU140" :   
     cscBx = 8 
     matchUsingPropagation  = False 
+    regeneratedL1DT = True
     paths = [
-        {"path": '/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/NeutrinoGun_PU200_ForRateEstimation/', "fileCnt" : 10000},
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU140/', "fileCnt" : 10000},
         ]   
-    analysisType = "rate"
+    analysisType = "rate"    
+    
+if filesNameLike == "MinBias_Phase2Spring23_PU200" :   
+    cscBx = 8 
+    matchUsingPropagation  = False 
+    regeneratedL1DT = True
+    paths = [
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU200/', "fileCnt" : 10000},
+        ]   
+    analysisType = "rate" 
     
         
 print("input data paths", paths)        
@@ -382,7 +394,7 @@ if matchUsingPropagation :
                                  muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root") #if you want to make this file, remove this entry#if you want to make this file, remove this entry
                                  #muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_noPropagation_t74.root")
                                  )
-else :
+elif analysisType == "efficiency":
     process.L1MuonAnalyzerOmtf= cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
                                  etaCutFrom = cms.double(0.82), #OMTF eta range
                                  etaCutTo = cms.double(1.24),
@@ -395,7 +407,21 @@ else :
                                  matchUsingPropagation = cms.bool(matchUsingPropagation), #if this is defined, useMatcher is true, for rate analysis this mus be removed, but for efficiency is needed
                                  muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")                                     
                                 )
-
+elif analysisType == "rate":
+    process.L1MuonAnalyzerOmtf= cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
+                                 etaCutFrom = cms.double(0.82), #OMTF eta range
+                                 etaCutTo = cms.double(1.24),
+                                 L1OMTFInputTag  = cms.InputTag("simOmtfDigis","OMTF"),
+                                 #nn_pThresholds = cms.vdouble(nn_pThresholds), 
+                                 analysisType = cms.string(analysisType),
+                                                                  
+                                 simTracksTag = cms.InputTag('g4SimHits'),
+                                 simVertexesTag = cms.InputTag('g4SimHits'),
+                                 #matchUsingPropagation = cms.bool(matchUsingPropagation), #if this is defined, useMatcher is true, for rate analysis this mus be removed, but for efficiency is needed
+                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root"),
+                                 phase = cms.int32(2)                                    
+                                )
+    
 process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
 
 
