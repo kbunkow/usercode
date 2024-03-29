@@ -109,8 +109,15 @@ if len(sys.argv) >= 2 :
 #version = "t24c_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU200"
 
 path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/results/"
-histFile = TFile(path + "omtfAnalysis2_rate_t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__EphemeralZeroBias_Run370580.root")
-version = "t26_phase2_with_extrapolation_DTQ_2_4__EphemeralZeroBias_Run370580"
+#histFile = TFile(path + "omtfAnalysis2_rate_t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__EphemeralZeroBias_Run370580.root")
+#version = "t26_phase2_with_extrapolation_DTQ_2_4__EphemeralZeroBias_Run370580"
+
+#histFile = TFile(path + "omtfAnalysis2_rate_t27__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__MinBias_Phase2Spring23_PU200.root")
+#version = "t27_phase2_with_extrapolation_DTQ_2_4__MinBias_Phase2Spring23_PU200"
+
+histFile = TFile(path + "omtfAnalysis2_rate_t27__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+version = "t27__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
 
 #histFile.ls()
 
@@ -118,8 +125,8 @@ inputResults = version
 
 print (histFile)
 
-lhcFillingRatio = 2760./3564.
-#lhcFillingRatio = 2345./3564.; #run 367883     2023C
+#lhcFillingRatio = 2760./3564.
+lhcFillingRatio = 2345./3564.; #run 367883     2023C
 lhcFreq = 40144896; #11264 * 3564
 
 rootDirStr = "L1MuonAnalyzerOmtf" + rootDirPostFix

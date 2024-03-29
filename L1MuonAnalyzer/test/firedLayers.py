@@ -60,8 +60,26 @@ print("eff  hist " + firedLayersEventCntOmtfEff.GetName() )
 effNorm = firedLayersEventCntOmtfEff.Integral() 
 
 firedLayersStat = []
+firedLayersStatQuality_1 = []
 
 fullRate = 0
+
+quality_1 = [
+    int("000000110000000011", 2),
+    int("000000100000000011", 2),
+    int("000000010000000011", 2),
+    int("000000110000000001", 2),        
+    int("000001000000001100", 2),
+    int("000011000000001100", 2),
+    int("000010000000001100", 2),
+    int("000011000000000100", 2), 
+    int("000000011000000001", 2),
+    int("001000010000000001", 2),
+    ]
+
+quality_1_rate = 0;
+qulaity_1_eff = 0
+
 for firedLayers in range(0, firedLayersEventCntOmtfRate.GetNbinsX(), 1) : 
     rate = firedLayersEventCntOmtfRate.GetBinContent(firedLayers +1) * scale
     eff = firedLayersEventCntOmtfEff.GetBinContent(firedLayers +1) / effNorm
@@ -75,11 +93,24 @@ for firedLayers in range(0, firedLayersEventCntOmtfRate.GetNbinsX(), 1) :
     #    eff_rate = rate/eff #eff/rate
 
     if rate > 0 or eff > 0:
-        #if rate >= 20: #<<<<<<<<<<<<<<<<,todo tune depanding on the statistics
-        if firedLayersEventCntOmtfRate.GetBinContent(firedLayers +1) >= 2 :
-            firedLayersStat.append( (firedLayers, rate, eff, eff_rate) )
-            #print("%8i %018i %f" % (firedLayers, firedLayers,  rate) ) 
-        #print("%8i %s rate: %8.1f eff: %.5f ratio %f" % (firedLayers, format(firedLayers, '018b'), rate, eff, eff_rate) ) 
+        if firedLayers in quality_1 :
+            quality_1_rate += rate;
+            qulaity_1_eff += eff
+            
+            if rate == 0:
+                eff_rate = 0
+                
+            firedLayersStatQuality_1.append( (firedLayers, rate, eff, eff_rate) )
+        else :
+            #if rate >= 20: #<<<<<<<<<<<<<<<<,todo tune depanding on the statistics
+            if firedLayersEventCntOmtfRate.GetBinContent(firedLayers +1) >= 2 :
+                firedLayersStat.append( (firedLayers, rate, eff, eff_rate) )
+                #print("%8i %018i %f" % (firedLayers, firedLayers,  rate) ) 
+                #print("%8i %s rate: %8.1f eff: %.5f ratio %f" % (firedLayers, format(firedLayers, '018b'), rate, eff, eff_rate) ) 
+
+print("fullRate", fullRate)
+print("quality_1_rate", quality_1_rate)
+print("qulaity_1_eff", qulaity_1_eff)
 
 print("\nselected\n")
 firedLayersStat.sort(key = lambda x: x[3], reverse = False)  
@@ -89,9 +120,16 @@ totalEff = 0
 
 totalEff10 = 0
 
+for firedLayerStat in firedLayersStatQuality_1 :
+    totalRateDrop += firedLayerStat[1]
+    totalEff  += firedLayerStat[2]
+    print("%8i %s rate: %8.1f eff: %.5f ratio %f totalEff %f totalRateDrop %f fullRate %f " % (firedLayerStat[0], format(firedLayerStat[0], '018b'),  firedLayerStat[1], firedLayerStat[2], firedLayerStat[3], totalEff, totalRateDrop, fullRate - totalRateDrop) ) 
+
+print()
+
 for firedLayerStat in firedLayersStat :
     #print (format(firedLayerStat[0], '018b'), firedLayerStat)
-    if (firedLayerStat[1] > -1) :
+    if (firedLayerStat[1] > -1 and firedLayerStat[2] < 0.003) :
     #if (firedLayerStat[1] > 150) or (firedLayerStat[2] < 0.0001 and firedLayerStat[1] > 100): #rate > 100
         totalRateDrop += firedLayerStat[1]
         totalEff  += firedLayerStat[2]
