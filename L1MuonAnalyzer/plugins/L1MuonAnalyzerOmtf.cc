@@ -90,6 +90,7 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
       omtfEfficiencyAnalysers.emplace_back(new PtGenVsPtCand(subDir, name, etaFrom, etaTo, qualityCut, 800, 0, 800, true));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyVsPhi(subDir, name, etaFrom, etaTo, qualityCut, ptGenCut, ptL1Cut, 100));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyVsEta(subDir, name, qualityCut, ptGenCut, ptL1Cut, 210));
+      omtfEfficiencyAnalysers.emplace_back(new EfficiencyVsEta(subDir, name, qualityCut, 27, 22, 210));
 
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 1, 100, 300/20, false, false));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 1, 100, 300/20, false, true));

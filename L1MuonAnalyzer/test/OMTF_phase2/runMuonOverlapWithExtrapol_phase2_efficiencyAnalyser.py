@@ -15,17 +15,17 @@ verbose = True
 
 useExtraploationAlgo = True
 
-generateExtrFactors = True
+generateExtrFactors = False
 
-version = 't25c__'
+version = 't27a__'
 
-regeneratedL1DT = True
+regeneratedL1DT = False
 
 if useExtraploationAlgo :
     if generateExtrFactors :
         version = version + 'generateExtrFactors_ExtraplMB1nadMB2DTQualAndEta_EtaValueP1Scale'
     else :
-        version = version + 'Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2'
+        version = version + 'Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4'
 else :
     version = version + 'Patterns_0x00012'
     
@@ -34,7 +34,7 @@ else :
 if not regeneratedL1DT :
     version = version + "_noDTReGen"
 
-runDebug = "INFO" # or "INFO" DEBUG
+runDebug = "DEBUG" # or "INFO" DEBUG
 #useExtraploationAlgo = True
 
 
@@ -372,7 +372,7 @@ if useExtraploationAlgo :
     #process.simOmtfPhase2Digis.goldenPatternResultFinalizeFunction = cms.int32(10) #valid values are 0, 1, 2, 3, 5
     
     process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(2)
-    process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(2) #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!
+    process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(4) #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!
     
     #process.simOmtfPhase2Digis.useEndcapStubsRInExtr  = cms.bool(True)   #TODO REMOVE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     

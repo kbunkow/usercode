@@ -3,18 +3,19 @@ from WMCore.Configuration import Configuration
 config = Configuration()
 
 config.section_("General")
-config.General.requestName = 'omtf_run3_ZeroBias_Run2023_t26_7'
+config.General.requestName = 'omtf_run3_ZeroBias_Run2023_367883_t27a_1'
 #config.General.workArea = 'jobs_SM_Run2017E-ZMu-17Nov2017'
 #config.General.workArea = 'jobs_JHT_2018D'
 config.General.transferLogs = True 
 config.General.transferOutputs = True 
 
 config.section_("Data")
-#config.Data.inputDataset = '/EphemeralZeroBias0/Run2023C-v1/RAW'
-#config.Data.runRange = '367883'
+config.Data.inputDataset = '/EphemeralZeroBias1/Run2023C-v1/RAW'
+config.Data.runRange = '367883'
 
-config.Data.inputDataset = '/EphemeralZeroBias7/Run2023D-v1/RAW'
-config.Data.runRange = '370580'
+#config.Data.inputDataset = '/EphemeralZeroBias0/Run2023D-v1/RAW'
+#config.Data.runRange = '370580'
+
 
 #config.Data.lumiMask='Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
 #config.Data.lumiMask='Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.txt'

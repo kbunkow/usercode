@@ -115,9 +115,39 @@ path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/
 #histFile = TFile(path + "omtfAnalysis2_rate_t27__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__MinBias_Phase2Spring23_PU200.root")
 #version = "t27_phase2_with_extrapolation_DTQ_2_4__MinBias_Phase2Spring23_PU200"
 
-histFile = TFile(path + "omtfAnalysis2_rate_t27__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
-version = "t27__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+#version = "t27a__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
 
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+#version = "t27a__Patterns_0x00021_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00020_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+#version = "t27a__Patterns_0x00020_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")#
+#version = "t27a__Patterns_0x00021_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
+
+#histFile = TFile(path + "omtfAnalysis2_rate_t27b__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+#version = "t27b__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
+#histFile = TFile(path + "omtfAnalysis2_rate_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+#version = "t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
+
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+#version = "t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200.root")
+#version = "t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__MinBias_Phase2Spring23_PU200"
+
+#path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_t26_0/results"
+#histFile = TFile(path + "omtfAnalysis2_rate_t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__ZeroBiasRun370580.root")
+#version = "t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__ZeroBiasRun370580"
+
+path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_367883_t27a_0/results/"
+histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580.root")
+version = "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun367883.root"
 
 #histFile.ls()
 

@@ -391,11 +391,27 @@ def drawEffs(fileDir, type, quality, lineColor, pTresh = "0.5" ) :
 
 doLogScale = False
 
-#drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
-#drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kGreen)
+drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
+drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kRed)
 #drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize11/', "omtf_v1", "12", kRed)
-#drawEffs('t22__Extrapl_Patterns_t17_v0_gpFinalize10/', "omtf_v1", "12", kMagenta)
+#drawEffs('t22__Extrapl_Patterns_t17_v0_gpFinalize10/', "omtf_v1", "12", kRed)
+#drawEffs('t27__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
 
+#drawEffs('t27a__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kMagenta)
+#drawEffs('t27a__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kMagenta)
+
+#drawEffs('t27a__Patterns_0x00020_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
+#drawEffs('t27a__Patterns_0x00021_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
+
+#drawEffs('t27a__Patterns_0x00020_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
+#drawEffs('t27a__Patterns_0x00021_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
+
+#drawEffs('t27b__Patterns_0x00020_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
+#drawEffs('t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
+
+
+drawEffs('t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
+drawEffs('t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False
@@ -441,8 +457,8 @@ legend.SetTextSize(0.03)
 legend.SetMargin(0.2)
 
 
-drawRate('t23_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "OMTF_DTQ_2_2", "12", kBlack)
-drawRate('t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "NN_FP_v217_DTQ_2_2", "12", kRed)
+#drawRate('t23_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "OMTF_DTQ_2_2", "12", kBlack)
+#drawRate('t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "NN_FP_v217_DTQ_2_2", "12", kRed)
 
 legend.Draw()
 

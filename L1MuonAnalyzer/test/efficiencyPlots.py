@@ -85,6 +85,9 @@ if version == "t21a__Patterns_0x00012" :
   
 if version == "t21a__Extrapl_Patterns_t17_gpFinalize11" :
     histFile = TFile( histFileDir + "omtfAnalysis2_eff_t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize11__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "t21a__Extrapl_Patterns_t17_gpFinalize10" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10__mcWaw2023_OneOverPt_and_iPt2.root" )  
    
 if version == "t22__Extrapl_Patterns_t17_v0_gpFinalize10" :
     histFile = TFile( histFileDir + "omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10__mcWaw_2024_01_03_OneOverPt.root" )    
@@ -111,8 +114,43 @@ if version == "t27__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023
     histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
 
 if version == "t27__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
-    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
-        
+    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" ) 
+
+if version == "t27a__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27a__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )   
+
+if version == "t27a__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27a__Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
+    
+
+if version == "t27a__Patterns_0x00020_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27a__Patterns_0x00020_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "t27a__Patterns_0x00021_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb20_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )     
+    
+    
+if version == "t27a__Patterns_0x00020_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27a__Patterns_0x00020_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "t27a__Patterns_0x00021_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb21_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
+    
+    
+if version == "t27b__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t27b__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )    
+    
+    
+if version == "t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )  
+
+if version == "t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_eff_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2.root" )       
+    
+                   
 #phase-2 ########################################################################3
 histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1Trigger/L1TMuonOverlapPhase2/test/expert/omtfAnalysis/"   
 if version == "phase2_t21b_DTQ0_LUTNN_FP_v217" :

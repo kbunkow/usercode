@@ -15,10 +15,10 @@ verbose = True
 
 useExtraploationAlgo = True
 
-version = 't27__'
+version = 't27a__'
 
 if useExtraploationAlgo :
-    version = version + 'Patterns_0x00021_ExtraplMB1nadMB2SimplifiedFP_t27'
+    version = version + 'Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27'
     #version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10'
     #version = version + 'Patterns_ExtraplMB1nadMB2FullAlgo_t16_classProb17_recalib2_gpFinalize10'
 else :
@@ -43,13 +43,13 @@ if analysisType == "efficiency" :
 elif analysisType == "rate" :
     outFilesName = outFilesName + "rate_"    
     
-if "NeutrinoGun" or "MinBias" in filesNameLike : 
+if ("NeutrinoGun" in filesNameLike) or ("MinBias" in filesNameLike): 
     outFilesName = 'omtfAnalysis2_'  + "rate_"
     
 outFilesName = outFilesName + version + "__" + filesNameLike
 
 if(runDebug == "DEBUG") :
-    outFilesName = outFilesName + "_test7"
+    outFilesName = outFilesName + "_test9"
 
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
@@ -146,10 +146,10 @@ if filesNameLike == 'mcWaw2023_OneOverPt_and_iPt2':
              {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, #200 files full eta
              {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, #200 files
              #
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500}, ##100 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500}, ##100 files
-             #{"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 200}, #500 files
-             #{"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 200}, #500 files
+             #{"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500}, ##100 files
+             #{"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500}, ##100 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 200}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 200}, #500 files
              ]
 
 if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -228,7 +228,6 @@ if len(chosenFiles) == 0 :
 print("running version", version)
 print("analysisType", analysisType)
 print("outFilesName", outFilesName)
-
 
 firstEv = 0#40000
 #nEvents = 1000
@@ -321,10 +320,12 @@ if useExtraploationAlgo :
     #process.simOmtfDigis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/Patterns_ExtraplMB1nadMB2FullAlgo_t16_classProb17_recalib2.xml")
     #process.simOmtfDigis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2.xml")
     #process.simOmtfDigis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3.xml")
-    process.simOmtfDigis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2Simplified_t27_DTQ_4_4_mcWaw2023_OneOverPt_and_iPt2_classProb17_recalib2.xml")
+    #process.simOmtfDigis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2Simplified_t27_DTQ_4_4_mcWaw2023_OneOverPt_and_iPt2_classProb17_recalib2.xml")
+    process.simOmtfDigis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_0x0021_ExtraplMB1nadMB2Simplified_t27_DTQ_4_4_mcWaw2023_OneOverPt_and_iPt2_classProb22_recalib2.xml")
 else :
     process.simOmtfDigis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_0x00012_oldSample_3_30Files_grouped1_classProb17_recalib2.xml")
 
+print(process.simOmtfDigis.patternsXMLFile)
   
 process.simOmtfDigis.rpcMaxClusterSize = cms.int32(3)
 process.simOmtfDigis.rpcMaxClusterCnt = cms.int32(2)
