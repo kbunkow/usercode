@@ -410,7 +410,7 @@ drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kRed)
 #drawEffs('t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
 
 
-drawEffs('t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
+#drawEffs('t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
 drawEffs('t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

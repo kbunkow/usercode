@@ -102,8 +102,8 @@ if len(sys.argv) >= 2 :
 # version = "t24b_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140"
 #
 #
-# histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2__MinBias_Phase2Spring23_PU200.root')
-# version = "t24c_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU200"
+#histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2__MinBias_Phase2Spring23_PU200.root')
+#version = "t24c_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU200"
 
 #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU200.root' )
 #version = "t24c_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU200"
@@ -145,9 +145,22 @@ path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/
 #histFile = TFile(path + "omtfAnalysis2_rate_t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__ZeroBiasRun370580.root")
 #version = "t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__ZeroBiasRun370580"
 
-path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_367883_t27a_0/results/"
-histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580.root")
-version = "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun367883.root"
+#path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2023_367883_t27a_0/results/"
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580.root")
+#version = "rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun367883"
+
+#path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2024_379252_t27b_1/results/"
+#histFile = TFile(path + "omtfAnalysis2_rate_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580.root")
+#version = "rate_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580"
+
+
+#path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2024_379252_t27a_0/results/"
+#histFile = TFile(path + "omtfAnalysis2_rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580.root")
+#version = "rate_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580"
+
+path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_run3_ZeroBias_Run2024_379252_t27b_0/results/"
+histFile = TFile(path + "omtfAnalysis2_rate_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580.root")
+version = "rate_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580"
 
 #histFile.ls()
 

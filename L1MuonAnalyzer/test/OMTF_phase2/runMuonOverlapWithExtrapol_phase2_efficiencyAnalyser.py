@@ -65,7 +65,7 @@ if "NeutrinoGun" or "MinBias" in filesNameLike :
 outFilesName = outFilesName + version + "__" + filesNameLike
 
 if(runDebug == "DEBUG") :
-    outFilesName = outFilesName + "_test6"
+    outFilesName = outFilesName + "_test9"
 
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
@@ -89,7 +89,7 @@ if verbose:
                          OMTFReconstruction = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
                          l1MuonAnalyzerOmtf = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
                        ),
-       debugModules = cms.untracked.vstring('L1MuonAnalyzerOmtf', 'simOmtfPhase2Digis', 'omtfParamsSource', 'omtfParams', "esProd", 'L1TMuonOverlapPhase1ParamsESProducer') #'L1MuonAnalyzerOmtf',
+       debugModules = cms.untracked.vstring('L1MuonAnalyzerOmtf', 'simOmtfPhase2Digis', 'omtfParamsSource', 'omtfParamsPhase2', "esProd", 'L1TMuonOverlapPhase1ParamsESProducer') #'L1MuonAnalyzerOmtf',
        #debugModules = cms.untracked.vstring('*')
     )
 
@@ -170,6 +170,13 @@ if filesNameLike == 'mcWaw2023_OneOverPt_and_iPt2':
              # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
               {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 1}, #500 files
               {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 1}, #500 files
+             ]
+
+if filesNameLike == "DYToLL_Phase2Spring23_PU200" :
+    cscBx = 8
+    matchUsingPropagation  = True 
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/DYToLL_M-50_TuneCP5_14TeV-pythia8/crab_DYToLL_M-50_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU200/", "fileCnt" : 10000}, #1000 files
              ]
 
 if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -299,19 +306,18 @@ process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
 
-####Event Setup Producer
-process.load('L1Trigger.L1TMuonOverlapPhase1.fakeOmtfParams_cff')
-process.omtfParams.configXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/hwToLogicLayer_0x0209.xml")
-process.omtfParams.patternsXMLFiles = cms.VPSet(
-        cms.PSet(patternsXMLFile=cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")),)
+###Event Setup Producer
+process.load('L1Trigger.L1TMuonOverlapPhase2.fakeOmtfParamsPhase2_cff')
+#process.omtfParamsPhase2.configXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/hwToLogicLayer_0x0209.xml")
+#process.omtfParamsPhase2.patternsXMLFiles = cms.VPSet(cms.PSet(patternsXMLFile=cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")),)
 
-process.esProd = cms.EDAnalyzer("EventSetupRecordDataGetter",
-   toGet=cms.VPSet(
-      cms.PSet(record=cms.string('L1TMuonOverlapParamsRcd'),
-               data=cms.vstring('L1TMuonOverlapParams'))
-                   ),
-   verbose=cms.untracked.bool(False)
-)
+# process.esProd = cms.EDAnalyzer("EventSetupRecordDataGetter",
+#    toGet=cms.VPSet(
+#       cms.PSet(record=cms.string('L1TMuonOverlapParamsRcd'),
+#                data=cms.vstring('L1TMuonOverlapParams'))
+#                    ),
+#    verbose=cms.untracked.bool(False)
+# )
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string(outFilesName + '.root'), closeFileFast = cms.untracked.bool(True) )
                                    
@@ -349,7 +355,8 @@ process.simOmtfPhase2Digis.candidateSimMuonMatcher = cms.bool(False)
 
 
 if useExtraploationAlgo :
-    process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")
+    a = 0
+    #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")
 else :
     process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_0x00012_oldSample_3_30Files_grouped1_classProb17_recalib2.xml") ##todo
 
@@ -449,8 +456,8 @@ elif analysisType == "rate":
 process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
 
 
-process.L1TMuonSeq = cms.Sequence( process.esProd          
-                                   + process.simOmtfPhase2Digis 
+process.L1TMuonSeq = cms.Sequence( #process.esProd +          
+                                   process.simOmtfPhase2Digis 
                                    #+ process.dumpED
                                    #+ process.dumpES
 )

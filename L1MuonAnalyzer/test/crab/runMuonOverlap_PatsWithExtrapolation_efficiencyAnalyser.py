@@ -19,7 +19,7 @@ test = False
 
 real_data = True
 
-version = 't27a__'
+version = 't27b__'
 
 if useExtraploationAlgo :
     version = version + 'Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27'
@@ -37,7 +37,7 @@ for a in sys.argv :
         analysisType = a
         break;
     
-#filesNameLike = sys.argv[2]
+#filesNameLike = sys.argv[1]
 filesNameLike = "ZeroBiasRun370580"
 if test :
     filesNameLike = "MinBias_Phase2Spring23_PU140"
@@ -60,7 +60,7 @@ if verbose:
                                                #'detailedInfo',
                                                #'critical',
                                                #'cout',
-                                               #'cerr',
+                                               'cerr',
                                                'omtfEventPrint'
                     ),
        categories        = cms.untracked.vstring( 'OMTFReconstruction', 'l1tOmtfEventPrint', 'l1MuonAnalyzerOmtf'), #'l1tOmtfEventPrint', 'l1MuonAnalyzerOmtf'

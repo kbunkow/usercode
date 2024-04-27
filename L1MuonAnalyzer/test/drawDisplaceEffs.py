@@ -54,13 +54,13 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1
 # lineColor = kRed
 # inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff__t21a__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3__MH-1000_MFF-150_CTau-1000mm_allFiles_gpFinalize11.root' )
 #
-algoVersion = "t22__Extrapl_Patterns_t17_v0_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets"
-lineColor = kMagenta
-inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10__EfeMC_HTo2LongLivedTo2mu2jets.root' )
-
-algoVersion = "t22__Extrapl_Patterns_t17_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets"
-lineColor = kGreen
-inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10__EfeMC_HTo2LongLivedTo2mu2jets.root' )
+# algoVersion = "t22__Extrapl_Patterns_t17_v0_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets"
+# lineColor = kMagenta
+# inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10__EfeMC_HTo2LongLivedTo2mu2jets.root' )
+#
+# algoVersion = "t22__Extrapl_Patterns_t17_gpFinalize10_EfeMC_HTo2LongLivedTo2mu2jets"
+# lineColor = kGreen
+# inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10__EfeMC_HTo2LongLivedTo2mu2jets.root' )
 
 
 # algoVersion = "eff_t22__Extrapl_Patterns_t17_gpFinalize10_displMuGun"
@@ -73,9 +73,15 @@ inputFile = TFile(dir + 'omtfAnalysis/omtfAnalysis2_eff_t22__Patterns_ExtraplMB1
 # lineColor = kMagenta
 # inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_d1_DTQ0_SingleMu_effAna_rootDump_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
 #
-# algoVersion = "phase2_t20__Extrapl_XTo2LLTo4Mu"
-# lineColor = kBlue
-# inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump_Displaced_cTau5m_XTo2LLTo4Mu.root' )
+algoVersion = "phase2_t20__Extrapl_XTo2LLTo4Mu"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump_Displaced_cTau5m_XTo2LLTo4Mu.root' )
+
+dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/results/"
+
+#algoVersion = "t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__EfeMC_HTo2LongLivedTo2mu2jets"
+#lineColor = kMagenta
+#inputFile = TFile(dir + 'omtfAnalysis2_eff_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__EfeMC_HTo2LongLivedTo2mu2jets.root' )
 
 inputFiles.append(inputFile)
 inputFile.ls()

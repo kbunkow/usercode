@@ -2,16 +2,19 @@ import CRABClient
 from WMCore.Configuration import Configuration
 config = Configuration()
 
+runNum = '379252'
+
 config.section_("General")
-config.General.requestName = 'omtf_run3_ZeroBias_Run2023_367883_t27a_1'
+#config.General.requestName = 'omtf_run3_ZeroBias_Run2023_367883_t27a_1'
+config.General.requestName = 'omtf_run3_ZeroBias_Run2024_' +  runNum + '_t27b_0'
 #config.General.workArea = 'jobs_SM_Run2017E-ZMu-17Nov2017'
 #config.General.workArea = 'jobs_JHT_2018D'
 config.General.transferLogs = True 
 config.General.transferOutputs = True 
 
 config.section_("Data")
-config.Data.inputDataset = '/EphemeralZeroBias1/Run2023C-v1/RAW'
-config.Data.runRange = '367883'
+config.Data.inputDataset = '/EphemeralZeroBias0/Run2024B-v1/RAW'
+config.Data.runRange = runNum
 
 #config.Data.inputDataset = '/EphemeralZeroBias0/Run2023D-v1/RAW'
 #config.Data.runRange = '370580'
