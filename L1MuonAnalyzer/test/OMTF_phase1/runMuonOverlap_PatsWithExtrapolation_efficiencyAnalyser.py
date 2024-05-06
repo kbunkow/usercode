@@ -51,7 +51,7 @@ if ("NeutrinoGun" in filesNameLike) or ("MinBias" in filesNameLike):
 outFilesName = outFilesName + version + "__" + filesNameLike
 
 if(runDebug == "DEBUG") :
-    outFilesName = outFilesName + "_test10"
+    outFilesName = outFilesName + "_test10b"
 
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
@@ -211,7 +211,7 @@ if filesNameLike == "MinBias_Phase2Spring23_PU200" :
 print("input data paths", paths)        
 
 if(runDebug == "DEBUG") :
-    fileCnt = 1;
+    fileCnt = 10;
         
 for path in paths :
     root_files = []
@@ -267,7 +267,7 @@ fileNames = cms.untracked.vstring(
 )
 	                    
 if(runDebug == "DEBUG") :
-    process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000))
+    process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000))
 else :
     process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 
@@ -278,13 +278,13 @@ if useExtraploationAlgo :
 else: 
     process.load('L1Trigger.L1TMuonOverlapPhase1.fakeOmtfParams_cff')
     
-process.esProd = cms.EDAnalyzer("EventSetupRecordDataGetter",
-   toGet = cms.VPSet(
-      cms.PSet(record = cms.string('L1TMuonOverlapParamsRcd'),
-               data = cms.vstring('L1TMuonOverlapParams'))
-                   ),
-   verbose = cms.untracked.bool(False)
-)
+# process.esProd = cms.EDAnalyzer("EventSetupRecordDataGetter",
+#    toGet = cms.VPSet(
+#       cms.PSet(record = cms.string('L1TMuonOverlapParamsRcd'),
+#                data = cms.vstring('L1TMuonOverlapParams'))
+#                    ),
+#    verbose = cms.untracked.bool(False)
+# )
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string(outFilesName + '.root'), closeFileFast = cms.untracked.bool(True) )
                                    
@@ -418,8 +418,8 @@ elif analysisType == "rate":
 process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
 
 
-process.L1TMuonSeq = cms.Sequence( process.esProd          
-                                   + process.simOmtfDigis 
+process.L1TMuonSeq = cms.Sequence( #process.esProd+        
+                                   process.simOmtfDigis 
                                    #+ process.dumpED
                                    #+ process.dumpES
 )
