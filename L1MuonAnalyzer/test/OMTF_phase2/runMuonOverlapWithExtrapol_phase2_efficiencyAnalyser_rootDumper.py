@@ -3,7 +3,6 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process("L1TMuonEmulation")
 import os
 import sys
-#import commands
 import re
 from os import listdir
 from os.path import isfile, join
@@ -15,12 +14,18 @@ verbose = True
 
 test_mode = False
 
-filesNameLike = sys.argv[2]
+filesNameLike = sys.argv[1]
+print("filesNameLike", filesNameLike)
 
 matchUsingPropagationInAnlyzer  = True 
 matchUsingPropagationInDumper  = True #False for SingleM<u without PU, in oter cases when simple matching cannot be used it should be True
 
-version = "ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump"
+regeneratedL1DT = True
+
+minDtPhiQuality = 2
+minDtPhiBQuality = 2
+
+version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_4_t30____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality)
 
 if test_mode :
     version = version + "_test1"
@@ -55,30 +60,28 @@ if verbose:
 
     #process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
 if not verbose:
-    process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(-1)
+    process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(10000)
     process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(False), 
                                          #SkipEvent = cms.untracked.vstring('ProductNotFound') 
                                      )
     
-# PostLS1 geometry used
-process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
-process.load('Configuration.Geometry.GeometryExtended2026D86_cff')  
-    
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
-process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
-process.load('Configuration.EventContent.EventContent_cff')
-process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-#process.load('Configuration.Geometry.GeometryExtended2026D41Reco_cff')
-#process.load('Configuration.Geometry.GeometryExtended2026D41_cff')
+#process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
+#process.load('FWCore.MessageService.MessageLogger_cfi')
+#process.load('Configuration.EventContent.EventContent_cff')
+#process.load('SimGeneral.MixingModule.mixNoPU_cfi')
+process.load('Configuration.Geometry.GeometryExtended2026D95Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
+#process.load('Configuration.StandardSequences.RawToDigi_cff')
 #process.load('Configuration.StandardSequences.SimL1Emulator_cff')
+#process.load('Configuration.StandardSequences.SimPhase2L1GlobalTriggerEmulator_cff')
+#process.load('L1Trigger.Configuration.Phase2GTMenus.SeedDefinitions.prototypeSeeds')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:upgradePLS3', '')
-process.GlobalTag = GlobalTag(process.GlobalTag, '103X_upgrade2023_realistic_v2', '') 
+process.GlobalTag = GlobalTag(process.GlobalTag, '131X_mcRun4_realistic_v9', '')
 
 chosenFiles = []
 
@@ -97,26 +100,27 @@ if filesNameLike == 'mcWaw2023_iPt2_04_04_2023' :
              "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", #500 files
              ]
     
-if filesNameLike == 'mcWaw2023_OneOverPt_allfiles':
+if filesNameLike == 'mcWaw2023_OneOverPt_allfiles' : #mcWaw2023_OneOverPt_allfiles
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
     paths = [
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
-             #
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
-             #
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", #500 files
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/" #500 files
-             #
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
-             #
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
-             # "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
+             
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
+             
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", #500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", #500 files
+             
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
+             
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
              ]
     
+    #only negative eta
 if filesNameLike == 'mcWaw_2024_01_03_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
@@ -124,7 +128,8 @@ if filesNameLike == 'mcWaw_2024_01_03_OneOverPt' :
              "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", #1000 files
              "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/" #1000 files
              ]
-    
+
+#negaive eta only    
 if filesNameLike == 'mcWaw_2024_01_04_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
@@ -151,7 +156,8 @@ if filesNameLike == 'Displaced_Dxy3m_pT0To1000_condPhase2_realistic' :
              "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt2_Run2029_13_1_0_01_12_2023", #500 files
              "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt2_Run2029_13_1_0_01_12_2023", #500 files
              ]   
-
+if filesNameLike == "test":
+    paths = [ ]
 
 if test_mode :
     file_cnt = 1
@@ -174,6 +180,9 @@ for path in paths :
             
         if file_num >= file_cnt :
             break                 
+
+chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_212.root')
+
     
 print("chosenFiles")
 for chFile in chosenFiles:
@@ -218,30 +227,18 @@ process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
 
-####Event Setup Producer
-process.load('L1Trigger.L1TMuonOverlapPhase1.fakeOmtfParams_cff')
-process.omtfParams.configXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/hwToLogicLayer_0x0209.xml")
-process.omtfParams.patternsXMLFiles = cms.VPSet(
-        cms.PSet(patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")), )
-
-process.esProd = cms.EDAnalyzer("EventSetupRecordDataGetter",
-   toGet = cms.VPSet(
-      cms.PSet(record = cms.string('L1TMuonOverlapParamsRcd'),
-               data = cms.vstring('L1TMuonOverlapParams'))
-                   ),
-   verbose = cms.untracked.bool(False)
-)
-
 process.TFileService = cms.Service("TFileService", fileName = cms.string('omtfAnalysis2_' + version + "_" + filesNameLike +'.root'), closeFileFast = cms.untracked.bool(True) )
 
-                                   
-####OMTF Emulator
-process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_extrapol_cfi')
 
 #needed by candidateSimMuonMatcher
 process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAlong_cfi")
 #process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorOpposite_cfi")
 #process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAny_cfi")
+
+####OMTF Emulator
+process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
+#process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")
+process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_4_t30__classProb17_recalib2.xml")
 
 process.simOmtfPhase2Digis.candidateSimMuonMatcher = cms.bool(True)
 process.simOmtfPhase2Digis.simTracksTag = cms.InputTag('g4SimHits')
@@ -255,14 +252,8 @@ process.simOmtfPhase2Digis.eventCaptureDebug = cms.bool(False)
 
 process.simOmtfPhase2Digis.cleanStubs = cms.bool(False)
 
-
-process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(0)
-process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(2)
-
-process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")
-#process.simOmtfPhase2Digis.patternsXMLFiles = cms.VPSet(cms.PSet(patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/GPs_parametrised_plus_v1.xml")),
-#                                                       cms.PSet(patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/GPs_parametrised_minus_v1.xml"))
-#)
+process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(minDtPhiQuality)
+process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(minDtPhiBQuality)
 
 #TODO tune the matching thresholds in CandidateSimMuonMatcher::matchSimple
 #or CandidateSimMuonMatcher::match
@@ -295,13 +286,17 @@ process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
 #process.dumpED = cms.EDAnalyzer("EventContentAnalyzer")
 #process.dumpES = cms.EDAnalyzer("PrintEventSetupContent")
 
-process.L1TMuonSeq = cms.Sequence( process.esProd          
-                                   + process.simOmtfPhase2Digis 
+process.L1TMuonSeq = cms.Sequence( process.simOmtfPhase2Digis 
                                    #+ process.dumpED
                                    #+ process.dumpES
 )
 
-process.L1TMuonPath = cms.Path(process.L1TMuonSeq)
+if not regeneratedL1DT :
+    process.L1TMuonPath = cms.Path(process.L1TMuonSeq) ########################################<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    print("regeneratedL1DT = ", regeneratedL1DT)
+else :
+    process.L1TMuonPath = cms.Path(process.CalibratedDigis * process.dtTriggerPhase2PrimitiveDigis * process.L1TMuonSeq)
+    print("regeneratedL1DT = ", regeneratedL1DT, " process.dtTriggerPhase2PrimitiveDigis")
 
 process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath)
 

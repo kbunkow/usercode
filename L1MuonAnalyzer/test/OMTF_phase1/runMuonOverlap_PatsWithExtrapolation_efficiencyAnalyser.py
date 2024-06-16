@@ -15,7 +15,7 @@ verbose = True
 
 useExtraploationAlgo = True
 
-version = 't27a__'
+version = 't30__'
 
 if useExtraploationAlgo :
     #version = version + 'Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27'

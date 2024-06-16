@@ -176,6 +176,24 @@ if version == "phase2_t24c_DTQ_2_2_NN_FP_v217_noDTReGen_mcWaw2023_OneOverPt_and_
 if version == "phase2_t25a_DTQ_2_2__floatPointExtr__NN_FP_v217__mcWaw_2024_01_03_OneOverPt" :
     histFile = TFile( histFileDir + "omtfAnalysis2_eff_t25a__generateExtrFactors_ExtraplMB1nadMB2DTQualAndEta_EtaValueP1Scale_NN_FP_v217__mcWaw_2024_01_03_OneOverPt.root" )  
 
+
+
+histFileDir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/" 
+if version == "phase2_pats_DT_2_4_t30____DT_2_4_mcWaw2023_OneOverPt_allfiles" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_4_t30____DT_2_4_mcWaw2023_OneOverPt_allfiles.root" )  
+
+if version == "pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt" : #negaive eta only
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt.root" ) 
+    
+if version == "pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_04_OneOverPt" : #negaive eta only
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_04_OneOverPt.root" )  
+
+if version == "pats_DT_2_4_t30____DT_0_2_mcWaw_2024_01_03_OneOverPt" : #negaive eta only
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_4_t30____DT_0_2_mcWaw_2024_01_03_OneOverPt.root" )  
+    
+if version == "pats_DT_2_4_t30____DT_2_2_mcWaw_2024_01_03_OneOverP" : #negaive eta only
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_4_t30____DT_2_2_mcWaw_2024_01_03_OneOverPt.root" )  
+
 # if "SingleMu_" in version :
 #     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )
 #     omtf_type = 2022

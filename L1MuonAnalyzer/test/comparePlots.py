@@ -38,7 +38,8 @@ gStyle.SetOptTitle(0);
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/usercode/L1MuonAnalyzer/test/'
 #plotsDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/usercode/L1MuonAnalyzer/test/'
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/'
-plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/'
+#plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/'
+plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/'
 
 first = True
 
@@ -391,8 +392,8 @@ def drawEffs(fileDir, type, quality, lineColor, pTresh = "0.5" ) :
 
 doLogScale = False
 
-drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
-drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kRed)
+#drawEffs('t21a__Patterns_0x00012/', "omtf_v1", "12", kBlack)
+#drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kRed)
 #drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize11/', "omtf_v1", "12", kRed)
 #drawEffs('t22__Extrapl_Patterns_t17_v0_gpFinalize10/', "omtf_v1", "12", kRed)
 #drawEffs('t27__Patterns_0x00020_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
@@ -411,7 +412,12 @@ drawEffs('t21a__Extrapl_Patterns_t17_gpFinalize10/', "omtf_v1", "12", kRed)
 
 
 #drawEffs('t27a__Patterns_0x00020_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kGreen)
-drawEffs('t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
+#drawEffs('t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
+
+#drawEffs('phase2_pats_DT_2_4_t30____DT_2_4_mcWaw2023_OneOverPt_allfiles/', "omtf_v1", "12", kGreen)
+#drawEffs('pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kGreen)
+drawEffs('pats_DT_2_4_t30____DT_2_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kBlue)
+drawEffs('pats_DT_2_4_t30____DT_0_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kMagenta)
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False

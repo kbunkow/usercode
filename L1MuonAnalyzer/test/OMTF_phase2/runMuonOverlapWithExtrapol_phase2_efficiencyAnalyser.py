@@ -17,9 +17,9 @@ useExtraploationAlgo = True
 
 generateExtrFactors = False
 
-version = 't27a__'
+version = 't30__'
 
-regeneratedL1DT = False
+regeneratedL1DT = True
 
 if useExtraploationAlgo :
     if generateExtrFactors :
@@ -41,7 +41,7 @@ runDebug = "DEBUG" # or "INFO" DEBUG
 
 analysisType = "efficiency" # or rate
 
-useNN = True
+useNN = False
 
 if useNN :
    version = version + "_NN_FP_v217"
@@ -100,31 +100,23 @@ if not verbose:
                                          #SkipEvent = cms.untracked.vstring('ProductNotFound') 
                                      )
     
-    
-# PostLS1 geometry used
-process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
-process.load('Configuration.Geometry.GeometryExtended2026D86_cff') 
-############################
-#process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')    
-    
-    
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
-process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
-process.load('Configuration.EventContent.EventContent_cff')
-process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-#process.load('Configuration.Geometry.GeometryExtended2026D41Reco_cff')
-#process.load('Configuration.Geometry.GeometryExtended2026D41_cff')
+#process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
+#process.load('FWCore.MessageService.MessageLogger_cfi')
+#process.load('Configuration.EventContent.EventContent_cff')
+#process.load('SimGeneral.MixingModule.mixNoPU_cfi')
+process.load('Configuration.Geometry.GeometryExtended2026D95Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
+#process.load('Configuration.StandardSequences.RawToDigi_cff')
 #process.load('Configuration.StandardSequences.SimL1Emulator_cff')
+#process.load('Configuration.StandardSequences.SimPhase2L1GlobalTriggerEmulator_cff')
+#process.load('L1Trigger.Configuration.Phase2GTMenus.SeedDefinitions.prototypeSeeds')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:upgradePLS3', '')
-process.GlobalTag = GlobalTag(process.GlobalTag, '103X_upgrade2023_realistic_v2', '') 
+process.GlobalTag = GlobalTag(process.GlobalTag, '131X_mcRun4_realistic_v9', '')
 
 chosenFiles = []
 
@@ -146,7 +138,7 @@ if filesNameLike == 'mcWaw_2024_01_03_OneOverPt' :
     matchUsingPropagation  = False 
     paths = [    
              {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 500}, #1000 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 500} #1000 files
+             #{"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 500} #1000 files
              ]
     #fileCnt = 10 #<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -306,26 +298,13 @@ process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
 
-###Event Setup Producer
-process.load('L1Trigger.L1TMuonOverlapPhase2.fakeOmtfParamsPhase2_cff')
-#process.omtfParamsPhase2.configXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/hwToLogicLayer_0x0209.xml")
-#process.omtfParamsPhase2.patternsXMLFiles = cms.VPSet(cms.PSet(patternsXMLFile=cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")),)
-
-# process.esProd = cms.EDAnalyzer("EventSetupRecordDataGetter",
-#    toGet=cms.VPSet(
-#       cms.PSet(record=cms.string('L1TMuonOverlapParamsRcd'),
-#                data=cms.vstring('L1TMuonOverlapParams'))
-#                    ),
-#    verbose=cms.untracked.bool(False)
-# )
-
 process.TFileService = cms.Service("TFileService", fileName = cms.string(outFilesName + '.root'), closeFileFast = cms.untracked.bool(True) )
                                    
 ####OMTF Emulator
-if useExtraploationAlgo :
-    process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_extrapol_cfi')
-else :
-    process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
+#if useExtraploationAlgo :
+#    process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_extrapol_cfi')
+#else :
+process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
 
 if(runDebug == "DEBUG") :
     process.simOmtfPhase2Digis.dumpResultToXML = cms.bool(True)
