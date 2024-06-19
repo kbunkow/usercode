@@ -147,7 +147,7 @@ EfficiencyPtGenVsDxy::EfficiencyPtGenVsDxy(TFileDirectory& subDir, std::string n
   histTitle<<name<<" allCandsPtGenVsDxy "<<ifPtBelowCutPrefix;
   histTitle<<" quality >= "<<qualityCut<<" "<<ptPrefix<<" L1Cut "<<ptL1Cut<<" [GeV] "<<";ptGen [GeV]; dxy [cm]";
 
-  allCands = subDir.make<TH2D>(histName.str().c_str(), histTitle.str().c_str(), nBinsPt, 0, 200, 300/20, 0, 300);
+  allCands = subDir.make<TH2D>(histName.str().c_str(), histTitle.str().c_str(), nBinsPt, 0, 200, nBinsDxy, 0, 400);
 
   histName.str("");
   histTitle.str("");
@@ -156,7 +156,7 @@ EfficiencyPtGenVsDxy::EfficiencyPtGenVsDxy(TFileDirectory& subDir, std::string n
   histTitle<<name<<" aceptedCandsPtGenVsDxy "<<ifPtBelowCutPrefix;
   histTitle<<" quality >= "<<qualityCut<<" "<<ptPrefix<<" L1Cut "<<ptL1Cut<<" [GeV] "<<";ptGen [GeV]; dxy [cm]";
 
-  aceptedCands = subDir.make<TH2D>(histName.str().c_str(), histTitle.str().c_str(), nBinsPt, 0, 200, nBinsDxy, 0, 300);
+  aceptedCands = subDir.make<TH2D>(histName.str().c_str(), histTitle.str().c_str(), nBinsPt, 0, 200, nBinsDxy, 0, 400);
 
   histName.str("");
   histTitle.str("");
@@ -165,7 +165,7 @@ EfficiencyPtGenVsDxy::EfficiencyPtGenVsDxy(TFileDirectory& subDir, std::string n
   histTitle<<name<<" effPtGenVsDxy "<<ifPtBelowCutPrefix;
   histTitle<<" quality >= "<<qualityCut<<" "<<ptPrefix<<" L1Cut "<<ptL1Cut<<" [GeV] "<<";ptGen [GeV]; dxy [cm]";
 
-  efficiency = subDir.make<TH2D>(histName.str().c_str(), histTitle.str().c_str(), nBinsPt, 0, 200, nBinsDxy, 0, 300);
+  efficiency = subDir.make<TH2D>(histName.str().c_str(), histTitle.str().c_str(), nBinsPt, 0, 200, nBinsDxy, 0, 400);
 }
 
 EfficiencyPtGenVsDxy::~EfficiencyPtGenVsDxy() {

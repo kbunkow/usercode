@@ -73,15 +73,29 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1
 # lineColor = kMagenta
 # inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_d1_DTQ0_SingleMu_effAna_rootDump_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
 #
-algoVersion = "phase2_t20__Extrapl_XTo2LLTo4Mu"
-lineColor = kBlue
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump_Displaced_cTau5m_XTo2LLTo4Mu.root' )
+#algoVersion = "phase2_t20__Extrapl_XTo2LLTo4Mu"
+#lineColor = kBlue
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t21b_DTQ0_effAna_rootDump_Displaced_cTau5m_XTo2LLTo4Mu.root' )
 
-dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/results/"
+#dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/results/"
 
 #algoVersion = "t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__EfeMC_HTo2LongLivedTo2mu2jets"
 #lineColor = kMagenta
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__EfeMC_HTo2LongLivedTo2mu2jets.root' )
+
+dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/"
+#algoVersion = "Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kBlue
+#inputFile = TFile(dir + 'omtfAnalysis2_eff_t31__Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm.root' )
+
+dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/"
+algoVersion = "DT_2_2_t30____DT_2_2_4_LLPGun_mH20_1000_cTau10_5000mm"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_4_LLPGun_mH20_1000_cTau10_5000mm.root' )
+
+#algoVersion = "DT_2_2_2_t31____DT_2_2_2_LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kGreen
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_2_2_2_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
 inputFiles.append(inputFile)
 inputFile.ls()
@@ -103,8 +117,9 @@ ptL1Cut = "10"
 qualityCut = "qualityCut_8"
 q = "q8"
 
-#ptL1Cut = "22"
-ptL1Cut = "5"
+ptL1Cut = "22"
+#ptL1Cut = "5"
+#ptL1Cut = "1"
 
 qualityCut = "qualityCut_12"
 q = "q12"

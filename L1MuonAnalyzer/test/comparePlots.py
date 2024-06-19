@@ -415,9 +415,16 @@ doLogScale = False
 #drawEffs('t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
 
 #drawEffs('phase2_pats_DT_2_4_t30____DT_2_4_mcWaw2023_OneOverPt_allfiles/', "omtf_v1", "12", kGreen)
-#drawEffs('pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kGreen)
-drawEffs('pats_DT_2_4_t30____DT_2_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kBlue)
-drawEffs('pats_DT_2_4_t30____DT_0_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kMagenta)
+drawEffs('pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kBlue)
+#drawEffs('pats_DT_2_4_t30____DT_2_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kBlue)
+#drawEffs('pats_DT_2_4_t30____DT_0_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kMagenta) #is not good
+drawEffs('pats_DT_2_2_t30____DT_2_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kMagenta)
+#drawEffs('pats_DT_2_2_t30____DT_0_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed)
+
+drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kGreen)
+#drawEffs('pats_DT_2_2_2_t31____DT_0_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlue)
+
+
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False
