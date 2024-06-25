@@ -97,6 +97,14 @@ inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT
 #lineColor = kGreen
 #inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_2_2_2_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
+#algoVersion = "DT_2_2_2_t31____DT_2_2_2_t32_LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kBlue
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_2_2_2_t32_LLPGun_mH20_1000_cTau10_5000mm.root' )
+
+algoVersion = "DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm.root' )
+
 inputFiles.append(inputFile)
 inputFile.ls()
 
@@ -117,8 +125,8 @@ ptL1Cut = "10"
 qualityCut = "qualityCut_8"
 q = "q8"
 
-ptL1Cut = "22"
-#ptL1Cut = "5"
+#ptL1Cut = "22"
+ptL1Cut = "5"
 #ptL1Cut = "1"
 
 qualityCut = "qualityCut_12"

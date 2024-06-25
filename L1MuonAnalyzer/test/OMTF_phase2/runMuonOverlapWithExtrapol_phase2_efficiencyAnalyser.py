@@ -177,7 +177,14 @@ if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<
     paths = [
         {"path": '/eos/cms/store/user/eyigitba/dispDiMu/crabOut/CRAB_PrivateMC/', "fileCnt" : 10000},
         ]   
-
+    
+if filesNameLike == "Displaced_Dxy3m_pT0To1000" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    cscBx = 8
+    matchUsingPropagation  = True 
+    paths = [
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023', "fileCnt" : 10},
+        ]   
+    
 if filesNameLike == 'Displaced_cTau5m_XTo2LLTo4Mu':
     matchUsingPropagationInAnlyzer = True 
     matchUsingPropagationInDumper = True 

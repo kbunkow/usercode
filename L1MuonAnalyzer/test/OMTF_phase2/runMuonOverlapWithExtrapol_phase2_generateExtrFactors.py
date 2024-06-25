@@ -14,8 +14,6 @@ verbose = True
 
 test_mode = False
 
-dumpHitsToROOT = True
-
 filesNameLike = sys.argv[1]
 print("filesNameLike", filesNameLike)
 
@@ -27,15 +25,13 @@ regeneratedL1DT = True
 
 #watch out: L1Trigger/L1TMuon/data/omtf_config/ExtrapolationFactors_ExtraplMB1nadMB2DTQualAndR_EtaValueP1Scale_t25c.xml is only for the minDtPhiQuality = 2!!!!!!!!!!!!!!!!!!!
 #there are no entries of quality 0 and 1 there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-minDtPhiQuality = 2
+minDtPhiQuality = 0
 minDtPhiBQuality = 2
-dtRefHitMinQuality = 2
 
-version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
-#version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
+version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality)
 
 if test_mode :
-    version = version + "_test5"
+    version = version + "_test1"
 
 #version = "noExtrapl_ValueP1Scale_t18_qualConverted_min4_ipT1_deltaPhiVsPhiRef_fixedDTScale"
 
@@ -93,77 +89,48 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '131X_mcRun4_realistic_v9', '')
 chosenFiles = []
 
 cscBx = 8
-#file_cnt = 100000
+
 fileCnt = 100000 #1000 
+
 if filesNameLike == 'mcWaw2023_iPt2_04_04_2023' :
     cscBx = 8
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
-    paths = [
-             #"{/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, 100files
-             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500},
-             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
-             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
-             ]
-
-if filesNameLike == 'mcWaw2023_iPt1_04_04_2023' :
-    cscBx = 8
-    matchUsingPropagationInAnlyzer  = False 
-    matchUsingPropagationInDumper  = False 
-    paths = [
-             #"{/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, 100files
-             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500},
-             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
-             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt1_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt1_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
-             ]
-
-if filesNameLike == 'mcWaw_2024_04_03_OneOverPt' :
-    matchUsingPropagationInAnlyzer  = False 
-    matchUsingPropagationInDumper  = False 
-    paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
-             ]
-
-if filesNameLike == 'mcWaw_2024_03_11_OneOverPt' :
-    matchUsingPropagationInAnlyzer  = False 
-    matchUsingPropagationInDumper  = False 
-    paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_11_03_2024/SingleMu_ch0_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_11_03_2024/SingleMu_ch2_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
+    paths = [#"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_22_02_2023/", 100files
+             #"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_22_02_2023/",
+             #"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_15_02_2023/",
+             #"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_15_02_2023/"
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", #500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", #500 files
              ]
     
 if filesNameLike == 'mcWaw2023_OneOverPt_allfiles' : #mcWaw2023_OneOverPt_allfiles
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
     paths = [
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_20_04_2023/", "fileCnt" : 500},#500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_20_04_2023/", "fileCnt" : 500},#500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_20_04_2023/", #500 files
              
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500},#500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500},#500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", #500 files
              
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", #500 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", #500 files
              
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500},#200 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500},#200 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", #200 files
              
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500},##100 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500},##100 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
+             "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", ##100 files
              ]
     
-#negaive eta only  
+    #only negative eta
 if filesNameLike == 'mcWaw_2024_01_03_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
     paths = [    
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 1000},#1000 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 1000},#1000 files
+             "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", #1000 files
+             "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/" #1000 files
              ]
 
 #negaive eta only    
@@ -171,41 +138,42 @@ if filesNameLike == 'mcWaw_2024_01_04_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
     paths = [    
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_04_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_04_01_2024/", "fileCnt" : 1000},#1000 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_04_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_04_01_2024/", "fileCnt" : 1000},#1000 files
+             "/eos/user/a/akalinow/Data/SingleMu/13_1_0_04_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_04_01_2024/", #1000 files
+             "/eos/user/a/akalinow/Data/SingleMu/13_1_0_04_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_04_01_2024/" #1000 files
              ]    
 
+    
 if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     cscBx = 8
     matchUsingPropagation  = True 
     paths = [
-        {"path": '/eos/cms/store/user/eyigitba/dispDiMu/crabOut/CRAB_PrivateMC/', "fileCnt" : 10000},
-        ]  
-
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023', "fileCnt" : 10000},
+        ]   
+    
+if filesNameLike == "Displaced_Dxy3m_pT0To1000" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    cscBx = 8
+    matchUsingPropagation  = True 
+    paths = [
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023', "fileCnt" : 30},
+        ]   
+    
 if filesNameLike == 'Displaced_cTau5m_XTo2LLTo4Mu' :
     matchUsingPropagationInAnlyzer  = True 
     matchUsingPropagationInDumper  = True 
     paths = [    
-             {"path": "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_realistic/XTo2LLPTo4Mu_CTau5m_Phase2Exotic/231203_175643/0000/", "fileCnt" : 500},#500 files
-             ]    
-
-if filesNameLike == 'LLPGun_mH20_1000_cTau10_5000mm' :
-    matchUsingPropagationInAnlyzer  = True 
-    matchUsingPropagationInDumper  = True 
-    paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/eyigitba/crab/LLPGun_mH20_1000_cTau10_5000mm/LLPGun_mH20_1000_cTau10_5000mm_GS_DR_v2/", "fileCnt" : 100},#100 files
+             "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_realistic/XTo2LLPTo4Mu_CTau5m_Phase2Exotic/231203_175643/0000/", #500 files
              ]    
 
 if filesNameLike == 'Displaced_Dxy3m_pT0To1000_condPhase2_realistic' :
     matchUsingPropagationInAnlyzer  = True 
     matchUsingPropagationInDumper  = False 
     paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023", #500 files
+             "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt0_Run2029_13_1_0_01_12_2023", #500 files
+             "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt1_Run2029_13_1_0_01_12_2023", #500 files
+             "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt1_Run2029_13_1_0_01_12_2023", #500 files
+             "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt2_Run2029_13_1_0_01_12_2023", #500 files
+             "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt2_Run2029_13_1_0_01_12_2023", #500 files
              ]   
 if filesNameLike == "test":
     paths = [ ]
@@ -213,8 +181,8 @@ if filesNameLike == "test":
 if test_mode :
     fileCnt = 1
 
-print("input data paths", paths)        
-    
+print("input data paths", paths)
+        
 for path in paths :
     root_files = []
     for root, dirs, files in os.walk(path["path"]):
@@ -229,31 +197,23 @@ for path in paths :
         else :
             print("file not found!!!!!!!: " + root_file)   
             
-        if file_num > path["fileCnt"] :
+        if file_num >= path["fileCnt"] :
             break         
         if file_num >= fileCnt :
             break            
-             
-if filesNameLike == "test":
-    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_212.root')
-    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/12_5_2_p1_14_04_2023/230414_115927/0000/SingleMu_OneOverPt_1_100_m_472.root')
-    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_431.root')
 
-
-
-   
 print("chosenFiles")
 for chFile in chosenFiles:
     print(chFile)
 
-print("number of chosen files:", len(chosenFiles))
+
+print("chosen file count", len(chosenFiles) )
 
 if len(chosenFiles) == 0 :
     print("no files selected!!!!!!!!!!!!!!!")
-    exit 
+    exit
 
 print("running version", version)
-print("dumpHitsToROOT", dumpHitsToROOT)
                                  
 # input files (up to 255 files accepted)
 process.source = cms.Source('PoolSource',
@@ -286,11 +246,6 @@ process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
 
-#using RPC in dtTriggerPhase2PrimitiveDigis has not much sense now
-#process.load("RecoLocalMuon.RPCRecHit.rpcRecHits_cfi")
-#process.rpcRecHits.rpcDigiLabel = cms.InputTag('simMuonRPCDigis')
-#process.dtTriggerPhase2PrimitiveDigis.useRPC = False
-
 process.TFileService = cms.Service("TFileService", fileName = cms.string('omtfAnalysis2_' + version + "_" + filesNameLike +'.root'), closeFileFast = cms.untracked.bool(True) )
 
 
@@ -303,25 +258,28 @@ process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAl
 process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
 #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")
 process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_t30__classProb17_recalib2.xml")
-#process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_2_t31__classProb17_recalib2.xml")
 
-process.simOmtfPhase2Digis.candidateSimMuonMatcher = cms.bool(True)
-process.simOmtfPhase2Digis.simTracksTag = cms.InputTag('g4SimHits')
-process.simOmtfPhase2Digis.simVertexesTag = cms.InputTag('g4SimHits')
-process.simOmtfPhase2Digis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")
+#process.simOmtfPhase2Digis.candidateSimMuonMatcher = cms.bool(True)
+#process.simOmtfPhase2Digis.simTracksTag = cms.InputTag('g4SimHits')
+#process.simOmtfPhase2Digis.simVertexesTag = cms.InputTag('g4SimHits')
+#process.simOmtfPhase2Digis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")
 
 
-process.simOmtfPhase2Digis.dumpResultToXML = cms.bool(test_mode)
-process.simOmtfPhase2Digis.XMLDumpFileName = cms.string("TestEvents__" + version + "_" + filesNameLike + ".xml")
-process.simOmtfPhase2Digis.dumpHitsToROOT = cms.bool(dumpHitsToROOT)
-process.simOmtfPhase2Digis.eventCaptureDebug = cms.bool(test_mode)
+process.simOmtfPhase2Digis.dumpResultToXML = cms.bool(False)
+process.simOmtfPhase2Digis.dumpHitsToROOT = cms.bool(False)
+process.simOmtfPhase2Digis.eventCaptureDebug = cms.bool(False)
 
-process.simOmtfPhase2Digis.cleanStubs = cms.bool(False)
+process.simOmtfPhase2Digis.cleanStubs = cms.bool(True)
 
 process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(minDtPhiQuality)
 process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(minDtPhiBQuality)
-process.simOmtfPhase2Digis.dtRefHitMinQuality =  cms.int32(dtRefHitMinQuality)
-process.simOmtfPhase2Digis.ghostBusterType = cms.string("byRefLayerAndHitQual") #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+process.simOmtfPhase2Digis.dtRefHitMinQuality = cms.int32(2) ##################################<<<<<<<<<<<<<<<<<<<<<
+
+process.simOmtfPhase2Digis.useFloatingPointExtrapolation  = cms.bool(True)
+process.simOmtfPhase2Digis.FileInPath = cms.string("")
+
+process.simOmtfPhase2Digis.minCSCStubRME12 = cms.int32(410) #[cm]
+process.simOmtfPhase2Digis.minCSCStubR = cms.int32(490) #[cm]
 
 
 #TODO tune the matching thresholds in CandidateSimMuonMatcher::matchSimple
@@ -363,7 +321,7 @@ process.L1TMuonSeq = cms.Sequence( process.simOmtfPhase2Digis
 if not regeneratedL1DT :
     process.L1TMuonPath = cms.Path(process.L1TMuonSeq) ########################################<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!
     print("regeneratedL1DT = ", regeneratedL1DT)
-else :                             #process.rpcRecHits *    
+else :
     process.L1TMuonPath = cms.Path(process.CalibratedDigis * process.dtTriggerPhase2PrimitiveDigis * process.L1TMuonSeq)
     print("regeneratedL1DT = ", regeneratedL1DT, " process.dtTriggerPhase2PrimitiveDigis")
 
