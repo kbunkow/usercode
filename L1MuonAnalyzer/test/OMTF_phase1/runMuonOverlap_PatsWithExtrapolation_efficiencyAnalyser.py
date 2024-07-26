@@ -15,18 +15,19 @@ verbose = True
 
 useExtraploationAlgo = True
 
-version = 't30__'
+version = 't31__'
 
 if useExtraploationAlgo :
     #version = version + 'Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27'
-    version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10'
+    #version = version + 'Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_gpFinalize10'
     #version = version + 'Patterns_ExtraplMB1nadMB2FullAlgo_t16_classProb17_recalib2_gpFinalize10'
+    version = version + 'Phase1_2024'
 else :
     version = version + 'Patterns_0x00012'
 
 customize_omtf = False
 
-runDebug = "DEBUG" # or "INFO" DEBUG
+runDebug = "INFO" # or "INFO" DEBUG
 #useExtraploationAlgo = True
 
 
@@ -176,7 +177,13 @@ if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<
     paths = [
         {"path": '/eos/cms/store/user/eyigitba/dispDiMu/crabOut/CRAB_PrivateMC/', "fileCnt" : 10000},
         ]   
-    
+
+if filesNameLike == 'LLPGun_mH20_1000_cTau10_5000mm' :
+    matchUsingPropagation  = True 
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/eyigitba/crab/LLPGun_mH20_1000_cTau10_5000mm/LLPGun_mH20_1000_cTau10_5000mm_GS_DR_v2/", "fileCnt" : 100},#100 files
+             ]   
+        
 if filesNameLike == "Displaced_Dxy5m_pT0To1000_condRun3" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     cscBx = 8
     matchUsingPropagation  = False 

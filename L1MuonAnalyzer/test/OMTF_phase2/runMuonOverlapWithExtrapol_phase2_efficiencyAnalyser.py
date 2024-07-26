@@ -17,7 +17,7 @@ useExtraploationAlgo = True
 
 generateExtrFactors = False
 
-version = 't30__'
+version = 't33__'
 
 regeneratedL1DT = True
 
@@ -25,7 +25,8 @@ if useExtraploationAlgo :
     if generateExtrFactors :
         version = version + 'generateExtrFactors_ExtraplMB1nadMB2DTQualAndEta_EtaValueP1Scale'
     else :
-        version = version + 'Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_4'
+        #version = version + 'ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_2_2_2_t33'
+        version = version + 'ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_2_t33'
 else :
     version = version + 'Patterns_0x00012'
     
@@ -65,7 +66,7 @@ if "NeutrinoGun" or "MinBias" in filesNameLike :
 outFilesName = outFilesName + version + "__" + filesNameLike
 
 if(runDebug == "DEBUG") :
-    outFilesName = outFilesName + "_test9"
+    outFilesName = outFilesName + "_test10"
 
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
@@ -311,7 +312,8 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string(outFile
 #if useExtraploationAlgo :
 #    process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_extrapol_cfi')
 #else :
-process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
+#process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
+process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_DT_2_2_2_cff')
 
 if(runDebug == "DEBUG") :
     process.simOmtfPhase2Digis.dumpResultToXML = cms.bool(True)
@@ -357,15 +359,15 @@ process.simOmtfPhase2Digis.noHitValueInPdf = cms.bool(True)
 process.simOmtfPhase2Digis.lctCentralBx = cms.int32(cscBx);#<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!TODO this was changed in CMSSW 10(?) to 8. if the data were generated with the previous CMSSW then you have to use 6
 
 if useExtraploationAlgo :
-    process.simOmtfPhase2Digis.dtRefHitMinQuality =  cms.int32(4)
+    #process.simOmtfPhase2Digis.dtRefHitMinQuality =  cms.int32(4)
 
-    process.simOmtfPhase2Digis.usePhiBExtrapolationFromMB1 = cms.bool(True)
-    process.simOmtfPhase2Digis.usePhiBExtrapolationFromMB2 = cms.bool(True)
+    #process.simOmtfPhase2Digis.usePhiBExtrapolationFromMB1 = cms.bool(True)
+    #process.simOmtfPhase2Digis.usePhiBExtrapolationFromMB2 = cms.bool(True)
     
     #process.simOmtfPhase2Digis.goldenPatternResultFinalizeFunction = cms.int32(10) #valid values are 0, 1, 2, 3, 5
     
-    process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(2)
-    process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(4) #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!
+    #process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(2)
+    #process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(4) #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!
     
     #process.simOmtfPhase2Digis.useEndcapStubsRInExtr  = cms.bool(True)   #TODO REMOVE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     

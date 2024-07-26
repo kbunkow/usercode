@@ -31,7 +31,7 @@ minDtPhiQuality = 2
 minDtPhiBQuality = 2
 dtRefHitMinQuality = 2
 
-version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
+version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33a"
 #version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
 
 if test_mode :
@@ -121,14 +121,15 @@ if filesNameLike == 'mcWaw2023_iPt1_04_04_2023' :
              {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt1_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
              ]
 
-if filesNameLike == 'mcWaw_2024_04_03_OneOverPt' :
+if filesNameLike == 'mcWaw_2024_04_03_ch2_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
     paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
+             #{"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
              ]
 
+#negaive eta only  
 if filesNameLike == 'mcWaw_2024_03_11_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 

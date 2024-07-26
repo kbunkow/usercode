@@ -2,7 +2,7 @@ from ROOT import TCanvas, TPad, TFile, TPaveLabel, TPaveText, TH1D, TEfficiency,
 from ROOT import gROOT
 from ROOT import gStyle
 from ROOT import TLegend
-from ROOT import kBlack, kBlue, kRed, kGreen, kMagenta, kCyan
+from ROOT import kBlack, kBlue, kRed, kGreen, kMagenta, kCyan, kPink, kOrange
 from array import array
 
 from ROOT import TDirectory
@@ -88,11 +88,16 @@ def drawEff(canvas, effFile, type, quality, ptCut, lineColor, legend, pTresh = "
             effHist.GetXaxis().SetRangeUser(0, 200)
             effHist.GetYaxis().SetRangeUser(0, 1.00)
         else :    
+            canvas.cd(1).SetLogy()
+            
             effHist.Draw("AEP")
             effHist.SetMarkerStyle(22)
             effHist.SetMarkerColor(lineColor)
-            canvas.cd(2).Update()
-            effHist.GetPaintedGraph().GetYaxis().SetRangeUser(0., 1.00)
+            canvas.cd(1).Update()
+            #effHist.GetPaintedGraph().GetYaxis().SetRangeUser(0., 1.00)
+            
+            effHist.GetPaintedGraph().GetXaxis().SetRangeUser(0, 30)
+            effHist.GetPaintedGraph().GetYaxis().SetRangeUser(0.0001, 1.05)
 
     else:
         if not doEff :
@@ -122,7 +127,7 @@ def drawEff(canvas, effFile, type, quality, ptCut, lineColor, legend, pTresh = "
                 effHistCopy.GetPaintedGraph().GetXaxis().SetRangeUser(0, 25)
                 effHistCopy.GetPaintedGraph().GetYaxis().SetRangeUser(0.001, 1.05)
             else :
-                effHistCopy.GetPaintedGraph().GetYaxis().SetRangeUser(0.8, 1.00)  
+                effHistCopy.GetPaintedGraph().GetYaxis().SetRangeUser(0.9, 1.00)  
     else:
         if not doEff :
             effHistCopy = effHist.Clone(effHist.GetName() + "_log")
@@ -415,21 +420,26 @@ doLogScale = False
 #drawEffs('t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__mcWaw2023_OneOverPt_and_iPt2/', "omtf_v1", "12", kBlue)
 
 #drawEffs('phase2_pats_DT_2_4_t30____DT_2_4_mcWaw2023_OneOverPt_allfiles/', "omtf_v1", "12", kGreen)
-#drawEffs('pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kBlue)
+#drawEffs('pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kCyan)
 #drawEffs('pats_DT_2_4_t30____DT_2_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kBlue)
 #drawEffs('pats_DT_2_4_t30____DT_0_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kMagenta) #is not good
 drawEffs('pats_DT_2_2_t30____DT_2_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kMagenta)
-#drawEffs('pats_DT_2_2_t30____DT_0_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed)S
+#drawEffs('pats_DT_2_2_t30____DT_0_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kOrange)
 
-drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kGreen) #old ghostbuster
+#drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kGreen) #old ghostbuster
 
-drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_t32_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed) # ghostbuster with customByRefLayerAndHitQual, by ref hit full quality
+#drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_t32_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed) # ghostbuster with customByRefLayerAndHitQual, by ref hit full quality
 
-#drawEffs('pats_DT_2_2_t30____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlack)
+drawEffs('pats_DT_2_2_t30____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlue)
 
-drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kCyan) # ghostbuster with customByRefLayerAndHitQual, by ref hit  quality = 0 or 1
+drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed) # ghostbuster with customByRefLayerAndHitQual, by ref hit  quality = 0 or 1
 
-drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlack) # ghostbuster with customByRefLayerAndHitQual, by ref hit quality = 0 or 1
+#drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlack) # ghostbuster with customByRefLayerAndHitQual, by ref hit quality = 0 or 1
+
+
+#drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw2023_iPt2_04_04_2023/', "omtf_v1", "12", kBlue) 
+#drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33a_mcWaw2023_iPt2_04_04_2023/', "omtf_v1", "12", kCyan) 
+
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False

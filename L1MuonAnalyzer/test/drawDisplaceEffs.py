@@ -84,14 +84,14 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__EfeMC_HTo2LongLivedTo2mu2jets.root' )
 
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/"
-#algoVersion = "Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm"
-#lineColor = kBlue
-#inputFile = TFile(dir + 'omtfAnalysis2_eff_t31__Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm.root' )
+algoVersion = "Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_eff_t31__Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm.root' )
 
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/"
-algoVersion = "DT_2_2_t30____DT_2_2_4_LLPGun_mH20_1000_cTau10_5000mm"
-lineColor = kBlue
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_4_LLPGun_mH20_1000_cTau10_5000mm.root' )
+#algoVersion = "DT_2_2_t30____DT_2_2_4_LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kMagenta
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_4_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
 #algoVersion = "DT_2_2_2_t31____DT_2_2_2_LLPGun_mH20_1000_cTau10_5000mm"
 #lineColor = kGreen
@@ -101,9 +101,9 @@ inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT
 #lineColor = kBlue
 #inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_2_2_2_t32_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
-algoVersion = "DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm"
-lineColor = kBlue
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm.root' )
+#algoVersion = "DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kRed
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
 inputFiles.append(inputFile)
 inputFile.ls()
@@ -126,7 +126,8 @@ qualityCut = "qualityCut_8"
 q = "q8"
 
 #ptL1Cut = "22"
-ptL1Cut = "5"
+ptL1Cut = "10"
+#ptL1Cut = "5"
 #ptL1Cut = "1"
 
 qualityCut = "qualityCut_12"
@@ -201,7 +202,7 @@ hists.append(aceptedCandsPtGenVsDxyProj)
 c1.Modified()
 c1.Update()
 
-outFile = TFile(algoVersion + ".root", "RECREATE")
+outFile = TFile(algoVersion + "_ptL1Cut_" + ptL1Cut + "_" + q + ".root", "RECREATE")
 outFile.cd()
 for hist in hists :
     hist.Write()
@@ -210,8 +211,9 @@ c2 = TCanvas('canvas_2' , 'canvas_2', 200, 10, 450, 450)
 c2.cd()
 c2.SetGridx()
 c2.SetGridy()
+histPt.SetLineStyle(2)
 histPt.Draw()
-histUPt.SetLineColor(kRed)
+histUPt.SetLineColor(lineColor)
 histUPt.Draw("same")
 legend = TLegend(0.5, 0.6, 0.8, 0.8)
 legend.SetBorderSize(0)
