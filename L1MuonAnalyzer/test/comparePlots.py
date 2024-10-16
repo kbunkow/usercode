@@ -423,16 +423,16 @@ doLogScale = False
 #drawEffs('pats_DT_2_4_t30____DT_2_4_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kCyan)
 #drawEffs('pats_DT_2_4_t30____DT_2_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kBlue)
 #drawEffs('pats_DT_2_4_t30____DT_0_2_mcWaw_2024_01_03_OneOverPt/', "omtf_v1", "12", kMagenta) #is not good
-drawEffs('pats_DT_2_2_t30____DT_2_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kMagenta)
+#drawEffs('pats_DT_2_2_t30____DT_2_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kMagenta)
 #drawEffs('pats_DT_2_2_t30____DT_0_2_4_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kOrange)
 
 #drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kGreen) #old ghostbuster
 
 #drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_t32_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed) # ghostbuster with customByRefLayerAndHitQual, by ref hit full quality
 
-drawEffs('pats_DT_2_2_t30____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlue)
+#drawEffs('pats_DT_2_2_t30____DT_2_2_2_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlue)
 
-drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed) # ghostbuster with customByRefLayerAndHitQual, by ref hit  quality = 0 or 1
+#drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kRed) # ghostbuster with customByRefLayerAndHitQual, by ref hit  quality = 0 or 1
 
 #drawEffs('pats_DT_2_2_2_t31____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1", "12", kBlack) # ghostbuster with customByRefLayerAndHitQual, by ref hit quality = 0 or 1
 
@@ -440,6 +440,8 @@ drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw_2024_01_04_OneOverPt/', "omtf_v1
 #drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw2023_iPt2_04_04_2023/', "omtf_v1", "12", kBlue) 
 #drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33a_mcWaw2023_iPt2_04_04_2023/', "omtf_v1", "12", kCyan) 
 
+drawEffs('pats_DT_2_2_4_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kCyan) 
+drawEffs('pats_DT_2_2_2_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False

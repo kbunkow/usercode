@@ -25,10 +25,10 @@ regeneratedL1DT = True
 
 #watch out: L1Trigger/L1TMuon/data/omtf_config/ExtrapolationFactors_ExtraplMB1nadMB2DTQualAndR_EtaValueP1Scale_t25c.xml is only for the minDtPhiQuality = 2!!!!!!!!!!!!!!!!!!!
 #there are no entries of quality 0 and 1 there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-minDtPhiQuality = 0
+minDtPhiQuality = 2
 minDtPhiBQuality = 2
 
-version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality)
+version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_t34"
 
 if test_mode :
     version = version + "_test1"

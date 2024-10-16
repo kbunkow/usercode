@@ -229,7 +229,13 @@ if version == "pats_DT_2_2_t30____DT_2_2_2_t33a_mcWaw2023_iPt2_04_04_2023" :
 
 if version == "pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw2023_iPt2_04_04_2023" :
     histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw2023_iPt2_04_04_2023.root" )
-    
+
+if version == "pats_DT_2_2_4_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_4_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2.root" )    
+
+if version == "pats_DT_2_2_2_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2.root" )    
+        
 # if "SingleMu_" in version :
 #     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )
 #     omtf_type = 2022
