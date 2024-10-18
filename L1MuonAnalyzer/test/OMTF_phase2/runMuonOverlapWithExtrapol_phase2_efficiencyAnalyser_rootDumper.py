@@ -12,7 +12,7 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 verbose = True
 
-test_mode = False
+test_mode = True
 
 dumpHitsToROOT = True
 
@@ -125,8 +125,8 @@ if filesNameLike == 'mcWaw_2024_04_03_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
     paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_03_04_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_03_04_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
              ]
 
 #negaive eta only  
