@@ -12,7 +12,7 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 verbose = True
 
-test_mode = True
+test_mode = False
 
 dumpHitsToROOT = True
 
@@ -31,11 +31,11 @@ minDtPhiQuality = 2
 minDtPhiBQuality = 2
 dtRefHitMinQuality = 2
 
-version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_4_t34____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t34"
+version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t35"
 #version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
 
 if test_mode :
-    version = version + "_test5"
+    version = version + "_test6"
 
 #version = "noExtrapl_ValueP1Scale_t18_qualConverted_min4_ipT1_deltaPhiVsPhiRef_fixedDTScale"
 
@@ -134,8 +134,8 @@ if filesNameLike == 'mcWaw_2024_03_11_OneOverPt' :
     matchUsingPropagationInAnlyzer  = False 
     matchUsingPropagationInDumper  = False 
     paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_11_03_2024/SingleMu_ch0_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/13_1_0_11_03_2024/SingleMu_ch2_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_11_03_2024/SingleMu_ch0_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_11_03_2024/SingleMu_ch2_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
              ]
     
 if filesNameLike == 'mcWaw_2023_04_20_OneOverPt' : #mcWaw2023_OneOverPt_allfiles
@@ -223,12 +223,12 @@ if filesNameLike == 'Displaced_Dxy3m_pT0To1000_condPhase2_realistic' :
     matchUsingPropagationInAnlyzer  = True 
     matchUsingPropagationInDumper  = False 
     paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
              ]   
 if filesNameLike == "test":
     paths = [ ]
@@ -294,7 +294,7 @@ fileNames = cms.untracked.vstring(
 )
          
 if test_mode : 
-    process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
+    process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000))
 else :                     
     process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 
@@ -309,6 +309,8 @@ process.load("L1Trigger.DTTriggerPhase2.dtTriggerPhase2PrimitiveDigis_cfi")
 process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
+
+process.dtTriggerPhase2PrimitiveDigis.co_option = -1 # coincidence w.r.t. : -1 = off, 0 = co all, 1 = co phi, 2 = co theta. defoult is 1, but for OMTF this coincidence filter has no sense
 
 #using RPC in dtTriggerPhase2PrimitiveDigis has not much sense now
 #process.load("RecoLocalMuon.RPCRecHit.rpcRecHits_cfi")
@@ -328,7 +330,7 @@ process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
 #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0.xml")
 #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_t30__classProb17_recalib2.xml")
 #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_2_t31__classProb17_recalib2.xml")
-process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_4_t34__classProb17_recalib2.xml")
+#process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_4_t34__classProb17_recalib2.xml")
 
 process.simOmtfPhase2Digis.candidateSimMuonMatcher = cms.bool(True)
 process.simOmtfPhase2Digis.simTracksTag = cms.InputTag('g4SimHits')

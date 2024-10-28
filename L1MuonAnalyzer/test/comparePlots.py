@@ -39,7 +39,8 @@ gStyle.SetOptTitle(0);
 #plotsDir = '/home/kbunkow/CMSSW/CMSSW_12_1_0_pre5/src/usercode/L1MuonAnalyzer/test/'
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/'
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/'
-plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/'
+#plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/'
+plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/'
 
 first = True
 
@@ -440,8 +441,9 @@ doLogScale = False
 #drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33_mcWaw2023_iPt2_04_04_2023/', "omtf_v1", "12", kBlue) 
 #drawEffs('pats_DT_2_2_t30____DT_2_2_2_t33a_mcWaw2023_iPt2_04_04_2023/', "omtf_v1", "12", kCyan) 
 
-drawEffs('pats_DT_2_2_4_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kCyan) 
+#drawEffs('pats_DT_2_2_4_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kCyan) 
 drawEffs('pats_DT_2_2_2_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
+drawEffs('DT_2_2_2_t35____DT_2_2_2_t35_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kBlue) 
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False

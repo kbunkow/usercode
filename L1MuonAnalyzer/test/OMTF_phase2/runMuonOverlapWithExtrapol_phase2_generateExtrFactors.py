@@ -27,8 +27,9 @@ regeneratedL1DT = True
 #there are no entries of quality 0 and 1 there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 minDtPhiQuality = 2
 minDtPhiBQuality = 2
+dtRefHitMinQuality = 2
 
-version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_t34"
+version = "ExtrapolationFactors_ExtraplMB1andMB2_R_EtaValueP1Scale_DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t35a"
 
 if test_mode :
     version = version + "_test1"
@@ -147,14 +148,14 @@ if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<
     cscBx = 8
     matchUsingPropagation  = True 
     paths = [
-        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023', "fileCnt" : 10000},
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023', "fileCnt" : 10000},
         ]   
     
 if filesNameLike == "Displaced_Dxy3m_pT0To1000" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     cscBx = 8
     matchUsingPropagation  = True 
     paths = [
-        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023', "fileCnt" : 30},
+        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023', "fileCnt" : 30},
         ]   
     
 if filesNameLike == 'Displaced_cTau5m_XTo2LLTo4Mu' :
@@ -246,6 +247,9 @@ process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
 
+process.dtTriggerPhase2PrimitiveDigis.co_option = -1 # coincidence w.r.t. : -1 = off, 0 = co all, 1 = co phi, 2 = co theta. defoult is 1, but for OMTF this coincidence filter has no sense
+
+
 process.TFileService = cms.Service("TFileService", fileName = cms.string('omtfAnalysis2_' + version + "_" + filesNameLike +'.root'), closeFileFast = cms.untracked.bool(True) )
 
 
@@ -273,7 +277,7 @@ process.simOmtfPhase2Digis.cleanStubs = cms.bool(True)
 
 process.simOmtfPhase2Digis.minDtPhiQuality = cms.int32(minDtPhiQuality)
 process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(minDtPhiBQuality)
-process.simOmtfPhase2Digis.dtRefHitMinQuality = cms.int32(2) ##################################<<<<<<<<<<<<<<<<<<<<<
+process.simOmtfPhase2Digis.dtRefHitMinQuality = cms.int32(dtRefHitMinQuality)
 
 process.simOmtfPhase2Digis.useFloatingPointExtrapolation  = cms.bool(True)
 process.simOmtfPhase2Digis.FileInPath = cms.string("")

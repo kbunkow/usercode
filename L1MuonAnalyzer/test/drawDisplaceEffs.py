@@ -105,6 +105,11 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/s
 #lineColor = kRed
 #inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
+dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/"
+algoVersion = "DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
+
 inputFiles.append(inputFile)
 inputFile.ls()
 
@@ -125,8 +130,8 @@ ptL1Cut = "10"
 qualityCut = "qualityCut_8"
 q = "q8"
 
-#ptL1Cut = "22"
-ptL1Cut = "10"
+ptL1Cut = "22"
+#ptL1Cut = "10"
 #ptL1Cut = "5"
 #ptL1Cut = "1"
 
