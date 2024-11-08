@@ -110,6 +110,10 @@ algoVersion = "DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm"
 lineColor = kBlue
 inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
+#algoVersion = "DT_2_2_2_t35____DT_2_2_2_t35_co1_LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kRed
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_co1_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
+
 inputFiles.append(inputFile)
 inputFile.ls()
 

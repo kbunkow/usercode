@@ -31,7 +31,7 @@ minDtPhiQuality = 2
 minDtPhiBQuality = 2
 dtRefHitMinQuality = 2
 
-version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_co1_t35"
+version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t35" #WK - dumping killed candidates
 #version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
 
 if test_mode :
@@ -216,7 +216,7 @@ if filesNameLike == 'LLPGun_mH20_1000_cTau10_5000mm' :
     matchUsingPropagationInAnlyzer  = True 
     matchUsingPropagationInDumper  = True 
     paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/eyigitba/crab/LLPGun_mH20_1000_cTau10_5000mm/LLPGun_mH20_1000_cTau10_5000mm_GS_DR_v2/", "fileCnt" : 100},#100 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/eyigitba/crab/LLPGun_mH20_1000_cTau10_5000mm/LLPGun_mH20_1000_cTau10_5000mm_GS_DR_v2/", "fileCnt" : 1000},#100 files
              ]    
 
 if filesNameLike == 'Displaced_Dxy3m_pT0To1000_condPhase2_realistic' :
@@ -230,6 +230,21 @@ if filesNameLike == 'Displaced_Dxy3m_pT0To1000_condPhase2_realistic' :
              {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
              {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
              ]   
+    
+if filesNameLike == 'Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024' :
+    matchUsingPropagationInAnlyzer  = True 
+    matchUsingPropagationInDumper  = True 
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024/", "fileCnt" : 10000},#995 files
+             ]    
+    
+if filesNameLike == '14_1_0pre3_11_06_2024_Dxy5m_PhaseII' :
+    matchUsingPropagationInAnlyzer  = True 
+    matchUsingPropagationInDumper  = True 
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/14_1_0pre3_11_06_2024_Dxy5m_PhaseII/", "fileCnt" : 10000},#2311 files
+             ]  
+            
 if filesNameLike == "test":
     paths = [ ]
 
@@ -310,7 +325,7 @@ process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
 
-process.dtTriggerPhase2PrimitiveDigis.co_option = 1 # coincidence w.r.t. : -1 = off, 0 = co all, 1 = co phi, 2 = co theta. defoult is 1, but for OMTF this coincidence filter has no sense
+process.dtTriggerPhase2PrimitiveDigis.co_option = -1 # coincidence w.r.t. : -1 = off, 0 = co all, 1 = co phi, 2 = co theta. defoult is 1, but for OMTF this coincidence filter has no sense
 
 #using RPC in dtTriggerPhase2PrimitiveDigis has not much sense now
 #process.load("RecoLocalMuon.RPCRecHit.rpcRecHits_cfi")
@@ -341,6 +356,7 @@ process.simOmtfPhase2Digis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/d
 process.simOmtfPhase2Digis.dumpResultToXML = cms.bool(test_mode)
 process.simOmtfPhase2Digis.XMLDumpFileName = cms.string("TestEvents__" + version + "_" + filesNameLike + ".xml")
 process.simOmtfPhase2Digis.dumpHitsToROOT = cms.bool(dumpHitsToROOT)
+process.simOmtfPhase2Digis.dumpKilledOmtfCands = cms.bool(False)
 process.simOmtfPhase2Digis.eventCaptureDebug = cms.bool(test_mode)
 
 process.simOmtfPhase2Digis.cleanStubs = cms.bool(False)
