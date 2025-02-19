@@ -106,13 +106,22 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/s
 #inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_t30____DT_2_2_2_t33_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/"
-algoVersion = "DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm"
-lineColor = kBlue
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
+#algoVersion = "DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kBlue
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
 #algoVersion = "DT_2_2_2_t35____DT_2_2_2_t35_co1_LLPGun_mH20_1000_cTau10_5000mm"
 #lineColor = kRed
-#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_co1_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2co1a_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
+
+algoVersion = "DT_2_2_2_t35f_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP202"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35k_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024.root' )
+
+algoVersion = "DT_2_2_2_t35k_Displaced_Dxy3m_pT0To1000_condPhase2_realistic"
+lineColor = kBlue
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35m_omtfPhiAtSt2_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35p_omtfPhiAtSt2_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
 
 inputFiles.append(inputFile)
 inputFile.ls()
@@ -126,21 +135,22 @@ c1.Divide(3, 2)
 #c1.SetRightMargin(0.22)
 canvases.append(c1)
 
-c1.cd(1).SetGridx()
-c1.cd(1).SetGridy()
-
-ptL1Cut = "10"
+#ptL1Cut = "10"
 
 qualityCut = "qualityCut_8"
 q = "q8"
 
-ptL1Cut = "22"
+#ptL1Cut = "22"
 #ptL1Cut = "10"
 #ptL1Cut = "5"
-#ptL1Cut = "1"
+ptL1Cut = "1"
 
-qualityCut = "qualityCut_12"
-q = "q12"
+#qualityCut = "qualityCut_12"
+#q = "q12"
+
+#####################################################################################################
+c1.cd(1).SetGridx()
+c1.cd(1).SetGridy()
 
 effHist = efficiencyDir.Get("omtf_" + q + "_effPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut)
 effHist.GetXaxis().SetRangeUser(0, 100)
@@ -151,15 +161,17 @@ c1.cd(4).SetGridx()
 c1.cd(4).SetGridy()
 
 allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY(algoVersion + "_" + qualityCut + "_ptL1Cut_" + ptL1Cut)
-aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
-aceptedCandsPtGenVsDxyProj.SetName(qualityCut + " ptCut " + ptL1Cut +"GeV " + algoVersion)
+aceptedCandsVsDxyOnPtCut = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_ptL1Cut_" + ptL1Cut).ProjectionY(algoVersion + "_" + qualityCut + "_ptL1Cut_" + ptL1Cut)
+effVsDxyOnPtCut = aceptedCandsVsDxyOnPtCut.Clone("eff_" + algoVersion + "_" + qualityCut + "_ptL1Cut_" + ptL1Cut)
+effVsDxyOnPtCut.Divide(allCandsPtGenVsDxyProj)
+effVsDxyOnPtCut.SetName(qualityCut + " ptCut " + ptL1Cut +"GeV " + algoVersion)
 #aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
-aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
-aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
-aceptedCandsPtGenVsDxyProj.Draw()
-hists.append(aceptedCandsPtGenVsDxyProj)
-histPt = aceptedCandsPtGenVsDxyProj
+effVsDxyOnPtCut.SetLineColor(lineColor)
+effVsDxyOnPtCut.GetYaxis().SetRangeUser(0, 1.0)
+effVsDxyOnPtCut.Draw()
+hists.append(aceptedCandsVsDxyOnPtCut)
+
+#####################################################################################################
 
 c1.cd(2).SetGridx()
 c1.cd(2).SetGridy()
@@ -172,15 +184,16 @@ c1.cd(5).SetGridx()
 c1.cd(5).SetGridy()
 
 allCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_allCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY()
-aceptedCandsPtGenVsDxyProj = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY(algoVersion + "_" + qualityCut + "_uptL1Cut_" + ptL1Cut)
-aceptedCandsPtGenVsDxyProj.Divide(allCandsPtGenVsDxyProj)
-aceptedCandsPtGenVsDxyProj.SetName(qualityCut + " uptCut " + ptL1Cut +"GeV " + algoVersion)
-#aceptedCandsPtGenVsDxyProj.GetXaxis().SetRangeUser(0, 100)
-aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
-aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
-aceptedCandsPtGenVsDxyProj.Draw("colz")
-hists.append(aceptedCandsPtGenVsDxyProj)
-histUPt = aceptedCandsPtGenVsDxyProj
+aceptedCandsVsDxyOnUPtCut = efficiencyDir.Get("omtf_" + q + "_aceptedCandsPtGenVsDxy_" + qualityCut + "_uptL1Cut_" + ptL1Cut).ProjectionY(algoVersion + "_" + qualityCut + "_uptL1Cut_" + ptL1Cut)
+effVsDxyOnUPtCut = aceptedCandsVsDxyOnUPtCut.Clone("eff_" + algoVersion + "_" + qualityCut + "_uptL1Cut_" + ptL1Cut)
+effVsDxyOnUPtCut.Divide(allCandsPtGenVsDxyProj)
+#effVsDxyOnUPtCut.SetName(qualityCut + " uptCut " + ptL1Cut +"GeV " + algoVersion)
+#effVsDxyOnUPtCut.GetXaxis().SetRangeUser(0, 100)
+effVsDxyOnUPtCut.SetLineColor(lineColor)
+effVsDxyOnUPtCut.GetYaxis().SetRangeUser(0, 1.0)
+effVsDxyOnUPtCut.Draw("colz")
+hists.append(aceptedCandsVsDxyOnUPtCut)
+#########################################################################################################
 
 c1.cd(3).SetGridx()
 c1.cd(3).SetGridy()
@@ -201,7 +214,7 @@ aceptedCandsPtGenVsDxyProj.SetLineColor(lineColor)
 aceptedCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(0, 1.0)
 aceptedCandsPtGenVsDxyProj.Draw("colz")
 hists.append(aceptedCandsPtGenVsDxyProj)
-
+########################################################################################################
 
 #effHist.GetYaxis().SetTitle("#phi_{B2} - #phi_{B2extrpol}")
 #effHist.GetXaxis().SetTitle("dXY")
@@ -216,19 +229,38 @@ outFile.cd()
 for hist in hists :
     hist.Write()
 
-c2 = TCanvas('canvas_2' , 'canvas_2', 200, 10, 450, 450)
-c2.cd()
-c2.SetGridx()
-c2.SetGridy()
-histPt.SetLineStyle(2)
-histPt.Draw()
-histUPt.SetLineColor(lineColor)
-histUPt.Draw("same")
+c2 = TCanvas('canvas_2' , 'canvas_2', 200, 10, 450 * 2, 450)
+c2.Divide(2, 1)
+
+c2.cd(1)
+c2.cd(1).SetGridx()
+c2.cd(1).SetGridy()
+c2.cd(1).SetLogy();
+
+#allCandsPtGenVsDxyProj.SetLineStyle(2)
+allCandsPtGenVsDxyProj.SetLineColor(kRed)
+allCandsPtGenVsDxyProj.Draw()
+allCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(10, 20000)
+
+aceptedCandsVsDxyOnPtCut.SetLineStyle(2)
+aceptedCandsVsDxyOnPtCut.SetLineColor(lineColor)
+aceptedCandsVsDxyOnPtCut.Draw("same")
+
+aceptedCandsVsDxyOnUPtCut.SetLineColor(lineColor)
+aceptedCandsVsDxyOnUPtCut.Draw("same")
+
+c2.cd(2)
+c2.cd(2).SetGridx()
+c2.cd(2).SetGridy()
+effVsDxyOnPtCut.SetLineStyle(2)
+effVsDxyOnPtCut.Draw()
+effVsDxyOnUPtCut.SetLineColor(lineColor)
+effVsDxyOnUPtCut.Draw("same")
 legend = TLegend(0.5, 0.6, 0.8, 0.8)
 legend.SetBorderSize(0)
 legend.SetTextSize(0.027)
-legend.AddEntry(histPt, "OMTF pT #geq " + str(ptL1Cut) + "GeV, " + q)
-legend.AddEntry(histUPt, "OMTF upT #geq " + str(ptL1Cut) + "GeV, " + q)
+legend.AddEntry(effVsDxyOnPtCut, "OMTF pT #geq " + str(ptL1Cut) + "GeV, " + q)
+legend.AddEntry(effVsDxyOnUPtCut, "OMTF upT #geq " + str(ptL1Cut) + "GeV, " + q)
 
 legend.Draw()
 

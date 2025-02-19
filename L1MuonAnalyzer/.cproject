@@ -58,7 +58,6 @@
 		<project id="L1MuonAnalyzer.null.1686364525" name="L1MuonAnalyzer"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.1660377773;cdt.managedbuild.toolchain.gnu.base.1660377773.1975022430;cdt.managedbuild.tool.gnu.cpp.compiler.base.536700990;cdt.managedbuild.tool.gnu.cpp.compiler.input.55083339">
@@ -97,5 +96,34 @@
 		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.2064864975;cdt.managedbuild.toolchain.gnu.base.2064864975.1917432328;cdt.managedbuild.tool.gnu.c.compiler.base.1445211787;cdt.managedbuild.tool.gnu.c.compiler.input.1660889703">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets>
+			<target name="scram b" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>/cvmfs/cms.cern.ch/common/scram</buildCommand>
+				<buildArguments>b</buildArguments>
+				<buildTarget/>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>false</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="scram b debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>/cvmfs/cms.cern.ch/common/scram</buildCommand>
+				<buildArguments>b USER_CXXFLAGS="-DEDM_ML_DEBUG"</buildArguments>
+				<buildTarget/>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>false</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="scram b clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>/cvmfs/cms.cern.ch/common/scram</buildCommand>
+				<buildArguments>b clean</buildArguments>
+				<buildTarget/>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>false</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+		</buildTargets>
 	</storageModule>
 </cproject>

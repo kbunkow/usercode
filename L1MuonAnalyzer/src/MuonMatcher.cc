@@ -88,6 +88,10 @@ MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg,
     if(matchUsingPropagation) {
       deltaPhiPropCandMean = (TH1D*)inFile.Get("deltaPhiPropCandMean");
       deltaPhiPropCandStdDev = (TH1D*)inFile.Get("deltaPhiPropCandStdDev");
+
+      //detaching the histograms from the file, as the inFile lives only in this constructor
+      deltaPhiPropCandMean->SetDirectory(nullptr);
+      deltaPhiPropCandStdDev->SetDirectory(nullptr);
     }
     else {
       deltaPhiVertexCand_Mean_pos =   (TH1D*)inFile.Get("deltaPhiVertexCand_Mean_pos");
@@ -134,7 +138,11 @@ void MuonMatcher::beginRun(const edm::EventSetup& eventSetup) {
 }*/
 
 MuonMatcher::~MuonMatcher() {
+  if (deltaPhiPropCandMean)
+    delete deltaPhiPropCandMean;
 
+  if (deltaPhiPropCandStdDev)
+    delete deltaPhiPropCandStdDev;
 
 }
 
@@ -227,24 +235,15 @@ void MuonMatcher::saveHists() {
   }
 }
 
-
 TrajectoryStateOnSurface MuonMatcher::atStation2(FreeTrajectoryState ftsStart, float eta) const {
-  eta = 0; //fix me!!!!! in case of displaced muon the vertex eta has no sense
-  ReferenceCountingPointer<Surface> rpc;
-  if (eta < -1.24)  //negative endcap, RE2
-    rpc = ReferenceCountingPointer<Surface>(
-        new BoundDisk(GlobalPoint(0., 0., -790.), TkRotation<float>(), SimpleDiskBounds(300., 810., -10., 10.)));
-  else if (eta < 1.24)  //barrel + overlap, 512.401cm is R of middle of the MB2
-    rpc = ReferenceCountingPointer<Surface>(new BoundCylinder(
+  ReferenceCountingPointer<Surface> surface;
+
+  surface = ReferenceCountingPointer<Surface>(new BoundCylinder(
         GlobalPoint(0., 0., 0.), TkRotation<float>(), SimpleCylinderBounds(512.401, 512.401, -900, 900)));
-  else
-    rpc = ReferenceCountingPointer<Surface>(  //positive endcap, RE2
-        new BoundDisk(GlobalPoint(0., 0., 790.), TkRotation<float>(), SimpleDiskBounds(300., 810., -10., 10.)));
 
-  TrajectoryStateOnSurface trackAtRPC = propagator->propagate(ftsStart, *rpc);
-  return trackAtRPC;
+  TrajectoryStateOnSurface tsof = propagator->propagate(ftsStart, *surface);
+  return tsof;
 }
-
 
 TrajectoryStateOnSurface MuonMatcher::atMB1(FreeTrajectoryState ftsStart, bool& isInW2MB1) const {
   ReferenceCountingPointer<Surface> mb1;
@@ -253,21 +252,24 @@ TrajectoryStateOnSurface MuonMatcher::atMB1(FreeTrajectoryState ftsStart, bool& 
   float w2Mb1_zMax = 660;
   mb1 = ReferenceCountingPointer<Surface>(new BoundCylinder(
         GlobalPoint(0., 0., 0.), TkRotation<float>(), SimpleCylinderBounds(431.133, 431.133, w2Mb1_zMin, w2Mb1_zMax)));
+  //N.B. zMin and zMax do not matter for the propagator->propagate, i.e. there is not cut on them
 
 
   TrajectoryStateOnSurface trackAtMb1 = propagator->propagate(ftsStart, *mb1);
   if(!trackAtMb1.isValid()) {
     isInW2MB1 = false;
-    LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::atMB1: "
+    LogTrace("l1MuonAnalyzerOmtf") <<"\nMuonMatcher::atMB1: "
             <<" ftsStart.position x: "<<ftsStart.position().x()<<" y " <<ftsStart.position().y()<<" z "<<ftsStart.position().z()<<" rho "<<ftsStart.position().perp()
             <<" ftsStart.momentum eta: "<<ftsStart.momentum().eta()<<" phi " <<ftsStart.momentum().phi()<<" propagation failed";
   }
   else {
+    //applying this cut here has no sense, because at matching it is better to use wider eta range,
+    //otherwise the candidates around omtf core region are not matched which is not good
     float trackZ = trackAtMb1.globalPosition().z();
     if( abs(trackZ) > w2Mb1_zMin && abs(trackZ) < w2Mb1_zMax)
       isInW2MB1 = true;
 
-    LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::atMB1: "
+    LogTrace("l1MuonAnalyzerOmtf") <<"\nMuonMatcher::atMB1: "
         <<" ftsStart.position x: "<<ftsStart.position().x()<<" y " <<ftsStart.position().y()<<" z "<<ftsStart.position().z()<<" rho "<<ftsStart.position().perp()
         <<" ftsStart.momentum eta: "<<ftsStart.momentum().eta()<<" phi " <<ftsStart.momentum().phi()
         <<" trackAtMb1 eta "<<std::setw(8)<<trackAtMb1.globalPosition().eta()<<" phi "<<trackAtMb1.globalPosition().phi()<<" z "<<trackAtMb1.globalPosition().z()
@@ -366,7 +368,6 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
   MatchingResult result(simTrack);
 
   double candGloablEta  = muonCand->hwEta() * 0.010875;
-  //if( abs(simTrack.momentum().eta() - candGloablEta ) < 0.3 ) TODO  in principle is replaced by using atMB1 !!!!!!!!!!!!!!!!!!!!!!!! check!!!!!!!!!!!!!!!
   {
     double candGlobalPhi = calcGlobalPhi( muonCand->hwPhi(), muonCand->processor(), nProcessors );
     candGlobalPhi = hwGmtPhiToGlobalPhi(candGlobalPhi );
@@ -387,7 +388,10 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
       mean = deltaPhiPropCandMean->GetBinContent(ptBin);
       sigma = deltaPhiPropCandStdDev->GetBinContent(ptBin);
     }
-    result.matchingLikelihood = normal_pdf(result.deltaPhi, mean, sigma); //TODO temporary solution
+
+    //sigma is 0 for very low pt muons, then normal_pdf gives -nan, therefore simple matchingLikelihood is used
+    //result.matchingLikelihood = normal_pdf(result.deltaPhi, mean, sigma); //TODO temporary solution
+    result.matchingLikelihood = 1. / ( std::abs(result.deltaPhi) + 0.001);
 
     result.muonCand = muonCand;
 
@@ -401,16 +405,19 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const S
     if(simTrack.momentum().pt() > 20) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!! - it is very big, why like that?
       treshold = 0.6;
 
-    treshold = 0.3; //should be good for all pts in Displaced_Dxy3m_pT0To1000_condPhase2_realistic
+    //treshold = 0.3; //should be good for all pts in Displaced_Dxy3m_pT0To1000_condPhase2_realistic
 
     //for displaced muons in H2ll
+    //N.B. if the threshold is too big, more duplicate matching is possible, which is not good as well
     treshold = 0.15; //pt > 30
     if(simTrack.momentum().pt() < 10) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!! - it is very big, why like that?
       treshold = 0.3;
     else if(simTrack.momentum().pt() < 30) //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tune the threshold!!!!!! - it is very big, why like that?
-      treshold = 0.2;
+      treshold = 0.22;
 
-    if( abs(result.deltaPhi - mean) < treshold)
+    mean = 0;
+
+    if( std::abs(result.deltaPhi - mean) < treshold && std::abs(result.deltaEta) < 0.4)
       result.result = MatchingResult::ResultType::matched;
 
     LogTrace("l1MuonAnalyzerOmtf") <<"\nMuonMatcher::match: simTrack type "<<simTrack.type()<<" pt "<<std::setw(8)<<simTrack.momentum().pt()
@@ -532,7 +539,7 @@ std::vector<MatchingResult> MuonMatcher::cleanMatching(std::vector<MatchingResul
     }
   }
 
-  //adding the muonCand-s that were not matched, i.e. in order to analyze them later
+  //adding the muonCand-s that were not matched or removed as duplicates, i.e. in order to analyze them later
   for(auto& muonCand : muonCands) {
     bool isMatched = false;
     for(auto& matchingResult : cleanedMatchingResults) {
@@ -550,7 +557,7 @@ std::vector<MatchingResult> MuonMatcher::cleanMatching(std::vector<MatchingResul
   }
 
 
-  LogTrace("l1MuonAnalyzerOmtf")<<"\nMuonMatcher::match cleanedMatchingResults:"<<std::endl;
+  LogTrace("l1MuonAnalyzerOmtf")<<"\nMuonMatcher::cleanMatching - cleanedMatchingResults:"<<std::endl;
   for(auto& result : cleanedMatchingResults) {
     if(result.trackingParticle || result.simTrack)
       LogTrace("l1MuonAnalyzerOmtf")<<" simTrack type "<<result.pdgId<<" pt "<<std::setw(8)<<result.genPt
@@ -591,6 +598,7 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
       continue;
 
     FreeTrajectoryState ftsStart = simTrackToFts(simTrack, simVertices);
+		/*
     if(checkIsInW2MB1) {
       bool isInW2MB1 = false;
 
@@ -600,26 +608,43 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
         continue;
     }
 
+    TrajectoryStateOnSurface tsofStation2 = atStation2(ftsStart, simTrack.momentum().eta() ); //propagation 8?
+    /*if(!tsofStation2.isValid()) {
+      LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::match: simTrack type "<<std::setw(3)<<simTrack.type()<<" pt "<<std::setw(9)<<simTrack.momentum().pt()<<" eta "<<std::setw(9)<<simTrack.momentum().eta()<<" phi "<<std::setw(9)<<simTrack.momentum().phi()<<std::endl;
+      LogTrace("l1MuonAnalyzerOmtf") <<__FUNCTION__<<":"<<__LINE__<<" propagation to station 2 failed"<<std::endl;
+    }*/
+
+    //bool isInW2MB1 = false;
+    //N.B. the extrapolation shoukd be to the same station where the OMTF cand phi is defined
+    //but it seems that using layer 0 (MB1) as the layer where the phi is defined gives much worse results - worse phi and more ghosts
+    //therefore it is better to use MB2 (as it always was)
+    //auto tsof = atMB1(ftsStart, isInW2MB1);
+    auto tsof = atStation2(ftsStart, simTrack.momentum().eta() );
+
     bool matched = false;
-
-    TrajectoryStateOnSurface tsof = atStation2(ftsStart, simTrack.momentum().eta() ); //propagation
-
     if(!tsof.isValid()) {
       LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::match: simTrack type "<<std::setw(3)<<simTrack.type()<<" pt "<<std::setw(9)<<simTrack.momentum().pt()<<" eta "<<std::setw(9)<<simTrack.momentum().eta()<<" phi "<<std::setw(9)<<simTrack.momentum().phi()<<std::endl;
-      LogTrace("l1MuonAnalyzerOmtf") <<__FUNCTION__<<":"<<__LINE__<<" propagation failed"<<std::endl;
+      LogTrace("l1MuonAnalyzerOmtf") <<__FUNCTION__<<":"<<__LINE__<<" propagation to station 1 failed"<<std::endl;
       MatchingResult result;
       result.result = MatchingResult::ResultType::propagationFailed;
+
+      int vtxInd = simTrack.vertIndex();
+      if (vtxInd >= 0) {
+        result.simVertex = &(simVertices->at(vtxInd));
+      }
+
       continue; //no sense to do matching
+      //N.B. this result is not added to matchingResults!!!!!!!, should it be???
     }
 
     //checking if the propagated track is inside the OMTF range, TODO - tune the range!!!!!!!!!!!!!!!!!
     //eta 0.7 is the beginning of the MB2,
-    //this complates the cut from atMB1
-    if( (fabs( tsof.globalPosition().eta()) >= 0.7 ) && (fabs( tsof.globalPosition().eta()) <= 1.3) ) {
-      LogTrace("l1tOmtfEventPrint") << "CandidateSimMuonMatcher::match trackingParticle IS in OMTF region, matching to the omtfCands";
+    //this completes the cut from atMB1
+    if( (fabs( tsof.globalPosition().eta()) >= 0.7 ) && (fabs( tsof.globalPosition().eta()) <= 1.31) ) {
+      LogTrace("l1tOmtfEventPrint") << "MuonMatcher::match SimTrack IS in OMTF region, matching to the omtfCands";
     }
     else {
-      LogTrace("l1tOmtfEventPrint") << "trackingParticle NOT in OMTF region ";
+      LogTrace("l1tOmtfEventPrint") << "SimTrack NOT in OMTF region ";
       continue;
     }
 
@@ -657,7 +682,7 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
     if(!matched) { //we are adding also if it was not matching to any candidate
       MatchingResult result(simTrack);
       //result.simTrack = &simTrack;
-      /*auto trackingParticle = new TrackingParticle();//work arroung -- theefficiency analysis works on the tracking particles
+      /*auto trackingParticle = new TrackingParticle();//work around -- the efficiency analysis works on the tracking particles
       trackingParticle->addG4Track(simTrack);
       result.trackingParticle = trackingParticle;*/
 
@@ -707,7 +732,7 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
     //checking if the propagated track is inside the OMTF range, TODO - tune the range!!!!!!!!!!!!!!!!!
     //eta 0.7 is the beginning of the MB2,
     if( (fabs( tsof.globalPosition().eta()) >= 0.7 ) && (fabs( tsof.globalPosition().eta()) <= 1.3) ) {
-      LogTrace("l1tOmtfEventPrint") << "CandidateSimMuonMatcher::match trackingParticle IS in OMTF region, matching to the omtfCands";
+      LogTrace("l1tOmtfEventPrint") << "MuonMatcher::match trackingParticle IS in OMTF region, matching to the omtfCands";
     }
     else {
       LogTrace("l1tOmtfEventPrint") << "trackingParticle NOT in OMTF region ";

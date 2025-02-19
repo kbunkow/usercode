@@ -24,6 +24,7 @@ matchUsingPropagationInDumper  = True #False for SingleM<u without PU, in oter c
 
 regeneratedL1DT = True
 
+useNN = False
 
 #watch out: L1Trigger/L1TMuon/data/omtf_config/ExtrapolationFactors_ExtraplMB1nadMB2DTQualAndR_EtaValueP1Scale_t25c.xml is only for the minDtPhiQuality = 2!!!!!!!!!!!!!!!!!!!
 #there are no entries of quality 0 and 1 there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -31,12 +32,16 @@ minDtPhiQuality = 2
 minDtPhiBQuality = 2
 dtRefHitMinQuality = 2
 
-version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t35" #WK - dumping killed candidates
+version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t35p_omtfPhiAtSt2" #WK - dumping killed candidates
 #version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
 
+log_threshold = 'INFO'
 if test_mode :
-    version = version + "_test6"
-
+    version = version + "_test8"
+    log_threshold = 'DEBUG'
+    
+if useNN :
+    version = version + "_NN"
 #version = "noExtrapl_ValueP1Scale_t18_qualConverted_min4_ipT1_deltaPhiVsPhiRef_fixedDTScale"
 
 if verbose: 
@@ -53,7 +58,7 @@ if verbose:
        omtfEventPrint = cms.untracked.PSet(    
                          filename  = cms.untracked.string('omtfAnalysis2_' + version + "_" + filesNameLike),
                          extension = cms.untracked.string('.txt'),                
-                         threshold = cms.untracked.string('INFO'),
+                         threshold = cms.untracked.string(log_threshold),
                          default = cms.untracked.PSet( limit = cms.untracked.int32(0) ), 
                          #INFO   =  cms.untracked.int32(0),
                          #DEBUG   = cms.untracked.int32(0),
@@ -61,7 +66,7 @@ if verbose:
                          OMTFReconstruction = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
                          l1MuonAnalyzerOmtf = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) )
                        ),
-       debugModules = cms.untracked.vstring('simOmtfPhase2Digis', 'L1MuonAnalyzerOmtf') 
+       debugModules = cms.untracked.vstring('simOmtfPhase2Digis', 'L1MuonAnalyzerOmtf', 'CalibratedDigis') 
        #debugModules = cms.untracked.vstring('*')
     )
 
@@ -95,6 +100,7 @@ chosenFiles = []
 cscBx = 8
 #file_cnt = 100000
 fileCnt = 100000 #1000 
+#fileCnt = 5 #1000 
 if filesNameLike == 'mcWaw2023_iPt2_04_04_2023' :
     cscBx = 8
     matchUsingPropagationInAnlyzer  = False 
@@ -199,10 +205,11 @@ if filesNameLike == 'mcWaw_2024_01_04_OneOverPt' :
              ]    
 
 if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    cscBx = 8
-    matchUsingPropagation  = True 
+    matchUsingPropagationInAnlyzer  = True 
+    matchUsingPropagationInDumper  = True 
     paths = [
-        {"path": '/eos/cms/store/user/eyigitba/dispDiMu/crabOut/CRAB_PrivateMC/', "fileCnt" : 10000},
+        #{"path": '/eos/cms/store/user/eyigitba/dispDiMu/crabOut/CRAB_PrivateMC/', "fileCnt" : 10000},
+        {"path": '/data2/kbunkow/cmsdata/EfeMC2023_HTo2LongLivedTo2mu2jets/CRAB_PrivateMC/', "fileCnt" : 100000},
         ]  
 
 if filesNameLike == 'Displaced_cTau5m_XTo2LLTo4Mu' :
@@ -221,7 +228,7 @@ if filesNameLike == 'LLPGun_mH20_1000_cTau10_5000mm' :
 
 if filesNameLike == 'Displaced_Dxy3m_pT0To1000_condPhase2_realistic' :
     matchUsingPropagationInAnlyzer  = True 
-    matchUsingPropagationInDumper  = False 
+    matchUsingPropagationInDumper  = True 
     paths = [    
              {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
              {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
@@ -366,6 +373,8 @@ process.simOmtfPhase2Digis.minDtPhiBQuality = cms.int32(minDtPhiBQuality)
 process.simOmtfPhase2Digis.dtRefHitMinQuality =  cms.int32(dtRefHitMinQuality)
 process.simOmtfPhase2Digis.ghostBusterType = cms.string("byRefLayerAndHitQual") #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+if useNN :
+    process.simOmtfPhase2Digis.neuralNetworkFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/lutNN_omtfRegression_v430_FP.xml")
 
 #TODO tune the matching thresholds in CandidateSimMuonMatcher::matchSimple
 #or CandidateSimMuonMatcher::match
@@ -410,8 +419,8 @@ else :                             #process.rpcRecHits *
     process.L1TMuonPath = cms.Path(process.CalibratedDigis * process.dtTriggerPhase2PrimitiveDigis * process.L1TMuonSeq)
     print("regeneratedL1DT = ", regeneratedL1DT, " process.dtTriggerPhase2PrimitiveDigis")
 
-process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath)
-
+#process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath)
+process.schedule = cms.Schedule(process.L1TMuonPath)
 #process.out = cms.OutputModule("PoolOutputModule", 
 #   fileName = cms.untracked.string("l1tomtf_superprimitives1.root")
 #)
