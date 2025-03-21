@@ -219,7 +219,7 @@ void LikelihoodDistribution::fill(double ptGen, double etaGen, double phiGen, do
     double candPt = useUpt ? l1MuonCand.uptGev : l1MuonCand.ptGev;
     if(l1MuonCand.hwQual >= qualityCut && candPt >=  ptL1Cut) {
       distribution->Fill(l1MuonCand.likelihood, l1MuonCand.refLayer);
-      LogTrace("l1tMuBayesEventPrint") <<" LikelihoodDistribution::fill likelihood "<<l1MuonCand.likelihood<<" refLayer "<<l1MuonCand.refLayer <<std::endl;
+      LogTrace("l1MuonAnalyzerOmtf") <<" LikelihoodDistribution::fill likelihood "<<l1MuonCand.likelihood<<" refLayer "<<l1MuonCand.refLayer <<std::endl;
     }
   }
 }

@@ -166,12 +166,17 @@ private:
   TH1D* deltaPhiPropCandStdDev = nullptr;
 
   TH1D* ptGen_pos = nullptr;
-  TH1D* deltaPhiVertexCand_Mean_pos = nullptr;
-  TH1D* deltaPhiVertexCand_StdDev_pos = nullptr;
 
   TH1D* ptGen_neg = nullptr;
-  TH1D* deltaPhiVertexCand_Mean_neg = nullptr;
-  TH1D* deltaPhiVertexCand_StdDev_neg = nullptr;
+
+  TH1* minDelta_pos = nullptr;
+  TH1* maxDelta_pos = nullptr;
+  TH1* medianDelta_pos = nullptr;
+
+  TH1* minDelta_neg = nullptr;
+  TH1* maxDelta_neg = nullptr;
+  TH1* medianDelta_neg = nullptr;
+
 
   TH1* muonsPerEvent = nullptr;
   TH1* muonsPerEventInOmtf = nullptr;

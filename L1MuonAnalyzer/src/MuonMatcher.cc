@@ -83,22 +83,32 @@ MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg,
   edm::LogImportant("l1MuonAnalyzerOmtf") <<" MuonMatcher: line "<<__LINE__<<" matchUsingPropagation "<<matchUsingPropagation<<std::endl;
   if(edmCfg.exists("muonMatcherFile") ) {
     std::string muonMatcherFileName =  edmCfg.getParameter<edm::FileInPath>("muonMatcherFile").fullPath();
-    TFile inFile(muonMatcherFileName.c_str());
+    TFile muonMatcherFile(muonMatcherFileName.c_str());
     edm::LogImportant("l1MuonAnalyzerOmtf") <<" MuonMatcher: using muonMatcherFileName "<<muonMatcherFileName<<std::endl;
     if(matchUsingPropagation) {
-      deltaPhiPropCandMean = (TH1D*)inFile.Get("deltaPhiPropCandMean");
-      deltaPhiPropCandStdDev = (TH1D*)inFile.Get("deltaPhiPropCandStdDev");
+      deltaPhiPropCandMean = (TH1D*)muonMatcherFile.Get("deltaPhiPropCandMean");
+      deltaPhiPropCandStdDev = (TH1D*)muonMatcherFile.Get("deltaPhiPropCandStdDev");
 
       //detaching the histograms from the file, as the inFile lives only in this constructor
       deltaPhiPropCandMean->SetDirectory(nullptr);
       deltaPhiPropCandStdDev->SetDirectory(nullptr);
     }
     else {
-      deltaPhiVertexCand_Mean_pos =   (TH1D*)inFile.Get("deltaPhiVertexCand_Mean_pos");
-      deltaPhiVertexCand_StdDev_pos = (TH1D*)inFile.Get("deltaPhiVertexCand_StdDev_pos");
+      minDelta_pos = (TH1F*)muonMatcherFile.Get("minDelta_pos");
+      maxDelta_pos = (TH1F*)muonMatcherFile.Get("maxDelta_pos");
+      medianDelta_pos = (TH1F*)muonMatcherFile.Get("medianDelta_pos");
 
-      deltaPhiVertexCand_Mean_neg =   (TH1D*)inFile.Get("deltaPhiVertexCand_Mean_neg");
-      deltaPhiVertexCand_StdDev_neg = (TH1D*)inFile.Get("deltaPhiVertexCand_StdDev_neg");
+      minDelta_neg = (TH1F*)muonMatcherFile.Get("minDelta_neg");
+      maxDelta_neg = (TH1F*)muonMatcherFile.Get("maxDelta_neg");
+      medianDelta_neg = (TH1F*)muonMatcherFile.Get("medianDelta_neg");
+
+      //detaching the histograms from the file
+      minDelta_pos->SetDirectory(nullptr);
+      maxDelta_pos->SetDirectory(nullptr);
+      medianDelta_pos->SetDirectory(nullptr);
+      minDelta_neg->SetDirectory(nullptr);
+      maxDelta_neg->SetDirectory(nullptr);
+      medianDelta_neg->SetDirectory(nullptr);
     }
 
     fillMean =  false;
@@ -111,12 +121,7 @@ MuonMatcher::MuonMatcher(const edm::ParameterSet& edmCfg,
     else {
       edm::LogImportant("l1MuonAnalyzerOmtf") <<" MuonMatcher: line "<<__LINE__<<std::endl;
       ptGen_pos = new TH1D("ptGen_pos", "candidates number vs ptGen, positive charge", 200, 0, 100);
-      deltaPhiVertexCand_Mean_pos = new TH1D("delgentaPhiVertexCand_Mean_pos", "mean #DELTA#phi track at vertex - muonCand Vs pT, positive charge", 200, 0, 100);;
-      deltaPhiVertexCand_StdDev_pos = new TH1D("deltaPhiVertexCand_StdDev_pos", "StdDev #DELTA#phi track at vertex - muonCand Vs pT, positive charge", 200, 0, 100);;
-
       ptGen_neg = new TH1D("ptGen_neg", "candidates number vs ptGen, negative charge", 200, 0, 100);
-      deltaPhiVertexCand_Mean_neg = new TH1D("deltaPhiVertexCand_Mean_neg", "mean #DELTA#phi track at vertex - muonCand Vs pT, negative charge", 200, 0, 100);;
-      deltaPhiVertexCand_StdDev_neg = new TH1D("deltaPhiVertexCand_StdDev_neg", "StdDev #DELTA#phi track at vertex - muonCand Vs pT, negative charge", 200, 0, 100);;
     }
 
     fillMean =  true;
@@ -186,51 +191,7 @@ void MuonMatcher::saveHists() {
       deltaPhiPropCandStdDevSmooth->Write();
     }
     else {
-      //lambda
-      auto calculateMaenAndStd = [](TH1D* ptGen_pos, TH1D* deltaPhiVertexCand_Mean_pos, TH1D* deltaPhiVertexCand_StdDev_pos) {
-        for(int iBin = 0; iBin <= deltaPhiVertexCand_Mean_pos->GetXaxis()->GetNbins() +1; iBin++) {
-          double mean = 0;
-          double stdDev = 0;
-          double entries = ptGen_pos->GetBinContent(iBin); //to iniclude the under and overflow bins
-          if(entries) {
-            mean = deltaPhiVertexCand_Mean_pos->GetBinContent(iBin) / entries ;
 
-            stdDev = deltaPhiVertexCand_StdDev_pos->GetBinContent(iBin) / entries;
-            stdDev = sqrt(stdDev - mean * mean);
-          }
-          deltaPhiVertexCand_Mean_pos->SetBinContent(iBin, mean);
-          deltaPhiVertexCand_StdDev_pos->SetBinContent(iBin, stdDev);
-
-          edm::LogImportant("l1MuonAnalyzerOmtf") <<" MuonMatcher::saveHists() lambda "<<std::setw(5)<<iBin<<" mean "<<std::setw(8)<<mean<<
-              " stdDev "<<stdDev<<" Entries "<<entries<<std::endl;
-        }
-
-        edm::LogImportant("l1MuonAnalyzerOmtf") <<"MuonMatcher::SaveHist: "<<__LINE__<<std::endl;
-        ptGen_pos->Write();
-        deltaPhiVertexCand_Mean_pos->Write();
-        deltaPhiVertexCand_StdDev_pos->Write();
-
-        edm::LogImportant("l1MuonAnalyzerOmtf") <<"MuonMatcher::SaveHist: "<<__LINE__<<std::endl;
-
-        TH1* deltaPhiVertexCand_Mean_pos_smooth = (TH1*)deltaPhiVertexCand_Mean_pos->Clone( (std::string(deltaPhiVertexCand_Mean_pos->GetName()) + "_smooth").c_str());
-        edm::LogImportant("l1MuonAnalyzerOmtf") <<"MuonMatcher::SaveHist: "<<__LINE__<<std::endl;
-        deltaPhiVertexCand_Mean_pos_smooth->GetXaxis()->SetRangeUser(2.5, 100);
-        deltaPhiVertexCand_Mean_pos_smooth->Smooth(1, "R");
-        edm::LogImportant("l1MuonAnalyzerOmtf") <<"MuonMatcher::SaveHist: "<<__LINE__<<std::endl;
-        deltaPhiVertexCand_Mean_pos_smooth->Write();
-        edm::LogImportant("l1MuonAnalyzerOmtf") <<"MuonMatcher::SaveHist: "<<__LINE__<<std::endl;
-
-        TH1* deltaPhiVertexCand_StdDev_pos_smooth = (TH1*)deltaPhiVertexCand_StdDev_pos->Clone((std::string(deltaPhiVertexCand_StdDev_pos->GetName()) + "_smooth").c_str());
-        deltaPhiVertexCand_StdDev_pos_smooth->GetXaxis()->SetRangeUser(2.5, 100);
-        deltaPhiVertexCand_StdDev_pos_smooth->Smooth(1, "R");
-        deltaPhiVertexCand_StdDev_pos_smooth->Write();
-
-        edm::LogImportant("l1MuonAnalyzerOmtf") <<"MuonMatcher::SaveHist: "<<__LINE__<<std::endl;
-
-      };//lambda end
-
-      calculateMaenAndStd(ptGen_pos, deltaPhiVertexCand_Mean_pos, deltaPhiVertexCand_StdDev_pos);
-      calculateMaenAndStd(ptGen_neg, deltaPhiVertexCand_Mean_neg, deltaPhiVertexCand_StdDev_neg);
     }
   }
 }
@@ -615,8 +576,9 @@ std::vector<MatchingResult> MuonMatcher::match(std::vector<const l1t::RegionalMu
     }*/
 
     //bool isInW2MB1 = false;
-    //N.B. the extrapolation shoukd be to the same station where the OMTF cand phi is defined
+    //N.B. the extrapolation should be to the same station where the OMTF cand phi is defined
     //but it seems that using layer 0 (MB1) as the layer where the phi is defined gives much worse results - worse phi and more ghosts
+    //probably because OMTF cands with ref hit in endcap layers (but this hypothesis needs to be checked)
     //therefore it is better to use MB2 (as it always was)
     //auto tsof = atMB1(ftsStart, isInW2MB1);
     auto tsof = atStation2(ftsStart, simTrack.momentum().eta() );
@@ -809,13 +771,9 @@ void MuonMatcher::fillHists(std::vector<const l1t::RegionalMuonCand*>& muonCands
 
         if(simTrack.type() > 0) {
           ptGen_pos->Fill(simTrack.momentum().pt());
-          deltaPhiVertexCand_Mean_pos->Fill(simTrack.momentum().pt(), deltaPhi); //filling overflow is ok here
-          deltaPhiVertexCand_StdDev_pos->Fill(simTrack.momentum().pt(), deltaPhi * deltaPhi);
         }
         else {
           ptGen_neg->Fill(simTrack.momentum().pt());
-          deltaPhiVertexCand_Mean_neg->Fill(simTrack.momentum().pt(), deltaPhi); //filling overflow is ok here
-          deltaPhiVertexCand_StdDev_neg->Fill(simTrack.momentum().pt(), deltaPhi * deltaPhi);
         }
 
         deltaPhiVertexProp->Fill(ptGen, deltaPhi);
@@ -858,19 +816,6 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const T
       meanDeltaPhi *= -1;
     }*/
 
-    if(trackingParticle.pdgId() > 0) {
-      auto ptBin = deltaPhiVertexCand_Mean_pos->FindBin(trackingParticle.pt());
-
-      meanDeltaPhi  = deltaPhiVertexCand_Mean_pos->GetBinContent(ptBin);
-      sigma = deltaPhiVertexCand_StdDev_pos->GetBinContent(ptBin);
-    }
-    else {
-      auto ptBin = deltaPhiVertexCand_Mean_neg->FindBin(trackingParticle.pt());
-
-      meanDeltaPhi  = deltaPhiVertexCand_Mean_neg->GetBinContent(ptBin);
-      sigma = deltaPhiVertexCand_StdDev_neg->GetBinContent(ptBin);
-    }
-
     result.propagatedPhi = foldPhi(trackingParticle.momentum().phi() + meanDeltaPhi) ;
     result.propagatedEta = trackingParticle.momentum().eta() ;
 
@@ -878,6 +823,7 @@ MatchingResult MuonMatcher::match(const l1t::RegionalMuonCand* muonCand, const T
 
     result.muonCand = muonCand;
 
+    //TODO FIX this implementation, don't use sigma and meanDeltaPhi
     double treshold = 6. * sigma;
     if(trackingParticle.pt() > 20)
       treshold = 7. * sigma;
@@ -1029,7 +975,7 @@ std::vector<MatchingResult> MuonMatcher::matchSimple(std::vector<const l1t::Regi
 
 
 /*
- * Using tis matching has sense only for the prompt muons.
+ * Using this matching has sense only for the prompt muons.
  * The delta phi (phi at vertex - phi cand) distributions are wider then with the propagation,
  * because the distribution (phi at vertex - phi propagated) is not symmetric, (not Gaussian) due to energy losses
  * so matching is worse ten this with propagation
@@ -1038,21 +984,50 @@ std::vector<MatchingResult> MuonMatcher::matchWithoutPorpagation(std::vector<con
     std::function<bool(const TrackingParticle& )> const& simTrackFilter)
 {
   std::vector<MatchingResult> matchingResults;
-  LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::match trackingParticles->size() "<<trackingParticles->size()<<std::endl;
+  LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::matchWithoutPorpagation trackingParticles->size() "<<trackingParticles->size()<<std::endl;
 
   for (auto& trackingParticle : *trackingParticles ) {
-    //LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::match:"<<__LINE__<<" trackingParticle type "<<std::setw(3)<<trackingParticle.pdgId()<<" pt "<<std::setw(9)<<trackingParticle.pt()<<" eta "<<std::setw(9)<<trackingParticle.momentum().eta()<<" phi "<<std::setw(9)<<trackingParticle.momentum().phi()<<std::endl;
+    LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::matchWithoutPorpagation:"<<__LINE__<<" trackingParticle type "<<std::setw(3)<<trackingParticle.pdgId()<<" pt "<<std::setw(9)<<trackingParticle.pt()<<" eta "<<std::setw(9)<<trackingParticle.momentum().eta()<<" phi "<<std::setw(9)<<trackingParticle.momentum().phi()<<std::endl;
 
     if(simTrackFilter(trackingParticle) == false)
       continue;
 
-    LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::match, trackingParticle type "<<std::setw(3)<<trackingParticle.pdgId()<<" pt "<<std::setw(9)<<trackingParticle.pt()<<" eta "<<std::setw(9)<<trackingParticle.momentum().eta()<<" phi "<<std::setw(9)<<trackingParticle.momentum().phi()<<std::endl;
+    LogTrace("l1MuonAnalyzerOmtf") <<"MuonMatcher::matchWithoutPorpagation, trackingParticle type "<<std::setw(3)<<trackingParticle.pdgId()<<" pt "<<std::setw(9)<<trackingParticle.pt()<<" eta "<<std::setw(9)<<trackingParticle.momentum().eta()<<" phi "<<std::setw(9)<<trackingParticle.momentum().phi()<<std::endl;
 
     bool matched = false;
 
     double ptGen = trackingParticle.pt();
+
+
+
+    int charge = trackingParticle.pdgId() > 0 ? -1 : 1; //works for muons
+
+    TH1* medianDelta = nullptr;
+    TH1* minDelta = nullptr;
+    TH1* maxDelta = nullptr;
+
+    if(charge  == 1) {
+      medianDelta = medianDelta_pos;
+      minDelta = minDelta_pos;
+      maxDelta = maxDelta_pos;
+    }
+    else {
+      medianDelta = medianDelta_neg;
+      minDelta = minDelta_neg;
+      maxDelta = maxDelta_neg;
+    }
+
+    auto ptBin = medianDelta->FindBin(ptGen);
+    auto min = minDelta->GetBinContent(ptBin);
+    auto max = maxDelta->GetBinContent(ptBin);
+
+/*
+    if (result.deltaPhi > min && result.deltaPhi < max && std::abs(result.deltaEta) < 0.4)
+      result.result = MatchingResult::ResultType::matched;
+
+
     if(ptGen >= deltaPhiVertexCand_Mean_pos->GetXaxis()->GetXmax())
-      ptGen = deltaPhiVertexCand_Mean_pos->GetXaxis()->GetXmax() - 0.01;
+      ptGen = deltaPhiVertexCand_Mean_pos->GetXaxis()->GetXmax() - 0.01;*/
 
 
     for(auto& muonCand : muonCands) {
@@ -1065,6 +1040,8 @@ std::vector<MatchingResult> MuonMatcher::matchWithoutPorpagation(std::vector<con
 
       MatchingResult result = match(muonCand, trackingParticle);
       if(result.result == MatchingResult::ResultType::matched) {
+
+        result.propagatedPhi = medianDelta->GetBinContent(ptBin);
         matchingResults.push_back(result);
         matched = true;
       }

@@ -15,26 +15,60 @@
 
 namespace L1MuAn {
 
+double hwGmtPhiToGlobalPhi(int phi) {
+  double phiGmtUnit = 2. * M_PI / 576.;
+  return phi * phiGmtUnit;
+}
+
+
+int calcGlobalPhi(int locPhi, int proc, int nProcessors) {
+  int globPhi = 0;
+  //60 degree sectors = 96 in int-scale
+  globPhi = (proc)*96 * 6/nProcessors + locPhi;
+  // first processor starts at CMS phi = 15 degrees (24 in int)... Handle wrap-around with %. Add 576 to make sure the number is positive
+  globPhi = (globPhi + 24 + 576) % 576;
+  return globPhi;
+}
+
+double foldPhi(double phi) {
+  if(phi > M_PI)
+    return (phi - 2 * M_PI );
+  else if(phi < -M_PI)
+    return (phi +  2 * M_PI );
+
+  return phi;
+}
 
 L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
               magneticFieldEsToken(esConsumes<MagneticField, IdealMagneticFieldRecord, edm::Transition::BeginRun>()),
               propagatorEsToken(esConsumes<Propagator, TrackingComponentsRecord, edm::Transition::BeginRun>(
                   edm::ESInputTag("", "SteppingHelixPropagatorAlong"))),
-                  muonMatcher(edmCfg, magneticFieldEsToken, propagatorEsToken) {
+                  //muonMatcher(edmCfg, magneticFieldEsToken, propagatorEsToken),
+                  candidateSimMuonMatcher(edmCfg, 6, magneticFieldEsToken, propagatorEsToken) {
   if(edmCfg.exists("phase") ) {
     if(edmCfg.getParameter<int>("phase") == 2)
       nProcessors = 3;
   }
 
-  fillMatcherHists = !edmCfg.exists("muonMatcherFile");
-  edm::LogImportant("l1MuonAnalyzerOmtf") <<" L1MuonAnalyzerOmtf: line "<<__LINE__<<" fillMatcherHists "<<fillMatcherHists<<std::endl;
+  if (edmCfg.exists("candidateSimMuonMatcherType")) {
+    if (edmCfg.getParameter<std::string>("candidateSimMuonMatcherType") == "withPropagator")
+      matchingType = CandidateSimMuonMatcher::MatchingType::withPropagator;
+    else if (edmCfg.getParameter<std::string>("candidateSimMuonMatcherType") == "simplePropagation")
+      matchingType = CandidateSimMuonMatcher::MatchingType::simplePropagation;
+    else if (edmCfg.getParameter<std::string>("candidateSimMuonMatcherType") == "simpleMatching")
+      matchingType = CandidateSimMuonMatcher::MatchingType::simpleMatching;
 
-  useMatcher = edmCfg.exists("matchUsingPropagation"); //TODO
+    edm::LogImportant("l1tOmtfEventPrint")
+        << " CandidateSimMuonMatcher: candidateSimMuonMatcherType "
+        << edmCfg.getParameter<std::string>("candidateSimMuonMatcherType") << std::endl;
+  }
 
-  if(edmCfg.exists("matchUsingPropagation") )
-    matchUsingPropagation = edmCfg.getParameter<bool>("matchUsingPropagation");
+  useMatcher = (matchingType == CandidateSimMuonMatcher::MatchingType::withPropagator) ||
+               (matchingType == CandidateSimMuonMatcher::MatchingType::simplePropagation) ||
+               (matchingType == CandidateSimMuonMatcher::MatchingType::simpleMatching) ;
 
-  edm::LogImportant("l1MuonAnalyzerOmtf") <<" L1MuonAnalyzerOmtf: line "<<__LINE__<<" matchUsingPropagation "<<matchUsingPropagation<<" useMatcher "<<useMatcher<<std::endl;
+
+  edm::LogImportant("l1MuonAnalyzerOmtf") <<" L1MuonAnalyzerOmtf: line "<<__LINE__<<" useMatcher "<<useMatcher<<std::endl;
 
   omtfToken = consumes<l1t::RegionalMuonCandBxCollection >(edmCfg.getParameter<edm::InputTag>("L1OMTFInputTag"));
 
@@ -48,7 +82,7 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
 
   edm::Service<TFileService> fs;
 
-  candPerEvent = fs->make<TH1D>("candPerEvent", "candPerEvent", 21, -0.5, 20.5);
+  candPerEvent = fs->make<TH1D>("candPerEvent", "candPerEvent - before ghostbusting", 21, -0.5, 20.5);
 
   analysisType = edmCfg.getParameter< string >("analysisType");
 
@@ -57,7 +91,7 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
   double etaFrom = 0.82;
   double etaTo = 1.24;
 
-  if(matchUsingPropagation) {
+  if(matchingType == CandidateSimMuonMatcher::MatchingType::withPropagator) {
     //for the displaced cutting on gen eta has no sense, therefore the the propagation should be used, with MuonMatcher::atMB1
     etaFrom = 0; //abs eta is used , so here must be 0
     etaTo = 3;
@@ -69,19 +103,20 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
   firedLayersEventCntOmtf = fs->make<TH1S>("firedLayersEventCntOmtf", "firedLayersEventCntOmtf", binsCnt, 0, binsCnt);
   firedLayersEventCntNN = fs->make<TH1S>("firedLayersEventCntNN", "firedLayersEventCntNN", binsCnt, 0, binsCnt);
 
-  candsDeltaPhi = fs->make<TH1I>("candsDeltaPhi", "candsDeltaPhi - uGMT units (2pi/576)", 576, -576/2 -0.5, 576/2 - 0.5);
+  candsDeltaPhi = fs->make<TH1I>("candsDeltaPhi", "candsDeltaPhi - uGMT units (2pi/576), after ghostbusting", 576, -576/2 -0.5, 576/2 - 0.5);
 
   candEtaPtCut1 = fs->make<TH1D>("candEta_PtCut_1GeV__qualCut_1", "candEta PtCut 1GeV, qualCut 1;eta; #events", 100, -2.1, 2.1);
   candEtaPtCut10 = fs->make<TH1D>("candEta_PtCut_1GeV__qualCut_4", "candEta PtCut 10GeV, qualCut 4;eta; #events", 100, -2.1, 2.1);
 
+  muonsPerEvent = fs->make<TH1D>("muonsPerEvent", "muonsPerEvent", 21, -0.5, 20.5);
+  muonsPerEventInOmtf = fs->make<TH1D>("muonsPerEventInOmtf", "muonsPerEventInOmtf", 21, -0.5, 20.5);
 
+  ptGenHist = fs->make<TH1I>("ptGenHist", "ptGenHist", 1000, 0, 1000);
 
   if(edmCfg.exists("nn_pThresholds") )
     nn_pThresholds = edmCfg.getParameter<vector<double> >("nn_pThresholds");
 
   if(analysisType == "efficiency") {
-    ptGenHist = fs->make<TH1I>("ptGenHist", "ptGenHist", 800, 0, 4000);
-
     double ptGenCut = 25;
     double ptL1Cut = 18;
     TFileDirectory subDir = fs->mkdir("efficiency");
@@ -203,7 +238,8 @@ void L1MuonAnalyzerOmtf::beginJob() {
 
 void L1MuonAnalyzerOmtf::beginRun(edm::Run const&, edm::EventSetup const& es) {
   if(useMatcher) {
-    muonMatcher.beginRun(es);
+    //muonMatcher.beginRun(es);
+    candidateSimMuonMatcher.beginRun(es);
   }
 }
 
@@ -275,7 +311,7 @@ bool simTrackIsMuonInOmtf(const SimTrack& simTrack) {
 
 
   //if( (std::abs(simTrack.momentum().eta()) >= 0.82 ) && (std::abs(simTrack.momentum().eta()) <= 1.24) ) {
-  if( (std::abs(simTrack.momentum().eta()) >= 0.72 ) && (std::abs(simTrack.momentum().eta()) <= 1.3) ) { //higher margin for matching, otherwise many candidates are marked as ghosts
+  if( (std::abs(simTrack.momentum().eta()) >= 0.7 ) && (std::abs(simTrack.momentum().eta()) <= 1.31) ) { //higher margin for matching, otherwise many candidates are marked as ghosts
   }
   else
     return false;;
@@ -334,7 +370,7 @@ bool trackingParticleIsMuonInOmtfBx0(const TrackingParticle& trackingParticle) {
 
 
   //if( (fabs(simTrack.momentum().eta()) >= 0.82 ) && (fabs(trackingParticle.momentum().eta()) <= 1.24) ) {
-  if( (fabs(trackingParticle.momentum().eta()) >= 0.72 ) && (fabs(trackingParticle.momentum().eta()) <= 1.3) ) { //higher margin for matching, otherwise many candidates re marked as ghosts
+  if( (fabs(trackingParticle.momentum().eta()) >= 0.7 ) && (fabs(trackingParticle.momentum().eta()) <= 1.31) ) { //higher margin for matching, otherwise many candidates re marked as ghosts
   }
   else
     return false;;
@@ -388,9 +424,13 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
   }
 
   std::vector<const l1t::RegionalMuonCand*> ghostBustedCands = ghostBust(l1omtfHandle.product());
+  AlgoMuons ghostBustedProcMuons(ghostBustedCands.size()); //needed for candidateSimMuonMatcher, here we just put empty AlgoMuons, as they are not used furher
+
 
   std::vector<MatchingResult> matchingResults;
-  if(useMatcher) {
+  if(matchingType == CandidateSimMuonMatcher::MatchingType::withPropagator ||
+     matchingType == CandidateSimMuonMatcher::MatchingType::simplePropagation ||
+     matchingType == CandidateSimMuonMatcher::MatchingType::simpleMatching) {
     edm::Handle<edm::SimTrackContainer> simTraksHandle;
     edm::Handle<edm::SimVertexContainer> simVertices;
     if(!simTrackToken.isUninitialized()) {
@@ -408,38 +448,31 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
     }
 
     //std::function<bool(const SimTrack& )> const& simTrackFilter = simTrackIsMuonInOmtfBx0;
+    //TODOO use simTrackFilter from CandidateSimMuonMatcher!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     std::function<bool(const SimTrack& )> simTrackFilter = simTrackIsMuonInBx0; //use this one if checkIsInW2MB1 = true
     if(analysisType == "rate") {
-      simTrackFilter = simTrackIsMuonInOmtf;
+      simTrackFilter = simTrackIsMuonInOmtfBx0;
     }
 
     std::function<bool(const TrackingParticle& )> trackParticleFilter = trackingParticleIsMuonInOmtfEvent0;
     if(analysisType == "rate") {
-      trackParticleFilter = trackingParticleIsMuonInOmtfBx0;
+      trackParticleFilter = trackingParticleIsMuonInOmtfBx0; //trackingParticleIsMuonInOmtfBx0;
     }
 
-    if(matchUsingPropagation) {
-      bool checkIsInW2MB1 =  true; //TODO!!!!!!!!!!!!!!!!
-      if(!trackingParticleToken.isUninitialized())
-        matchingResults = muonMatcher.match(ghostBustedCands, trackingParticleHandle.product(), trackParticleFilter);
-      else if(!simTrackToken.isUninitialized())
-        matchingResults = muonMatcher.match(ghostBustedCands, simTraksHandle.product(), simVertices.product(), simTrackFilter, checkIsInW2MB1);
+    if(matchingType == CandidateSimMuonMatcher::MatchingType::simpleMatching) {
+      //if(!trackingParticleToken.isUninitialized()) TODO not implemented yet for trackingParticle
+      //  matchingResults = candidateSimMuonMatcher.matchSimple(ghostBustedCands, ghostBustedProcMuons, trackingParticleHandle.product(), trackParticleFilter);
+      std::function<bool(const SimTrack&)> const& simTrackFilter = simTrackIsMuonInOmtfBx0;
+      if(!simTrackToken.isUninitialized())
+        matchingResults = candidateSimMuonMatcher.matchSimple(ghostBustedCands, ghostBustedProcMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
     }
     else {
-      if(fillMatcherHists) {
-        std::function<bool(const SimTrack& )> simTrackFilter = simTrackIsMuonInOmtfBx0;
-        muonMatcher.fillHists(ghostBustedCands, simTraksHandle.product(), simTrackFilter);
-      }
-      else {
-        if(!trackingParticleToken.isUninitialized())
-          matchingResults = muonMatcher.matchWithoutPorpagation(ghostBustedCands, trackingParticleHandle.product(), trackParticleFilter);
-        else if(!simTrackToken.isUninitialized()) {
-          simTrackFilter = simTrackIsMuonInOmtfBx0;
-          matchingResults = muonMatcher.matchSimple(ghostBustedCands, simTraksHandle.product(), simVertices.product(), simTrackFilter);
-        }
-      }
-    }
+      if(!trackingParticleToken.isUninitialized())
+        matchingResults = candidateSimMuonMatcher.match(ghostBustedCands, ghostBustedProcMuons, trackingParticleHandle.product(), trackParticleFilter);
 
+      else if(!simTrackToken.isUninitialized())
+        matchingResults = candidateSimMuonMatcher.match(ghostBustedCands, ghostBustedProcMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
+    }
   }
   else {// not useMatcher
     LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze:"<<__LINE__<<" ghostBustedCands.size() "<<ghostBustedCands.size()<<std::endl;
@@ -462,6 +495,8 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
     analyzeRate(event, matchingResults);
   }
 
+
+  int muonCntInOmtf = 0;
   double etaUnit = 0.010875; //TODO from the interface note, should be defined somewhere globally
   for (auto& matchingResult: matchingResults ) {
     if(matchingResult.muonCand != nullptr) {
@@ -471,7 +506,14 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
       if(matchingResult.muonCand->hwQual() >= 4 && matchingResult.muonCand->hwPt() >= 21) //TODO use some function for pt conversion
         candEtaPtCut10->Fill(matchingResult.muonCand->hwEta() * etaUnit);
     }
+
+    if(matchingResult.simTrack || matchingResult.trackingParticle) {
+      muonCntInOmtf++;
+    }
   }
+
+  muonsPerEventInOmtf->Fill(muonCntInOmtf);
+
   //Analyzing ghosts - in this verison they are afer the ghostBust()
   //TODO add quality cut!!!
   for(unsigned int i1 = 0; i1 < matchingResults.size(); i1++) {
@@ -610,6 +652,11 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, std::vector<Matchi
 
   MatchingResult* bestOmtfCand = nullptr;
   for (auto& matchingResult: matchingResults ) {
+    if( (matchingResult.trackingParticle || matchingResult.simTrack) &&
+        ( std::abs(matchingResult.propagatedEta) > 0.8 && std::abs(matchingResult.propagatedEta) < 1.24) ) {
+      ptGenHist->Fill(matchingResult.genPt);
+    }
+
     if(matchingResult.muonCand) {
       if(!bestOmtfCand || bestOmtfCand->muonCand->hwPt() < matchingResult.muonCand->hwPt()) {
         bestOmtfCand = &matchingResult;
@@ -792,9 +839,9 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, const edm::EventSe
 }
 
 void L1MuonAnalyzerOmtf::endJob() {
-  if(useMatcher) {
+  /*if(useMatcher) {
     muonMatcher.saveHists();
-  }
+  }*/
 }
 
 #include "FWCore/Framework/interface/MakerMacros.h"

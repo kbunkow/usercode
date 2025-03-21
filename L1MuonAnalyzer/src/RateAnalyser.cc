@@ -192,10 +192,11 @@ void CandsMatchingAnalyser::fill(L1MuonCand& l1MuonCand, const TrackingParticle*
 
 
     if(matchedTrackingParticle->parentVertex().isNonnull() ) {
-      LogTrace("l1tMuBayesEventPrint")<<" CandsMatchingAnalyser parentVertex Rho "<<matchedTrackingParticle->parentVertex()->position().Rho()<<std::endl;
+      LogTrace("l1MuonAnalyzerOmtf")<<" CandsMatchingAnalyser parentVertex Rho "<<matchedTrackingParticle->parentVertex()->position().Rho()
+                                      <<" parentVertex()->sourceTracks().size() "<< matchedTrackingParticle->parentVertex()->sourceTracks().size() <<std::endl;
       for(auto& parentTrack : matchedTrackingParticle->parentVertex()->sourceTracks() ) {
         parentTrackPdgId = parentTrack->pdgId();
-        LogTrace("l1tMuBayesEventPrint")<<" CandsMatchingAnalyser parentTrackPdgId "<<parentTrackPdgId<<std::endl;
+        LogTrace("l1MuonAnalyzerOmtf")<<" CandsMatchingAnalyser parentTrackPdgId "<<parentTrackPdgId<<std::endl;
       }
     }
 

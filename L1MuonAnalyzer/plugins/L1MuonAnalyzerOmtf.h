@@ -65,7 +65,7 @@
 
 #include "L1Trigger/L1TMuon/interface/MicroGMTConfiguration.h"
 
-#include "usercode/L1MuonAnalyzer/interface/MuonMatcher.h"
+//#include "usercode/L1MuonAnalyzer/interface/MuonMatcher.h"
 #include "L1Trigger/L1TMuonOverlapPhase1/interface/Tools/CandidateSimMuonMatcher.h"
 #include "usercode/L1MuonAnalyzer/interface/EfficiencyAnalyser.h"
 #include "usercode/L1MuonAnalyzer/interface/RateAnalyser.h"
@@ -116,11 +116,9 @@ public:
 private:
   std::string analysisType;
 
+  CandidateSimMuonMatcher::MatchingType matchingType = CandidateSimMuonMatcher::MatchingType::simpleMatching;
+
   bool useMatcher = false;
-
-  bool matchUsingPropagation = true;
-
-  bool fillMatcherHists = false;
 
   edm::EDGetTokenT<edm::SimTrackContainer> simTrackToken;
 
@@ -134,7 +132,9 @@ private:
   edm::ESGetToken<Propagator, TrackingComponentsRecord> propagatorEsToken;
 
 
-  MuonMatcher muonMatcher;
+  //MuonMatcher muonMatcher;
+
+  CandidateSimMuonMatcher candidateSimMuonMatcher;
 
 
   std::vector<std::unique_ptr<EfficiencyAnalyser> > omtfEfficiencyAnalysers;
@@ -173,6 +173,9 @@ private:
 
   TH1* candEtaPtCut1 = nullptr;
   TH1* candEtaPtCut10 = nullptr;
+
+  TH1* muonsPerEvent = nullptr;
+  TH1* muonsPerEventInOmtf = nullptr;
 
   int nProcessors = 6;
  };
