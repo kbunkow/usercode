@@ -4,7 +4,7 @@ config = Configuration()
 
 config.section_("General")
 #config.General.requestName = 'omtf_run3_ZeroBias_Run2023_367883_t27a_1'
-config.General.requestName = 'omtf_Phase2Spring24_MinBias_' + '_t36'
+config.General.requestName = 'omtf_Phase2Spring24_MinBias_' + '_t37'
 #config.General.workArea = 'jobs_SM_Run2017E-ZMu-17Nov2017'
 #config.General.workArea = 'jobs_JHT_2018D'
 config.General.transferLogs = True 

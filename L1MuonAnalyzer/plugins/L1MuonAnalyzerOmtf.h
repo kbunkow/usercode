@@ -101,7 +101,7 @@ public:
   //virtual void analyzeRate(const edm::Event& event, std::vector<MatchingResult>& matchingResults, const edm::SimVertexContainer* simVertices);
   virtual void analyzeRate(const edm::Event& event, std::vector<MatchingResult>& matchingResults);
 
-  virtual void analyzeRate(const edm::Event&, const edm::EventSetup&);
+  //virtual void analyzeRate(const edm::Event&, const edm::EventSetup&);
 
   void endJob() override;
 
@@ -116,7 +116,7 @@ public:
 private:
   std::string analysisType;
 
-  CandidateSimMuonMatcher::MatchingType matchingType = CandidateSimMuonMatcher::MatchingType::simpleMatching;
+  CandidateSimMuonMatcher::MatchingType matchingType = CandidateSimMuonMatcher::MatchingType::collectMuonCands;
 
   bool useMatcher = false;
 

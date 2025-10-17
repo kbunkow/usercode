@@ -40,13 +40,14 @@ if args.analysisType :
 if analysisType == "efficiency" :
     candidateSimMuonMatcherType = "simpleMatching"
 elif analysisType == "rate" :
-    candidateSimMuonMatcherType = "simplePropagation"
+    #candidateSimMuonMatcherType = "simplePropagation"
+    candidateSimMuonMatcherType = "withPropagator"
     genParticlesType = "trackingParticle" 
     
 
 regeneratedL1DT = True
 
-useNN = False
+useNN = True
 
 #watch out: L1Trigger/L1TMuon/data/omtf_config/ExtrapolationFactors_ExtraplMB1nadMB2DTQualAndR_EtaValueP1Scale_t25c.xml is only for the minDtPhiQuality = 2!!!!!!!!!!!!!!!!!!!
 #there are no entries of quality 0 and 1 there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -54,13 +55,14 @@ minDtPhiQuality = 2
 minDtPhiBQuality = 2
 dtRefHitMinQuality = 2
 
-version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t36" #WK - dumping killed candidates
+version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t37" #WK - dumping killed candidates
 #version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
 
 log_threshold = 'INFO'
 if test_mode :
-    version = version + "_test11_tp_mpSortedCSC_"
+    version = version + "_test20_"
     log_threshold = 'DEBUG'
+    #log_threshold = 'INFO' ####<<<<<<<<<<<<<<<<<<<<<<,
     
 if useNN :
     version = version + "_NN"
@@ -261,6 +263,24 @@ if filesNameLike == '14_1_0pre3_11_06_2024_Dxy5m_PhaseII' :
     paths = [    
              {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/14_1_0pre3_11_06_2024_Dxy5m_PhaseII/", "fileCnt" : 10000},#2311 files
              ]  
+    
+if filesNameLike == 'MinBias_Phase2Spring23_PU200' :
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/ThinnedOfficialMC/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU200/", "fileCnt" : 10000},#2311 files
+             ]      
+           
+    
+if filesNameLike == 'MinBias_Phase2Spring23_PU140' :
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/ThinnedOfficialMC/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU140/", "fileCnt" : 10000},#2311 files
+             ]
+           
            
 if filesNameLike == "test":
     paths = [ ]
@@ -295,7 +315,7 @@ if filesNameLike == "test":
     chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_431.root')
 
 if filesNameLike == "MinBias_Phase2Spring24":
-    candidateSimMuonMatcherType = "simplePropagation"
+    candidateSimMuonMatcherType = "withPropagator"
     genParticlesType = "trackingParticle" 
     
     analysisType = "rate" # or rate efficiency
@@ -378,6 +398,8 @@ process.simOmtfPhase2Digis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/d
 
 if genParticlesType == "trackingParticle" :
     process.simOmtfPhase2Digis.trackingParticleTag = cms.InputTag("mix", "MergedTrackTruth")
+    #process.simOmtfPhase2Digis.trackingParticleTag = cms.InputTag("prunedTrackingParticles")
+    
 elif genParticlesType == "simTrack" :
     process.simOmtfPhase2Digis.simTracksTag = cms.InputTag('g4SimHits')
     process.simOmtfPhase2Digis.simVertexesTag = cms.InputTag('g4SimHits')
@@ -397,7 +419,7 @@ process.simOmtfPhase2Digis.dtRefHitMinQuality =  cms.int32(dtRefHitMinQuality)
 process.simOmtfPhase2Digis.ghostBusterType = cms.string("byRefLayerAndHitQual") #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 if useNN :
-    process.simOmtfPhase2Digis.neuralNetworkFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/lutNN_omtfRegression_v430_FP.xml")
+    process.simOmtfPhase2Digis.neuralNetworkFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/lutNN_omtfRegression_v435_FP.xml")
 
 #TODO tune the matching thresholds in CandidateSimMuonMatcher::matchSimple
 #or CandidateSimMuonMatcher::match
@@ -430,6 +452,7 @@ process.L1MuonAnalyzerOmtf = cms.EDAnalyzer("L1MuonAnalyzerOmtf",
 
 if genParticlesType == "trackingParticle" :
     process.L1MuonAnalyzerOmtf.trackingParticleTag = cms.InputTag("mix", "MergedTrackTruth")
+    #process.L1MuonAnalyzerOmtf.trackingParticleTag = cms.InputTag("prunedTrackingParticles")
 elif genParticlesType == "simTrack" :
     process.L1MuonAnalyzerOmtf.simTracksTag = cms.InputTag('g4SimHits')
     process.L1MuonAnalyzerOmtf.simVertexesTag = cms.InputTag('g4SimHits')

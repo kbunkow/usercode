@@ -151,7 +151,7 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 22, 100, 400/20, false, true));
       omtfEfficiencyAnalysers.emplace_back(new EfficiencyPtGenVsDxy(subDir, name, qualityCut, 22, 100, 400/20, true, true));
 
-      omtfEfficiencyAnalysers.emplace_back(new LikelihoodDistribution(subDir, name, qualityCut, ptGenCut, ptL1Cut, 120));
+      //omtfEfficiencyAnalysers.emplace_back(new LikelihoodDistribution(subDir, name, qualityCut, ptGenCut, ptL1Cut, 120));
     };
 
     addOmtfAnalysers(subDir, "omtf_q12", 12);
@@ -392,6 +392,31 @@ bool trackingParticleIsMuonInOmtfEvent0(const TrackingParticle& trackingParticle
   return trackingParticleIsMuonInOmtfBx0(trackingParticle);
 }
 
+
+bool trackingParticleIsMuonInBx0Displ(const TrackingParticle& trackingParticle) {
+  if (std::abs(trackingParticle.pdgId()) == 13 ||
+      std::abs(trackingParticle.pdgId()) ==
+          1000015) {  // 1000015 is stau, todo use other selection (e.g. pt>20) if needed
+
+    if(trackingParticle.pt() < 2.) //in the overlap, the propagation of muons with pt less then ~3.2 fails - the actual threshold depends slightly on eta,
+      return false;
+
+    if(trackingParticle.dxy() < 30) {
+      if ((std::abs(trackingParticle.momentum().eta()) < 0.7) || (std::abs(trackingParticle.momentum().eta()) > 1.31))
+        return false;
+    }
+    else {
+      if ((std::abs(trackingParticle.parentVertex()->position().eta()) < 0.7) || (std::abs(trackingParticle.parentVertex()->position().eta()) > 1.4))
+        return false;
+    }
+
+    //only muons
+    if (trackingParticle.eventId().bunchCrossing() == 0)
+      return true;
+  }
+  return false;
+}
+
 void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup& es) {
 
   edm::Handle<l1t::RegionalMuonCandBxCollection> l1omtfHandle;
@@ -424,7 +449,29 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
   }
 
   std::vector<const l1t::RegionalMuonCand*> ghostBustedCands = ghostBust(l1omtfHandle.product());
-  AlgoMuons ghostBustedProcMuons(ghostBustedCands.size()); //needed for candidateSimMuonMatcher, here we just put empty AlgoMuons, as they are not used furher
+
+  FinalMuons finalMuons;
+  for(auto& regMuCan  : ghostBustedCands) {
+    auto finalMuon = std::make_shared<FinalMuon>();
+
+    //from phase-1 values
+    finalMuon->setPtGev(regMuCan->hwPt() > 0 ? (regMuCan->hwPt()-1)/2. : 0);
+    finalMuon->setPtUnconstrGev(regMuCan->hwPtUnconstrained() > 0 ? (regMuCan->hwPtUnconstrained()-1) : 0);
+    finalMuon->setSign(regMuCan->hwSign());
+    finalMuon->setPhiRad( hwGmtPhiToGlobalPhi(calcGlobalPhi( regMuCan->hwPhi(), regMuCan->processor(), nProcessors )));
+    finalMuon->setEtaRad(regMuCan->hwEta() * 0.010875);
+    finalMuon->setQuality(regMuCan->hwQual());
+
+    int layerHits = (int)regMuCan->trackAddress().at(0);
+    finalMuon->setFiredLayerBits(layerHits);
+
+    std::bitset<18> layerHitBits(layerHits);
+    finalMuon->setFiredLayerCnt(layerHitBits.count());
+    //finalMuon->setBx(regMuCan->getb);
+
+    finalMuons.emplace_back(finalMuon);
+    LogTrace("l1MuonAnalyzerOmtf")<<"L1MuonAnalyzerOmtf::analyze finalMuon pt "<<finalMuon->getPtGev()<<" phi "<<finalMuon->getPhiRad()<<" eta "<<finalMuon->getEtaRad();
+  }
 
 
   std::vector<MatchingResult> matchingResults;
@@ -456,7 +503,7 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
 
     std::function<bool(const TrackingParticle& )> trackParticleFilter = trackingParticleIsMuonInOmtfEvent0;
     if(analysisType == "rate") {
-      trackParticleFilter = trackingParticleIsMuonInOmtfBx0; //trackingParticleIsMuonInOmtfBx0;
+      trackParticleFilter = trackingParticleIsMuonInBx0Displ; //trackingParticleIsMuonInOmtfBx0; //trackingParticleIsMuonInOmtfBx0;
     }
 
     if(matchingType == CandidateSimMuonMatcher::MatchingType::simpleMatching) {
@@ -464,19 +511,19 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
       //  matchingResults = candidateSimMuonMatcher.matchSimple(ghostBustedCands, ghostBustedProcMuons, trackingParticleHandle.product(), trackParticleFilter);
       std::function<bool(const SimTrack&)> const& simTrackFilter = simTrackIsMuonInOmtfBx0;
       if(!simTrackToken.isUninitialized())
-        matchingResults = candidateSimMuonMatcher.matchSimple(ghostBustedCands, ghostBustedProcMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
+        matchingResults = candidateSimMuonMatcher.matchSimple(finalMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
     }
     else {
       if(!trackingParticleToken.isUninitialized())
-        matchingResults = candidateSimMuonMatcher.match(ghostBustedCands, ghostBustedProcMuons, trackingParticleHandle.product(), trackParticleFilter);
+        matchingResults = candidateSimMuonMatcher.match(finalMuons, trackingParticleHandle.product(), trackParticleFilter);
 
       else if(!simTrackToken.isUninitialized())
-        matchingResults = candidateSimMuonMatcher.match(ghostBustedCands, ghostBustedProcMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
+        matchingResults = candidateSimMuonMatcher.match(finalMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
     }
   }
   else {// not useMatcher
     LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze:"<<__LINE__<<" ghostBustedCands.size() "<<ghostBustedCands.size()<<std::endl;
-    for(auto& muonCand : ghostBustedCands) {
+    for(auto& muonCand : finalMuons) {
       MatchingResult result;
       result.muonCand = muonCand;
       matchingResults.emplace_back(result);
@@ -500,11 +547,11 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
   double etaUnit = 0.010875; //TODO from the interface note, should be defined somewhere globally
   for (auto& matchingResult: matchingResults ) {
     if(matchingResult.muonCand != nullptr) {
-      if(matchingResult.muonCand->hwQual() >= 1)
-        candEtaPtCut1->Fill(matchingResult.muonCand->hwEta() * etaUnit); //TODO use some function for eta conversion
+      if(matchingResult.muonCand->getQuality() >= 1)
+        candEtaPtCut1->Fill(matchingResult.muonCand->getEtaRad()); //TODO use some function for eta conversion
 
-      if(matchingResult.muonCand->hwQual() >= 4 && matchingResult.muonCand->hwPt() >= 21) //TODO use some function for pt conversion
-        candEtaPtCut10->Fill(matchingResult.muonCand->hwEta() * etaUnit);
+      if(matchingResult.muonCand->getQuality() >= 4 && matchingResult.muonCand->getPtGev() >= 10) //TODO use some function for pt conversion
+        candEtaPtCut10->Fill(matchingResult.muonCand->getEtaRad());
     }
 
     if(matchingResult.simTrack || matchingResult.trackingParticle) {
@@ -529,8 +576,8 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
           auto& mtfCand1 = matchingResults[i1].muonCand;
           auto& mtfCand2 = matchingResults[i2].muonCand;
 
-          int gloablHwPhi1 = calcGlobalPhi( mtfCand1->hwPhi(), mtfCand1->processor(), nProcessors ) ; //0...(576-1)
-          int gloablHwPhi2 = calcGlobalPhi( mtfCand2->hwPhi(), mtfCand2->processor(), nProcessors ) ;
+          int gloablHwPhi1 = mtfCand1->getPhiRad(); //0...(576-1)
+          int gloablHwPhi2 = mtfCand2->getPhiRad();
           //double globalPhi1 = hwGmtPhiToGlobalPhi(l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand1.hwPhi(), mtfCand1.trackFinderType(), mtfCand1.processor() ) );
           //double globalPhi2 = hwGmtPhiToGlobalPhi(l1t::MicroGMTConfiguration::calcGlobalPhi( mtfCand2.hwPhi(), mtfCand2.trackFinderType(), mtfCand2.processor() ) );
 
@@ -565,20 +612,20 @@ void L1MuonAnalyzerOmtf::analyzeEfficiency(const edm::Event& event, std::vector<
 
       L1MuonCand l1MuonCand;  //empty cand
       if(matchingResult.muonCand) {
-        L1MuonCand l1MuonCand1(*(matchingResult.muonCand));
+        L1MuonCand l1MuonCand1(matchingResult.muonCand);
         l1MuonCand = l1MuonCand1;
         //l1MuonCand.ptGev = hwPtToPtGeV(matchingResult.muonCand->hwPt() ); //TODO
 
         if(matchingResult.genPt >= 25) {
           if(l1MuonCand.hwQual > 0) {//removes candidates with abs(eta) > 1.24
-            int firedLayers = matchingResult.muonCand->trackAddress().at(0);
+            int firedLayers = matchingResult.muonCand->getFiredLayerBits();
             if( abs(l1MuonCand.ptGev) >= 18) {
               firedLayersEventCntOmtf->AddBinContent(firedLayers +1);
             }
 
-            if(omtfNNEfficiencyAnalysers.size() && abs(hwPtToPtGeV(matchingResult.muonCand->trackAddress().at(10 + 2) ) ) >= 22) {//TODO nn pt for the p threshold 0.45, change if other is needed
+            /*if(omtfNNEfficiencyAnalysers.size() && abs(hwPtToPtGeV(matchingResult.muonCand->trackAddress().at(10 + 2) ) ) >= 22) {//TODO nn pt for the p threshold 0.45, change if other is needed
               firedLayersEventCntNN->AddBinContent(firedLayers +1);
-            }
+            }*/
           }
         }
       }
@@ -600,9 +647,9 @@ void L1MuonAnalyzerOmtf::analyzeEfficiency(const edm::Event& event, std::vector<
       }
 
       for(unsigned int i = 0; i < omtfNNEfficiencyAnalysers.size(); i++) {
-        if(matchingResult.muonCand) {
+        /*if(matchingResult.muonCand) { TODO ???????
           l1MuonCand.ptGev = fabs(hwPtToPtGeV(matchingResult.muonCand->trackAddress().at(10 + i/9) ) ); //TODO check if abs is in the proper place, TODO i/2 because there are 2 Analysers, change if toehre addeds
-        }
+        }*/
         omtfNNEfficiencyAnalysers[i]->fill(matchingResult.genPt, matchingResult.propagatedEta, matchingResult.propagatedPhi, muDxy, l1MuonCand); //TODO
       }
     }
@@ -658,7 +705,7 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, std::vector<Matchi
     }
 
     if(matchingResult.muonCand) {
-      if(!bestOmtfCand || bestOmtfCand->muonCand->hwPt() < matchingResult.muonCand->hwPt()) {
+      if(!bestOmtfCand || bestOmtfCand->muonCand->getPtGev() < matchingResult.muonCand->getPtGev()) {
         bestOmtfCand = &matchingResult;
       }
     }
@@ -672,21 +719,22 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, std::vector<Matchi
 
   L1MuonCand l1MuonCand;  //empty cand
   if(bestOmtfCand) {
-    LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyzeRate bestOmtfCand muonCand->hwPt "<<bestOmtfCand->muonCand->hwPt()<<" trackingParticle "<<bestOmtfCand->trackingParticle <<std::endl;
+    LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyzeRate bestOmtfCand muonCand->getPtGev "<<bestOmtfCand->muonCand->getPtGev()<<" trackingParticle "<<bestOmtfCand->trackingParticle <<std::endl;
 
-    L1MuonCand l1MuonCand1(*(bestOmtfCand->muonCand) );
+    L1MuonCand l1MuonCand1(bestOmtfCand->muonCand);
     l1MuonCand = l1MuonCand1;
-    l1MuonCand.ptGev = hwPtToPtGeV(bestOmtfCand->muonCand->hwPt() ); //TODO
+    l1MuonCand.ptGev = bestOmtfCand->muonCand->getPtGev(); //TODO
 
     if(l1MuonCand.hwQual > 0) {//removes candidates with abs(eta) > 1.24
-      int firedLayers = bestOmtfCand->muonCand->trackAddress().at(0);
+      int firedLayers = bestOmtfCand->muonCand->getFiredLayerBits();
       if(abs(l1MuonCand.ptGev) >= 16) {
         firedLayersEventCntOmtf->AddBinContent(firedLayers +1);
       }
 
-      if(omtfNNRateAnalysers.size() &&  abs(hwPtToPtGeV(bestOmtfCand->muonCand->trackAddress().at(10 + 2) ) ) >= 22) {//TODO nn pt for the p threshold 0.45, change if other is needed
+      //TODO?????????????????????/
+      /*if(omtfNNRateAnalysers.size() &&  abs(hwPtToPtGeV(bestOmtfCand->muonCand->trackAddress().at(10 + 2) ) ) >= 22) {//TODO nn pt for the p threshold 0.45, change if other is needed
         firedLayersEventCntNN->AddBinContent(firedLayers +1);
-      }
+      }*/
     }
 
     /*if(bestOmtfCand->muonCand->hwQual() >= 1 && bestOmtfCand->muonCand->hwPt() >= 41) { //41
@@ -734,7 +782,8 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, std::vector<Matchi
      */
     for(unsigned int i = 0; i < omtfNNRateAnalysers.size(); i++) {
       if(bestOmtfCand) {
-        l1MuonCand.ptGev = fabs(hwPtToPtGeV(bestOmtfCand->muonCand->trackAddress().at(10 + i/3) ) ); //TODO check if abs is in the proper place, TODO watch aout the i
+        //TODO ???????????????????
+        //l1MuonCand.ptGev = fabs(hwPtToPtGeV(bestOmtfCand->muonCand->trackAddress().at(10 + i/3) ) ); //TODO check if abs is in the proper place, TODO watch aout the i
       }
       omtfNNRateAnalysers[i]->fill( l1MuonCand);
       omtfNNCandsMatchingAnalysers.at(i)->fill(l1MuonCand, bestOmtfCand->trackingParticle);
@@ -747,11 +796,12 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, std::vector<Matchi
 
 }
 
+/*
 void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, const edm::EventSetup& es) {
   //LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyzeRate"<<std::endl;
 
-  /*edm::Handle<edm::SimTrackContainer> simTraksHandle;
-  event.getByToken(simTrackToken, simTraksHandle); */
+  edm::Handle<edm::SimTrackContainer> simTraksHandle;
+  event.getByToken(simTrackToken, simTraksHandle);
 
   edm::Handle<l1t::RegionalMuonCandBxCollection> l1omtfHandle;
   event.getByToken(omtfToken, l1omtfHandle);
@@ -804,9 +854,9 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, const edm::EventSe
 
   L1MuonCand l1MuonCand;  //empty cand
   if(bestOmtfCand) {
-    L1MuonCand l1MuonCand1(*bestOmtfCand);
+    L1MuonCand l1MuonCand1(bestOmtfCand);
     l1MuonCand = l1MuonCand1;
-    l1MuonCand.ptGev = hwPtToPtGeV(bestOmtfCand->hwPt() ); //TODO
+    l1MuonCand.ptGev = bestOmtfCand->getPtGev(); //TODO
 
     if(l1MuonCand.hwQual > 0) {//removes candidates with abs(eta) > 1.24
       int firedLayers = bestOmtfCand->trackAddress().at(0);
@@ -834,9 +884,7 @@ void L1MuonAnalyzerOmtf::analyzeRate(const edm::Event& event, const edm::EventSe
     }
     omtfNNRateAnalysers[i]->fill( l1MuonCand);
   }
-
-
-}
+}*/
 
 void L1MuonAnalyzerOmtf::endJob() {
   /*if(useMatcher) {

@@ -97,9 +97,9 @@ void RateAnalyser::fill(L1MuonCand& l1MuonCand) {
     candPt->Fill(candPtGev);
     candUPt->Fill(candUPtGev);
 
-    auto eta = hwEtaToEta(l1MuonCand.hwEta);
+    auto eta = l1MuonCand.etaRad;
 
-    double candGlobalPhi = L1MuAn::calcGlobalPhi( l1MuonCand.hwPhi, l1MuonCand.processor, nProcessors );
+    double candGlobalPhi = l1MuonCand.phiRad;
     double phi = L1MuAn::hwGmtPhiToGlobalPhi(candGlobalPhi ); //[rad]
     phi =  phi * 180. / M_PI;
 
