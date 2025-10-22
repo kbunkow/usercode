@@ -63,16 +63,14 @@ fileNames = cms.untracked.vstring("file:///eos/user/a/akalinow/Data/SingleMu/12_
 	                    
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1)) #1000
 
-process.load('Configuration.Geometry.GeometryExtended2026D86Reco_cff')
-process.load('Configuration.Geometry.GeometryExtended2026D86_cff')
+process.load('Configuration.Geometry.GeometryExtendedRun4D110Reco_cff')
+process.load('Configuration.Geometry.GeometryExtendedRun4D110_cff')
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-#process.load('Configuration.Geometry.GeometryExtended2026D41Reco_cff')
-#process.load('Configuration.Geometry.GeometryExtended2026D41_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 #process.load('Configuration.StandardSequences.SimL1Emulator_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')

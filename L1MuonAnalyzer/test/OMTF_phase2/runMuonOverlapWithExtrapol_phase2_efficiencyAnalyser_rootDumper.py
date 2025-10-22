@@ -60,7 +60,7 @@ version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDt
 
 log_threshold = 'INFO'
 if test_mode :
-    version = version + "_test20_"
+    version = version + "_test21_"
     log_threshold = 'DEBUG'
     #log_threshold = 'INFO' ####<<<<<<<<<<<<<<<<<<<<<<,
     
@@ -112,7 +112,7 @@ process.load('Configuration.StandardSequences.Services_cff')
 #process.load('FWCore.MessageService.MessageLogger_cfi')
 #process.load('Configuration.EventContent.EventContent_cff')
 #process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D95Reco_cff')
+process.load('Configuration.Geometry.GeometryExtendedRun4D110Reco_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 #process.load('Configuration.StandardSequences.RawToDigi_cff')
 #process.load('Configuration.StandardSequences.SimL1Emulator_cff')
