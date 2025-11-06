@@ -36,6 +36,7 @@
 //#include "SimTracker/TrackTriggerAssociation/interface/TTClusterAssociationMap.h"
 //#include "SimTracker/TrackTriggerAssociation/interface/TTStubAssociationMap.h"
 //#include "SimTracker/TrackTriggerAssociation/interface/TTTrackAssociationMap.h"
+#include "DataFormats/L1TMuonPhase2/interface/SAMuon.h"
 #include "Geometry/Records/interface/StackedTrackerGeometryRecord.h"
 
 ////////////////////////////
@@ -114,6 +115,8 @@ public:
   bool matched(const edm::Ptr< SimTrack >& simTrackPtr, const l1t::RegionalMuonCand& omtfCand);
 
 private:
+  bool useSamMuons = true;
+
   std::string analysisType;
 
   CandidateSimMuonMatcher::MatchingType matchingType = CandidateSimMuonMatcher::MatchingType::collectMuonCands;
@@ -127,6 +130,8 @@ private:
   edm::EDGetTokenT<TrackingParticleCollection> trackingParticleToken;
 
   edm::EDGetTokenT<l1t::RegionalMuonCandBxCollection > omtfToken;
+  edm::EDGetTokenT<l1t::SAMuonCollection > omtfConstrToken;
+  edm::EDGetTokenT<l1t::SAMuonCollection > omtfUnconstrTOken;
 
   edm::ESGetToken<MagneticField, IdealMagneticFieldRecord> magneticFieldEsToken;
   edm::ESGetToken<Propagator, TrackingComponentsRecord> propagatorEsToken;
@@ -177,8 +182,12 @@ private:
   TH1* muonsPerEvent = nullptr;
   TH1* muonsPerEventInOmtf = nullptr;
 
+  TH2* candEtaQual = nullptr;
+
   int nProcessors = 6;
  };
-
 }
+
+//std::ostringstream& operator<<(std::ostringstream& os, const l1t::SAMuon& m);
+
 #endif /* PLUGINS_L1MUONANALYZEROMTF_H_ */

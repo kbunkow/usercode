@@ -13,6 +13,22 @@
 
 #include "L1Trigger/L1TMuonOverlapPhase1/interface/Omtf/OmtfName.h"
 
+//std::ostringstream& operator<<(std::ostringstream& os, const l1t::SAMuon& m)
+std::string toString(const l1t::SAMuon& m)
+{
+  std::ostringstream os;
+  os << "SAMuon";
+  os << ", tfType " << m.tfType();
+  os << ", hwPt " << std::setw(3) << m.hwPt()<<" phPt = "<< std::setw(8) << m.phPt()<<" Gev";
+  os << ", hwCharge " << m.hwCharge()<<" phCharge "<< m.phCharge();
+  os << ", hwEta " << std::setw(5)<< m.hwEta()<<" phEta "<< std::setw(8)<< m.phEta();
+  os << ", hwPhi " << std::setw(5)<< m.hwPhi()<< " phPhi "<< std::setw(8)<< m.phPhi();
+  os << ", hwD0 " << std::setw(5)<< m.hwD0()<<" phD0 "<< std::setw(8)<< m.phD0();
+  os << ", hwZ0 " << std::setw(5)<< m.hwZ0()<<" phZ0 "<< std::setw(8)<< m.phZ0();
+  os << ", qual " << m.hwQual();
+  return os.str();
+}
+
 namespace L1MuAn {
 
 double hwGmtPhiToGlobalPhi(int phi) {
@@ -72,6 +88,9 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
 
   omtfToken = consumes<l1t::RegionalMuonCandBxCollection >(edmCfg.getParameter<edm::InputTag>("L1OMTFInputTag"));
 
+  omtfConstrToken = consumes<l1t::SAMuonCollection>(edm::InputTag("simOmtfPhase2Digis", "OMTFconstr"));
+  omtfUnconstrTOken = consumes<l1t::SAMuonCollection>(edm::InputTag("simOmtfPhase2Digis", "OMTFunconstr"));
+
   if(edmCfg.exists("simVertexesTag") ) {
     simTrackToken =  consumes<edm::SimTrackContainer>(edm::InputTag("g4SimHits")); //TODO which is correct?
 
@@ -112,6 +131,8 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
   muonsPerEventInOmtf = fs->make<TH1D>("muonsPerEventInOmtf", "muonsPerEventInOmtf", 21, -0.5, 20.5);
 
   ptGenHist = fs->make<TH1I>("ptGenHist", "ptGenHist", 1000, 0, 1000);
+
+  candEtaQual = fs->make<TH2D>("candEtaQual", "candEtaQual;eta;quality", 100, -1.5, 1.5, 16, -0.5, 15.5);
 
   if(edmCfg.exists("nn_pThresholds") )
     nn_pThresholds = edmCfg.getParameter<vector<double> >("nn_pThresholds");
@@ -421,58 +442,103 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
 
   edm::Handle<l1t::RegionalMuonCandBxCollection> l1omtfHandle;
   event.getByToken(omtfToken, l1omtfHandle);
-
-  LogTrace("l1MuonAnalyzerOmtf")<<std::endl<<"\nL1MuonAnalyzerOmtf::analyze. run "<<event.id().run()<<" event "<<event.id().event()
-          <<" number of candidates "<<l1omtfHandle.product()->size(0)<<" ---------------------------"<<std::endl;
-
-  //for(int bx = l1omtfHandle.product()->getFirstBX(); bx <= l1omtfHandle.product()->getLastBX(); bx++) //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!
   int bx = 0;
-  {
-    for (auto finalCandidateIt = l1omtfHandle.product()->begin(bx); finalCandidateIt !=  l1omtfHandle.product()->end(bx); finalCandidateIt++) {
-      auto& finalCandidate = *finalCandidateIt;
-      int layerHits = (int)finalCandidate.trackAddress().at(0);
-      std::bitset<18> layerHitBits(layerHits);
 
-      LogTrace("l1MuonAnalyzerOmtf")<<" bx "<<bx
-          << " hwPt " <<std::setw(3)<< finalCandidate.hwPt()
-          << " hwUPt " <<std::setw(3)<< finalCandidate.hwPtUnconstrained()
-          << " hwSign " << finalCandidate.hwSign() << " hwQual "
-          <<std::setw(2)<< finalCandidate.hwQual() << " hwEta " << std::setw(4) << finalCandidate.hwEta()
-          << std::setw(4) << " hwPhi " << finalCandidate.hwPhi()
-          << "    eta " << std::setw(9) << (finalCandidate.hwEta() * 0.010875)
-          //<< " phi "<< std::setw(9) << globalPhi << " "
-          <<" firedLayers " << layerHitBits << " processor " <<finalCandidate.processor()
-          << " trackFinderType "<<finalCandidate.trackFinderType()
-          //<< OmtfName(finalCandidate.processor(), finalCandidate.trackFinderType())
-          << std::endl;
+  FinalMuons allFinalMuons;
+  LogTrace("l1MuonAnalyzerOmtf")<<std::endl<<"\nL1MuonAnalyzerOmtf::analyze. run "<<event.id().run()<<" event "<<event.id().event()<<" ---------------------------"<<std::endl;
+  if (useSamMuons) {
+    edm::Handle<l1t::SAMuonCollection> l1omtfConstrHandle;
+    event.getByToken(omtfConstrToken, l1omtfConstrHandle);
+    auto& constrainedMuons = *l1omtfConstrHandle.product();
+
+    edm::Handle<l1t::SAMuonCollection> l1omtfUnconstrHandle;
+    event.getByToken(omtfUnconstrTOken, l1omtfUnconstrHandle);
+    auto& unconstrainedMuons = *l1omtfUnconstrHandle.product();
+
+    if(constrainedMuons.size() != unconstrainedMuons.size()) {
+      edm::LogVerbatim("l1MuonAnalyzerOmtf")<<"WARNING: number of constrained SA muons ("<<constrainedMuons.size()
+      <<") is different from number of unconstrained SA muons ("<<unconstrainedMuons.size()<<")"<<std::endl;
+      throw cms::Exception("L1MuonAnalyzerOmtf")<<"number of constrained SA muons is different from number of unconstrained SA muons";
+    }
+
+    LogTrace("l1MuonAnalyzerOmtf")<<"  number of SAMuons "<<l1omtfConstrHandle.product()->size()<<std::endl;
+
+    for(unsigned int i = 0; i < constrainedMuons.size(); ++i) {
+      auto& regMuCan = l1omtfHandle.product()->at(bx, i);
+      auto& constrMuon = constrainedMuons[i];
+      auto& unconstrMuon = unconstrainedMuons[i];
+
+      auto finalMuon = std::make_shared<FinalMuon>();
+
+      LogTrace("l1MuonAnalyzerOmtf")<<" Constrained SA muon:   "<<toString(constrMuon)<<std::endl;
+      LogTrace("l1MuonAnalyzerOmtf")<<" Unconstrained SA muon: "<<toString(unconstrMuon)<<std::endl;
+
+      //from phase-1 values
+      finalMuon->setPtGev(constrMuon.phPt());
+      finalMuon->setPtUnconstrGev(unconstrMuon.phPt());
+      finalMuon->setSign(constrMuon.phCharge());
+      finalMuon->setPhiRad( constrMuon.phPhi() );
+      finalMuon->setEtaRad(constrMuon.phEta() );
+      finalMuon->setQuality(constrMuon.hwQual());
+
+      int layerHits = (int)regMuCan.trackAddress().at(0);
+      finalMuon->setFiredLayerBits(layerHits);
+
+      std::bitset<18> layerHitBits(layerHits);
+      finalMuon->setFiredLayerCnt(layerHitBits.count());
+      //finalMuon->setBx(regMuCan->getb);
+
+      allFinalMuons.emplace_back(finalMuon);
+      LogTrace("l1MuonAnalyzerOmtf")<<"finalMuon pt "<<finalMuon->getPtGev()<<" phi "<<finalMuon->getPhiRad()<<" eta "<<finalMuon->getEtaRad();
+    }
+
+  }
+  else {
+    //for(int bx = l1omtfHandle.product()->getFirstBX(); bx <= l1omtfHandle.product()->getLastBX(); bx++) //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    {
+      for (auto regMuCan = l1omtfHandle.product()->begin(bx); regMuCan !=  l1omtfHandle.product()->end(bx); regMuCan++) {
+        auto finalMuon = std::make_shared<FinalMuon>();
+
+        //from phase-1 values
+        finalMuon->setPtGev(regMuCan->hwPt() > 0 ? (regMuCan->hwPt()-1)/2. : 0);
+        finalMuon->setPtUnconstrGev(regMuCan->hwPtUnconstrained() > 0 ? (regMuCan->hwPtUnconstrained()-1) : 0);
+        finalMuon->setSign(regMuCan->hwSign());
+        finalMuon->setPhiRad( hwGmtPhiToGlobalPhi(calcGlobalPhi( regMuCan->hwPhi(), regMuCan->processor(), nProcessors )));
+        finalMuon->setEtaRad(regMuCan->hwEta() * 0.010875);
+        finalMuon->setQuality(regMuCan->hwQual());
+
+        int layerHits = (int)regMuCan->trackAddress().at(0);
+        finalMuon->setFiredLayerBits(layerHits);
+
+        std::bitset<18> layerHitBits(layerHits);
+        finalMuon->setFiredLayerCnt(layerHitBits.count());
+        //finalMuon->setBx(regMuCan->getb);
+
+        allFinalMuons.emplace_back(finalMuon);
+
+        LogTrace("l1MuonAnalyzerOmtf")<<" regMuCan: bx "<<bx
+            << " hwPt " <<std::setw(3)<< regMuCan->hwPt()
+            << " hwUPt " <<std::setw(3)<< regMuCan->hwPtUnconstrained()
+            << " hwSign " << regMuCan->hwSign() << " hwQual "
+            <<std::setw(2)<< regMuCan->hwQual() << " hwEta " << std::setw(4) << regMuCan->hwEta()
+            << std::setw(4) << " hwPhi " << regMuCan->hwPhi()
+            << "    eta " << std::setw(9) << (regMuCan->hwEta() * 0.010875)
+            //<< " phi "<< std::setw(9) << globalPhi << " "
+            <<" firedLayers " << layerHitBits << " processor " <<regMuCan->processor()
+            << " trackFinderType "<<regMuCan->trackFinderType()
+            //<< OmtfName(finalCandidate.processor(), finalCandidate.trackFinderType())
+            << std::endl;
+        LogTrace("l1MuonAnalyzerOmtf")<<" finalMuon pt "<<finalMuon->getPtGev()<<" phi "<<finalMuon->getPhiRad()<<" eta "<<finalMuon->getEtaRad();
+      }
     }
   }
 
-  std::vector<const l1t::RegionalMuonCand*> ghostBustedCands = ghostBust(l1omtfHandle.product());
+  LogTrace("l1MuonAnalyzerOmtf")<<"";
 
-  FinalMuons finalMuons;
-  for(auto& regMuCan  : ghostBustedCands) {
-    auto finalMuon = std::make_shared<FinalMuon>();
+  //std::vector<const l1t::RegionalMuonCand*> ghostBustedCands = ghostBust(l1omtfHandle.product());
 
-    //from phase-1 values
-    finalMuon->setPtGev(regMuCan->hwPt() > 0 ? (regMuCan->hwPt()-1)/2. : 0);
-    finalMuon->setPtUnconstrGev(regMuCan->hwPtUnconstrained() > 0 ? (regMuCan->hwPtUnconstrained()-1) : 0);
-    finalMuon->setSign(regMuCan->hwSign());
-    finalMuon->setPhiRad( hwGmtPhiToGlobalPhi(calcGlobalPhi( regMuCan->hwPhi(), regMuCan->processor(), nProcessors )));
-    finalMuon->setEtaRad(regMuCan->hwEta() * 0.010875);
-    finalMuon->setQuality(regMuCan->hwQual());
-
-    int layerHits = (int)regMuCan->trackAddress().at(0);
-    finalMuon->setFiredLayerBits(layerHits);
-
-    std::bitset<18> layerHitBits(layerHits);
-    finalMuon->setFiredLayerCnt(layerHitBits.count());
-    //finalMuon->setBx(regMuCan->getb);
-
-    finalMuons.emplace_back(finalMuon);
-    LogTrace("l1MuonAnalyzerOmtf")<<"L1MuonAnalyzerOmtf::analyze finalMuon pt "<<finalMuon->getPtGev()<<" phi "<<finalMuon->getPhiRad()<<" eta "<<finalMuon->getEtaRad();
-  }
-
+  FinalMuons ghostBustedFinalMuons = candidateSimMuonMatcher.ghostBust(allFinalMuons);
 
   std::vector<MatchingResult> matchingResults;
   if(matchingType == CandidateSimMuonMatcher::MatchingType::withPropagator ||
@@ -511,19 +577,19 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
       //  matchingResults = candidateSimMuonMatcher.matchSimple(ghostBustedCands, ghostBustedProcMuons, trackingParticleHandle.product(), trackParticleFilter);
       std::function<bool(const SimTrack&)> const& simTrackFilter = simTrackIsMuonInOmtfBx0;
       if(!simTrackToken.isUninitialized())
-        matchingResults = candidateSimMuonMatcher.matchSimple(finalMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
+        matchingResults = candidateSimMuonMatcher.matchSimple(ghostBustedFinalMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
     }
     else {
       if(!trackingParticleToken.isUninitialized())
-        matchingResults = candidateSimMuonMatcher.match(finalMuons, trackingParticleHandle.product(), trackParticleFilter);
+        matchingResults = candidateSimMuonMatcher.match(ghostBustedFinalMuons, trackingParticleHandle.product(), trackParticleFilter);
 
       else if(!simTrackToken.isUninitialized())
-        matchingResults = candidateSimMuonMatcher.match(finalMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
+        matchingResults = candidateSimMuonMatcher.match(ghostBustedFinalMuons, simTraksHandle.product(), simVertices.product(), simTrackFilter);
     }
   }
   else {// not useMatcher
-    LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze:"<<__LINE__<<" ghostBustedCands.size() "<<ghostBustedCands.size()<<std::endl;
-    for(auto& muonCand : finalMuons) {
+    LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze:"<<__LINE__<<" ghostBustedCands.size() "<<ghostBustedFinalMuons.size()<<std::endl;
+    for(auto& muonCand : ghostBustedFinalMuons) {
       MatchingResult result;
       result.muonCand = muonCand;
       matchingResults.emplace_back(result);
@@ -531,7 +597,6 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
   }
 
   candPerEvent->Fill(l1omtfHandle.product()->size(0));
-
   if(analysisType == "efficiency") {
     LogTrace("l1MuonAnalyzerOmtf") <<"L1MuonAnalyzerOmtf::analyze:"<<__LINE__<<std::endl;
     analyzeEfficiency(event, matchingResults);
@@ -544,7 +609,7 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
 
 
   int muonCntInOmtf = 0;
-  double etaUnit = 0.010875; //TODO from the interface note, should be defined somewhere globally
+  //double etaUnit = 0.010875; //TODO from the interface note, should be defined somewhere globally
   for (auto& matchingResult: matchingResults ) {
     if(matchingResult.muonCand != nullptr) {
       if(matchingResult.muonCand->getQuality() >= 1)
@@ -552,6 +617,8 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
 
       if(matchingResult.muonCand->getQuality() >= 4 && matchingResult.muonCand->getPtGev() >= 10) //TODO use some function for pt conversion
         candEtaPtCut10->Fill(matchingResult.muonCand->getEtaRad());
+
+      candEtaQual->Fill(matchingResult.muonCand->getEtaRad(), matchingResult.muonCand->getQuality());
     }
 
     if(matchingResult.simTrack || matchingResult.trackingParticle) {

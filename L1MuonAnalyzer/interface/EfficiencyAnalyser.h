@@ -82,6 +82,7 @@ public:
   virtual void write() {
     allCands->Write();
     aceptedCands->Write();
+    etaGenVsEtaCand->Write();
   }
 
 private:
@@ -92,6 +93,8 @@ private:
 
   TH1* allCands = nullptr;
   TH1* aceptedCands = nullptr;
+
+  TH2* etaGenVsEtaCand = nullptr;
 };
 
 class EfficiencyPtGenVsDxy : public EfficiencyAnalyser {

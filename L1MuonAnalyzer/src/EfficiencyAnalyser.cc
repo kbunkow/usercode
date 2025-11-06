@@ -116,6 +116,10 @@ EfficiencyVsEta::EfficiencyVsEta(TFileDirectory& subDir, std::string name, int q
   histTitle<<name<<" allCands eta: "<<" quality >= "<<qualityCut<<" ptGenCut "<<ptGenCut<<" ptL1Cut "<<ptL1Cut<<";eta; entries";
 
   aceptedCands = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), nBins, -2.1, 2.1);
+
+  etaGenVsEtaCand = subDir.make<TH2D>((name+"_etaGenVsEtaCand_qualityCut_"+std::to_string(qualityCut)+"_ptGenCut_"+std::to_string(int(ptGenCut))).c_str(),
+      (name+" etaGenVsEtaCand quality >= "+std::to_string(qualityCut)+" ptGenCut "+std::to_string(int(ptGenCut))+";etaGen; etaCand").c_str(),
+      nBins, -1.5, 1.5, nBins, -1.5, 1.5);
 }
 
 void EfficiencyVsEta::fill(double ptGen, double etaGen, double phiGen, double dxyGen, L1MuonCand& l1MuonCand) {
@@ -124,6 +128,7 @@ void EfficiencyVsEta::fill(double ptGen, double etaGen, double phiGen, double dx
     double candPt = useUpt ? l1MuonCand.uptGev : l1MuonCand.ptGev;
     if(l1MuonCand.hwQual >= qualityCut && candPt >=  ptL1Cut) {
       aceptedCands->Fill(etaGen);
+      etaGenVsEtaCand->Fill(etaGen, l1MuonCand.etaRad);
     }
   }
 }

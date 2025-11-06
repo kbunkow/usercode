@@ -40,7 +40,8 @@ gStyle.SetOptTitle(0);
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/usercode/L1MuonAnalyzer/test/'
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/'
 #plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/'
-plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/'
+#plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/'
+plotsDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/'
 
 first = True
 
@@ -337,10 +338,10 @@ def drawEffs(fileDir, type, quality, lineColor, pTresh = "0.5" ) :
     if type == "omtf" or type == "omtf_extrp" or type == "omtf_v1":
         print (c1.GetName() )
         logScalePadNum = 0
-        drawEff(c1, effFile, type, quality, "20", lineColor, legendEff1)
+        drawEff(c1, effFile, type, quality, "18", lineColor, legendEff1)
         
         logScalePadNum = 1 
-        drawEff(c2, effFile, type, quality, "22", lineColor, legendEff2)
+        drawEff(c2, effFile, type, quality, "20", lineColor, legendEff2)
 
         logScalePadNum = 2
         drawEff(c3, effFile, type, "12", "26", lineColor, legendEff3)
@@ -443,8 +444,13 @@ doLogScale = False
 
 #drawEffs('pats_DT_2_2_4_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kCyan) 
 #drawEffs('pats_DT_2_2_2_t34____DT_2_2_2_t34_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
-drawEffs('DT_2_2_2_t35____DT_2_2_2_t35_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kBlue) 
-drawEffs('DT_2_2_2_t35____DT_2_2_2_co1_t35_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
+#drawEffs('DT_2_2_2_t35____DT_2_2_2_t35_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kBlue) 
+#drawEffs('DT_2_2_2_t35____DT_2_2_2_co1_t35_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
+
+
+#drawEffs('DT_2_2_2_t35____DT_2_2_2_t35_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kBlue) 
+drawEffs('DT_2_2_2_t35____DT_2_2_2_t38_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kGreen) 
+drawEffs('DT_2_2_2_t35____DT_2_2_2_t38_NN_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
 
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -491,8 +497,8 @@ legend.SetTextSize(0.03)
 legend.SetMargin(0.2)
 
 
-#drawRate('t23_phase2_with_extrapolation_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "OMTF_DTQ_2_2", "12", kBlack)
-#drawRate('t23_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU140/', "omtf", "NN_FP_v217_DTQ_2_2", "12", kRed)
+drawRate('DT_2_2_2_t38_MinBias_Phase2Spring23_PU200/', "omtf", "DT_2_2_2_t38", "12", kGreen)
+drawRate('DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200/', "omtf", "DT_2_2_2_t38_NN", "12", kRed)
 
 legend.Draw()
 

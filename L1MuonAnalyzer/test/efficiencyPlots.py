@@ -241,7 +241,12 @@ if version == "DT_2_2_2_t35____DT_2_2_2_t35_mcWaw_2024_01_03_OneOverPt_iPt2" :
     histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35_mcWaw_2024_01_03_OneOverPt_iPt2.root" )  
 if version == "DT_2_2_2_t35____DT_2_2_2_co1_t35_mcWaw_2024_01_03_OneOverPt_iPt2" :
     histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_co1_t35_mcWaw_2024_01_03_OneOverPt_iPt2.root" )      
-    
+
+histFileDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/'        
+if version == "DT_2_2_2_t35____DT_2_2_2_t38_mcWaw_2024_01_03_OneOverPt_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_mcWaw_2024_01_03_OneOverPt_iPt2.root" )  
+if version == "DT_2_2_2_t35____DT_2_2_2_t38_NN_mcWaw_2024_01_03_OneOverPt_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_NN_mcWaw_2024_01_03_OneOverPt_iPt2.root" )     
 
 # if "SingleMu_" in version :
 #     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )
@@ -418,7 +423,8 @@ for iAlgo, obj in enumerate(efficiencyDir.GetListOfKeys() ) :
         elif omtf_type ==  2022 :   
             lineColor = 1
             ptCut = 20 #20 #+5
-            
+        
+        ptCut = 18    
         makeEfficiencyPlots(ptCut, 25, lineColor)
         #makeEfficiencyPlots(0, lineColor)
         
@@ -430,7 +436,8 @@ for iAlgo, obj in enumerate(efficiencyDir.GetListOfKeys() ) :
         elif omtf_type ==  2022 :
             lineColor = 1
             ptCut = 22 #22
-            
+           
+        ptCut = 20    
         makeEfficiencyPlots(ptCut, 30, lineColor)
         
         if ptGenVsPtCand.GetName().find("nn_omtf") >= 0 :

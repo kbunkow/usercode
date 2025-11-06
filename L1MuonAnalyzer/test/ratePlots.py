@@ -108,7 +108,7 @@ if len(sys.argv) >= 2 :
 #histFile = TFile('/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/results/omtfAnalysis2_eff_t24c__Patterns_ExtraplMB1nadMB2DTQualAndEtaFixedP_ValueP1Scale_t20_v1_SingleMu_iPt_and_OneOverPt_classProb17_recalib2_minDP0_DTQ_2_2_NN_FP_v217__MinBias_Phase2Spring23_PU200.root' )
 #version = "t24c_phase2_with_extrapolation_NN_FP_v217_DTQ_2_2__MinBias_Phase2Spring23_PU200"
 
-path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/results/"
+#path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/results/"
 #histFile = TFile(path + "omtfAnalysis2_rate_t26__Patterns_ExtraplMB1nadMB2SimplifiedFP_t17_classProb17_recalib2_minDP0_v3_gpFinalize10_DTQ_2_4__EphemeralZeroBias_Run370580.root")
 #version = "t26_phase2_with_extrapolation_DTQ_2_4__EphemeralZeroBias_Run370580"
 
@@ -162,11 +162,16 @@ path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_0_0_pre3/
 #histFile = TFile(path + "omtfAnalysis2_rate_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580.root")
 #version = "rate_t27b__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__ZeroBiasRun370580"
 
-path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_Phase2Spring24_MinBias__t37/results/"
-histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t37.root")
-version = "rate_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t37_Phase2Spring24_MinBias"
+#path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_Phase2Spring24_MinBias__t37/results/"
+#histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t37.root")
+#version = "rate_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t37_Phase2Spring24_MinBias"
 
-#histFile.ls()
+path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/"
+#histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_MinBias_Phase2Spring23_PU200.root")
+#version = "DT_2_2_2_t38_MinBias_Phase2Spring23_PU200"
+
+histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200.root")
+version = "DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200"
 
 inputResults = version
 
@@ -221,15 +226,20 @@ def makeRatePlotWithEff(candPt_rateCumul_copy, lineColor, canvasRate1, canvasRat
     candPt_rateCumul_copy.Sumw2(False);
     allEventsHist.Sumw2(False);
     
-    title = ("; OMTF p_{T}^{cut} [GeV]; rate [kHz]");
+    title = ("; OMTF p_{T}^{cut} [GeV]; probability per BX");
     rateCumul_withTEff = makeEfficiency(candPt_rateCumul_copy, allEventsHist, title, lineColor)
     
     canvasRate1.cd()
     rateCumul_withTEff.Draw("APZ")
     canvasRate1.Update()
     rateCumul_withTEff.GetPaintedGraph().GetXaxis().SetRangeUser(0, 100)
+    #rateCumul_withTEff.GetPaintedGraph().GetYaxis().SetRangeUser(1, 1000)
     
     paintedGraph = rateCumul_withTEff.GetPaintedGraph().Clone(rateCumul_withTEff.GetName() + "_copy" ) 
+    
+    #rateCumul_withTEff.GetPaintedGraph().SetTitle( "probability per BX")
+    #canvasRate1.Update()
+    
     scalekHz = 0.001
     for i in range(0, paintedGraph.GetN()) :
         paintedGraph.GetY()[i] *= lhcFreq * lhcFillingRatio * scalekHz
@@ -245,6 +255,8 @@ def makeRatePlotWithEff(candPt_rateCumul_copy, lineColor, canvasRate1, canvasRat
     paintedGraph.GetXaxis().SetRangeUser(0, 60);
     #paintedGraph.GetYaxis().SetRangeUser(10 * scalekHz, 50000000 * scalekHz);
     paintedGraph.GetYaxis().SetRangeUser(1, 1000);
+    
+    paintedGraph.GetYaxis().SetTitle("rate [kHz]")
     canvasRate2.Update();     
           
     print ("createad rateCumul_withTEff "  + rateCumul_withTEff.GetName() )           
@@ -355,7 +367,7 @@ for iAlgo, canvas in enumerate(canvases ) :
         lineColor = 1
         ptCutGev = 20    
     
-    ptCutGev = 22 #<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+    ptCutGev = 18 #<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
     
     ptCutBin = rateCumuls[iAlgo].GetXaxis().FindBin(ptCutGev)        
     rateOnThresh = rateCumuls[iAlgo].GetBinContent(ptCutBin)   
@@ -384,7 +396,7 @@ canvasComapre.cd(1)
 canvasComapre.cd(1).SetLeftMargin(0.4)
 canvasComapre.cd(1).SetGridx()
 canvasComapre.cd(1).SetGridy()
-ratesOnThreshHist.GetYaxis().SetRangeUser(6, 20)
+ratesOnThreshHist.GetYaxis().SetRangeUser(4, 20)
 ratesOnThreshHist.GetYaxis().SetLabelSize(0.02)
 ratesOnThreshHist.SetFillColor(0)
 ratesOnThreshHist.SetFillStyle(3001)

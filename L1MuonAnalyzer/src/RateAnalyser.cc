@@ -60,7 +60,7 @@ RateAnalyser::RateAnalyser(TFileDirectory subDir, std::string name, int qualityC
   histName<<"candPhi_PtCut10GeV_"<<"_qualityCut_"<<qualityCut;
   histTitle<<name<<" cand phi, ptCut 10 GeV "<<" quality >= "<<qualityCut<<";phi [deg]; #events";
 
-  candPhiPtCut10 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 180, 0, 360);
+  candPhiPtCut10 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 64, -3.2, 3.2);
 
   histName.str("");
   histTitle.str("");
@@ -68,7 +68,7 @@ RateAnalyser::RateAnalyser(TFileDirectory subDir, std::string name, int qualityC
   histName<<"candPhi_PtCut22GeV_"<<"_qualityCut_"<<qualityCut;
   histTitle<<name<<" cand phi, ptCut 22 GeV "<<" quality >= "<<qualityCut<<";phi [deg]; #events";
 
-  candPhiPtCut22 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 180, 0, 360);
+  candPhiPtCut22 = subDir.make<TH1D>(histName.str().c_str(), histTitle.str().c_str(), 64, -3.2, 3.2);
 
 }
 
