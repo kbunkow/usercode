@@ -15,7 +15,7 @@ verbose = True
 
 test_mode = False
 
-dumpHitsToROOT = True
+dumpHitsToROOT = False
 
 parser = argparse.ArgumentParser()
 
@@ -47,7 +47,7 @@ elif analysisType == "rate" :
 
 regeneratedL1DT = True
 
-useNN = False
+useNN = True
 
 #watch out: L1Trigger/L1TMuon/data/omtf_config/ExtrapolationFactors_ExtraplMB1nadMB2DTQualAndR_EtaValueP1Scale_t25c.xml is only for the minDtPhiQuality = 2!!!!!!!!!!!!!!!!!!!
 #there are no entries of quality 0 and 1 there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -60,7 +60,7 @@ version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDt
 
 log_threshold = 'INFO'
 if test_mode :
-    version = version + "_test28_"
+    version = version + "_test28a_"
     log_threshold = 'DEBUG'
     #log_threshold = 'INFO' ####<<<<<<<<<<<<<<<<<<<<<<,
     
@@ -78,7 +78,7 @@ if verbose:
                                                #'cerr',
                                                'omtfEventPrint'
                     ),
-       categories        = cms.untracked.vstring('l1tOmtfEventPrint', 'OMTFReconstruction', 'l1MuonAnalyzerOmtf'),
+       categories        = cms.untracked.vstring('l1tOmtfEventPrint', 'OMTFReconstruction', 'l1MuonAnalyzerOmtf', "MuonPathFitter"),
        omtfEventPrint = cms.untracked.PSet(    
                          filename  = cms.untracked.string('omtfAnalysis2_' + version + "_" + filesNameLike),
                          extension = cms.untracked.string('.txt'),                
@@ -90,7 +90,7 @@ if verbose:
                          OMTFReconstruction = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
                          l1MuonAnalyzerOmtf = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) )
                        ),
-       debugModules = cms.untracked.vstring('simOmtfPhase2Digis', 'L1MuonAnalyzerOmtf', 'CalibratedDigis') 
+       debugModules = cms.untracked.vstring('simOmtfPhase2Digis', 'L1MuonAnalyzerOmtf', 'CalibratedDigis', "dtTriggerPhase2PrimitiveDigis", "DTTrigPhase2Prod") 
        #debugModules = cms.untracked.vstring('*')
     )
 
@@ -310,11 +310,13 @@ for path in paths :
             break            
              
 if filesNameLike == "test":
-    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_212.root')
-    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/12_5_2_p1_14_04_2023/230414_115927/0000/SingleMu_OneOverPt_1_100_m_472.root')
-    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_431.root')
+    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_212.root')
+    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/12_5_2_p1_14_04_2023/230414_115927/0000/SingleMu_OneOverPt_1_100_m_472.root')
+    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_431.root')
     chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_770.root')    
-
+    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_299.root')      
+    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_3.root')    
+   
 if filesNameLike == "MinBias_Phase2Spring24":
     candidateSimMuonMatcherType = "withPropagator"
     genParticlesType = "trackingParticle" 

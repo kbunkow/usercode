@@ -170,8 +170,11 @@ path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/
 #histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_MinBias_Phase2Spring23_PU200.root")
 #version = "DT_2_2_2_t38_MinBias_Phase2Spring23_PU200"
 
-histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200.root")
-version = "DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200"
+#histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200.root")
+#version = "DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200"
+
+histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t39_MinBias_Phase2Spring23_PU200.root")
+version = "DT_2_2_2_t39_MinBias_Phase2Spring23_PU200"
 
 inputResults = version
 

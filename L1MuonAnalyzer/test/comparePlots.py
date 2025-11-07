@@ -449,9 +449,10 @@ doLogScale = False
 
 
 #drawEffs('DT_2_2_2_t35____DT_2_2_2_t35_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kBlue) 
-drawEffs('DT_2_2_2_t35____DT_2_2_2_t38_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kGreen) 
-drawEffs('DT_2_2_2_t35____DT_2_2_2_t38_NN_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
-
+#drawEffs('DT_2_2_2_t35____DT_2_2_2_t38_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kGreen) 
+drawEffs('DT_2_2_2_t35____DT_2_2_2_t38_NN_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kBlack) 
+drawEffs('DT_2_2_2_t35____DT_2_2_2_t39_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kBlue) 
+drawEffs('DT_2_2_2_t35____DT_2_2_2_t39_NN_mcWaw_2024_01_03_OneOverPt_iPt2/', "omtf_v1", "12", kRed) 
 
 #  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 doLogScale = False
@@ -499,6 +500,7 @@ legend.SetMargin(0.2)
 
 drawRate('DT_2_2_2_t38_MinBias_Phase2Spring23_PU200/', "omtf", "DT_2_2_2_t38", "12", kGreen)
 drawRate('DT_2_2_2_t38_NN_MinBias_Phase2Spring23_PU200/', "omtf", "DT_2_2_2_t38_NN", "12", kRed)
+drawRate('DT_2_2_2_t39_MinBias_Phase2Spring23_PU200/', "omtf", "DT_2_2_2_t39", "12", kBlue)
 
 legend.Draw()
 

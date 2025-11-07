@@ -84,9 +84,9 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_13_x_x/CMSSW_13_1_0/src/L1
 #inputFile = TFile(dir + 'omtfAnalysis2_eff_t27a__Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27__EfeMC_HTo2LongLivedTo2mu2jets.root' )
 
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/"
-algoVersion = "Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm"
-lineColor = kBlue
-inputFile = TFile(dir + 'omtfAnalysis2_eff_t31__Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm.root' )
+#algoVersion = "Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm"
+#lineColor = kBlue
+#inputFile = TFile(dir + 'omtfAnalysis2_eff_t31__Phase1_2024__LLPGun_mH20_1000_cTau10_5000mm.root' )
 
 dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_1_0_pre4/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/"
 #algoVersion = "DT_2_2_t30____DT_2_2_4_LLPGun_mH20_1000_cTau10_5000mm"
@@ -114,14 +114,20 @@ dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/s
 #lineColor = kRed
 #inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2co1a_t35_LLPGun_mH20_1000_cTau10_5000mm.root' )
 
-algoVersion = "DT_2_2_2_t35f_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP202"
+#algoVersion = "DT_2_2_2_t35f_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP202"
 lineColor = kBlue
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35k_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024.root' )
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35k_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024.root' )
 
-algoVersion = "DT_2_2_2_t35k_Displaced_Dxy3m_pT0To1000_condPhase2_realistic"
-lineColor = kBlue
+#algoVersion = "DT_2_2_2_t35k_Displaced_Dxy3m_pT0To1000_condPhase2_realistic"
+#lineColor = kBlue
 #inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35m_omtfPhiAtSt2_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
-inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35p_omtfPhiAtSt2_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
+#inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35p_omtfPhiAtSt2_Displaced_Dxy3m_pT0To1000_condPhase2_realistic.root' )
+
+
+dir = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/"
+algoVersion = "DT_2_2_2_t39_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024"
+lineColor = kBlue
+inputFile = TFile(dir + 'omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t39_Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024.root' )
 
 inputFiles.append(inputFile)
 inputFile.ls()
@@ -141,12 +147,12 @@ qualityCut = "qualityCut_8"
 q = "q8"
 
 #ptL1Cut = "22"
-#ptL1Cut = "10"
+ptL1Cut = "10"
 #ptL1Cut = "5"
-ptL1Cut = "1"
+#ptL1Cut = "1"
 
-#qualityCut = "qualityCut_12"
-#q = "q12"
+qualityCut = "qualityCut_12"
+q = "q12"
 
 #####################################################################################################
 c1.cd(1).SetGridx()
@@ -240,7 +246,7 @@ c2.cd(1).SetLogy();
 #allCandsPtGenVsDxyProj.SetLineStyle(2)
 allCandsPtGenVsDxyProj.SetLineColor(kRed)
 allCandsPtGenVsDxyProj.Draw()
-allCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(10, 20000)
+allCandsPtGenVsDxyProj.GetYaxis().SetRangeUser(10, 2000000)
 
 aceptedCandsVsDxyOnPtCut.SetLineStyle(2)
 aceptedCandsVsDxyOnPtCut.SetLineColor(lineColor)

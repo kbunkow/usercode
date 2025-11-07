@@ -247,6 +247,11 @@ if version == "DT_2_2_2_t35____DT_2_2_2_t38_mcWaw_2024_01_03_OneOverPt_iPt2" :
     histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_mcWaw_2024_01_03_OneOverPt_iPt2.root" )  
 if version == "DT_2_2_2_t35____DT_2_2_2_t38_NN_mcWaw_2024_01_03_OneOverPt_iPt2" :
     histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t38_NN_mcWaw_2024_01_03_OneOverPt_iPt2.root" )     
+if version == "DT_2_2_2_t35____DT_2_2_2_t39_mcWaw_2024_01_03_OneOverPt_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t39_mcWaw_2024_01_03_OneOverPt_iPt2.root" )       
+if version == "DT_2_2_2_t35____DT_2_2_2_t39_NN_mcWaw_2024_01_03_OneOverPt_iPt2" :
+    histFile = TFile( histFileDir + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t39_NN_mcWaw_2024_01_03_OneOverPt_iPt2.root" )    
+
 
 # if "SingleMu_" in version :
 #     histFile = TFile( '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/expert/omtf/eff_SingleMu/omtfAnalysis2_eff_' + version + '.root' )
@@ -294,14 +299,15 @@ efficienciesHist2 = []
 efficienciesOnThresh = []
 
 efficienciesVsEta = []
+efficienciesVsPhi = []
 
 def makeEfficiencyPlots(ptCutGev, platCutGev, lineColor) :
     #print (ptGenVsPtCand)
     #ptGenVsPtCand.GetName()
     canvasTitle = ptGenVsPtCand.GetName()[ : ptGenVsPtCand.GetName().find("ptGenVsPtCand")] + "ptCut " + str(ptCutGev) + "GeV" #+ "_" + version
     canvasTitle = canvasTitle.replace("_", " ")
-    c1 = TCanvas('canvas_' + ptGenVsPtCand.GetName() + "_" + str(ptCutGev), canvasTitle, 200, 10, 900, 900)
-    c1.Divide(2, 2)
+    c1 = TCanvas('canvas_' + ptGenVsPtCand.GetName() + "_" + str(ptCutGev), canvasTitle, 200, 10, 900 +500, 900)
+    c1.Divide(3, 2)
     c1.cd(1).SetGridx()
     c1.cd(1).SetGridy()
     #print ('created canvas ' + c1.GetName())
@@ -394,6 +400,35 @@ def makeEfficiencyPlots(ptCutGev, platCutGev, lineColor) :
         c1.cd(4).Update()
         effVsEta.GetPaintedGraph().GetYaxis().SetRangeUser(0.8, 1.05)
         efficienciesVsEta.append(effVsEta)
+    
+    c1.cd(5).SetGridx()
+    c1.cd(5).SetGridy()
+        
+    ####################eff vs phi
+    #omtf_q12_pt_ptGenVsPtCand_eta_0.82_1.24_qualityCut_12
+    #omtf_q12_allCandsPhi_eta_0.82_1.24_qualityCut_12_ptGenCut_25
+    allCandsPhiName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_", "allCandsPhi_")
+    allCandsPhiName = allCandsPhiName + "_ptGenCut_25"
+    print ("allCandsPhiName " + allCandsPhiName)
+    allCandsPhi = efficiencyDir.Get(allCandsPhiName)
+     
+    #omtf_q12_aceptedCandsPhi_eta_0.82_1.24_qualityCut_12_ptGenCut_25_ptL1Cut_18
+    aceptedCandsPhiName = ptGenVsPtCand.GetName().replace("pt_ptGenVsPtCand_", "aceptedCandsPhi_")   
+    aceptedCandsPhiName = aceptedCandsPhiName + "_ptGenCut_25_ptL1Cut_18"
+    print ("aceptedCandsPhiName " + aceptedCandsPhiName)
+        
+    aceptedCandsPhi = efficiencyDir.Get(aceptedCandsPhiName)
+    if not aceptedCandsPhi :
+        aceptedCandsPhiName = ptGenVsPtCand.GetName().replace("ptGenVsPtCand_", "aceptedCandsPhi_") + "_ptGenCut_25_ptL1Cut_18"
+        aceptedCandsPhi = efficiencyDir.Get(aceptedCandsPhiName)
+    
+    if aceptedCandsPhi :
+        effVsPhi = makeEfficiency(aceptedCandsPhi, allCandsPhi, aceptedCandsPhi.GetTitle().replace("allCands", "efficiency"), lineColor)
+        effVsPhi.SetName(effVsPhi.GetName().replace("_clone", "").replace("allCandsPhi", "efficiencyVsPhi"))
+        effVsPhi.Draw("")
+        c1.cd(4).Update()
+        effVsPhi.GetPaintedGraph().GetYaxis().SetRangeUser(0.8, 1.05)
+        efficienciesVsPhi.append(effVsPhi)
     
     canvases.append(c1)
     
