@@ -64,6 +64,10 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
   if(edmCfg.exists("phase") ) {
     if(edmCfg.getParameter<int>("phase") == 2)
       nProcessors = 3;
+    else {
+      nProcessors = 6;
+      useSamMuons = false;
+    }
   }
 
   if (edmCfg.exists("candidateSimMuonMatcherType")) {
@@ -215,13 +219,13 @@ L1MuonAnalyzerOmtf::L1MuonAnalyzerOmtf(const edm::ParameterSet& edmCfg):
     omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 8, 200, 0, 100, nProcessors));
     if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 8, 200, 0, 100, nProcessors));
 
-    subDir = subDirRate.mkdir("omtf_q4");
-    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
-    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
+    //subDir = subDirRate.mkdir("omtf_q4");
+    //omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
+    //if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 4, 200, 0, 100, nProcessors));
 
-    subDir = subDirRate.mkdir("omtf_q1");
-    omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
-    if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
+    //subDir = subDirRate.mkdir("omtf_q1");
+    //omtfRateAnalysers.emplace_back(new  RateAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
+    //if(useMatcher) omtfCandsMatchingAnalysers.emplace_back(new CandsMatchingAnalyser(subDir, "", 1, 200, 0, 100, nProcessors));
 
     for(auto& nn_pThreshold : nn_pThresholds) {
       std::ostringstream ostr;
@@ -481,6 +485,11 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
       finalMuon->setEtaRad(constrMuon.phEta() );
       finalMuon->setQuality(constrMuon.hwQual());
 
+      finalMuon->setPtGmt(constrMuon.hwPt());
+      finalMuon->setPtUnconstrGmt(unconstrMuon.hwPt());
+      finalMuon->setPhiGmt( constrMuon.hwPhi() );
+      finalMuon->setEtaGmt(constrMuon.hwEta());
+
       int layerHits = (int)regMuCan.trackAddress().at(0);
       finalMuon->setFiredLayerBits(layerHits);
 
@@ -488,8 +497,11 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
       finalMuon->setFiredLayerCnt(layerHitBits.count());
       //finalMuon->setBx(regMuCan->getb);
 
-      allFinalMuons.emplace_back(finalMuon);
-      LogTrace("l1MuonAnalyzerOmtf")<<"finalMuon pt "<<finalMuon->getPtGev()<<" phi "<<finalMuon->getPhiRad()<<" eta "<<finalMuon->getEtaRad();
+      //in phase-2 empty muons have pt = 0 (both hardware and physical). N.B. that in phase 1 empty muons have hwPt = 0, but 0 GeV is hwPt = 1, and it is valid muon
+      if(finalMuon->getPtGev() > 0) {
+        allFinalMuons.emplace_back(finalMuon);
+        LogTrace("l1MuonAnalyzerOmtf")<<*finalMuon<<std::endl<<std::endl;
+      }
     }
 
   }
@@ -508,6 +520,11 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
         finalMuon->setEtaRad(regMuCan->hwEta() * 0.010875);
         finalMuon->setQuality(regMuCan->hwQual());
 
+        finalMuon->setPtGmt(regMuCan->hwPt());
+        finalMuon->setPtUnconstrGmt(regMuCan->hwPtUnconstrained());
+        finalMuon->setPhiGmt( regMuCan->hwPhi() );
+        finalMuon->setEtaGmt(regMuCan->hwEta());
+
         int layerHits = (int)regMuCan->trackAddress().at(0);
         finalMuon->setFiredLayerBits(layerHits);
 
@@ -515,21 +532,24 @@ void L1MuonAnalyzerOmtf::analyze(const edm::Event& event, const edm::EventSetup&
         finalMuon->setFiredLayerCnt(layerHitBits.count());
         //finalMuon->setBx(regMuCan->getb);
 
-        allFinalMuons.emplace_back(finalMuon);
+        //keep only nonempty muons. In phase 1 empty muons have hwPt = 0
+        if(regMuCan->hwPt() > 0) {
+          allFinalMuons.emplace_back(finalMuon);
 
-        LogTrace("l1MuonAnalyzerOmtf")<<" regMuCan: bx "<<bx
-            << " hwPt " <<std::setw(3)<< regMuCan->hwPt()
-            << " hwUPt " <<std::setw(3)<< regMuCan->hwPtUnconstrained()
-            << " hwSign " << regMuCan->hwSign() << " hwQual "
-            <<std::setw(2)<< regMuCan->hwQual() << " hwEta " << std::setw(4) << regMuCan->hwEta()
-            << std::setw(4) << " hwPhi " << regMuCan->hwPhi()
-            << "    eta " << std::setw(9) << (regMuCan->hwEta() * 0.010875)
-            //<< " phi "<< std::setw(9) << globalPhi << " "
-            <<" firedLayers " << layerHitBits << " processor " <<regMuCan->processor()
-            << " trackFinderType "<<regMuCan->trackFinderType()
-            //<< OmtfName(finalCandidate.processor(), finalCandidate.trackFinderType())
-            << std::endl;
-        LogTrace("l1MuonAnalyzerOmtf")<<" finalMuon pt "<<finalMuon->getPtGev()<<" phi "<<finalMuon->getPhiRad()<<" eta "<<finalMuon->getEtaRad();
+          LogTrace("l1MuonAnalyzerOmtf")<<" regMuCan: bx "<<bx
+              << " hwPt " <<std::setw(3)<< regMuCan->hwPt()
+              << " hwUPt " <<std::setw(3)<< regMuCan->hwPtUnconstrained()
+              << " hwSign " << regMuCan->hwSign() << " hwQual "
+              <<std::setw(2)<< regMuCan->hwQual() << " hwEta " << std::setw(4) << regMuCan->hwEta()
+              << std::setw(4) << " hwPhi " << regMuCan->hwPhi()
+              << "    eta " << std::setw(9) << (regMuCan->hwEta() * 0.010875)
+              //<< " phi "<< std::setw(9) << globalPhi << " "
+              <<" firedLayers " << layerHitBits << " processor " <<regMuCan->processor()
+              << " trackFinderType "<<regMuCan->trackFinderType()
+              //<< OmtfName(finalCandidate.processor(), finalCandidate.trackFinderType())
+              << std::endl;
+          LogTrace("l1MuonAnalyzerOmtf")<<" finalMuon pt "<<finalMuon->getPtGev()<<" phi "<<finalMuon->getPhiRad()<<" eta "<<finalMuon->getEtaRad();
+        }
       }
     }
   }

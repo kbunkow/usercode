@@ -176,6 +176,12 @@ path = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/
 histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t39_MinBias_Phase2Spring23_PU200.root")
 version = "DT_2_2_2_t39_MinBias_Phase2Spring23_PU200"
 
+path = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_Phase2Spring24_MinBias__t40/results/'
+
+histFile = TFile(path + "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t40.root")
+version = "DT_2_2_2_t40_Phase2Spring24_MinBias_PU200"
+
+
 inputResults = version
 
 print (histFile)

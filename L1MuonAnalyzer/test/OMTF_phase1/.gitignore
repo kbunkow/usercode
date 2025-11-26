@@ -2,3 +2,5 @@
 /*.root
 /*.xml
 /results/
+/rootDump/
+/__pycache__/

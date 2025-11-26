@@ -3,3 +3,4 @@
 /*.root
 /results
 /rootDump/
+/__pycache__/

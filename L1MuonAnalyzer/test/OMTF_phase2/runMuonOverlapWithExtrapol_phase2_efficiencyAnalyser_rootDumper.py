@@ -15,7 +15,9 @@ verbose = True
 
 test_mode = False
 
-dumpHitsToROOT = False
+dumpHitsToROOT = True
+
+run3_digis = False ##TODO remember to set appropriately when running on CRAB!!!
 
 parser = argparse.ArgumentParser()
 
@@ -47,7 +49,7 @@ elif analysisType == "rate" :
 
 regeneratedL1DT = True
 
-useNN = True
+useNN = False
 
 #watch out: L1Trigger/L1TMuon/data/omtf_config/ExtrapolationFactors_ExtraplMB1nadMB2DTQualAndR_EtaValueP1Scale_t25c.xml is only for the minDtPhiQuality = 2!!!!!!!!!!!!!!!!!!!
 #there are no entries of quality 0 and 1 there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -55,12 +57,12 @@ minDtPhiQuality = 2
 minDtPhiBQuality = 2
 dtRefHitMinQuality = 2
 
-version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t39" #WK - dumping killed candidates
+version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t40" #WK - dumping killed candidates
 #version = "ExtraplMB1nadMB2DTQualAndRFixedP__pats_DT_2_2_2_t31____DT_" + str(minDtPhiQuality) + "_" + str(minDtPhiBQuality) + "_" + str(dtRefHitMinQuality) + "_t33"
 
 log_threshold = 'INFO'
 if test_mode :
-    version = version + "_test28a_"
+    version = version + "_test30e_"
     log_threshold = 'DEBUG'
     #log_threshold = 'INFO' ####<<<<<<<<<<<<<<<<<<<<<<,
     
@@ -88,7 +90,8 @@ if verbose:
                          #DEBUG   = cms.untracked.int32(0),
                          l1tOmtfEventPrint = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
                          OMTFReconstruction = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
-                         l1MuonAnalyzerOmtf = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) )
+                         l1MuonAnalyzerOmtf = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
+                         MuonPathFitter = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) ),
                        ),
        debugModules = cms.untracked.vstring('simOmtfPhase2Digis', 'L1MuonAnalyzerOmtf', 'CalibratedDigis', "dtTriggerPhase2PrimitiveDigis", "DTTrigPhase2Prod") 
        #debugModules = cms.untracked.vstring('*')
@@ -280,7 +283,15 @@ if filesNameLike == 'MinBias_Phase2Spring23_PU140' :
     paths = [    
              {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/ThinnedOfficialMC/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU140/", "fileCnt" : 10000},#2311 files
              ]
-           
+
+if filesNameLike == 'EphemeralZeroBias7_Run2025G' :
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+    run3_digis = True
+    paths = [    
+             {"path": "/eos/home-k/kbunkow/cms_data/run3_data/muon_digi_EphemeralZeroBias7_Run2025G-v1/", "fileCnt" : 10000},#2311 files
+             ]        
            
 if filesNameLike == "test":
     paths = [ ]
@@ -310,12 +321,26 @@ for path in paths :
             break            
              
 if filesNameLike == "test":
-    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_212.root')
-    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/12_5_2_p1_14_04_2023/230414_115927/0000/SingleMu_OneOverPt_1_100_m_472.root')
-    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_431.root')
-    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_770.root')    
-    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_299.root')      
-    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_3.root')    
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_212.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/12_5_2_p1_14_04_2023/230414_115927/0000/SingleMu_OneOverPt_1_100_m_472.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_431.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_770.root')    
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_299.root')      
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_3.root')    
+        
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_289.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_29.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_290.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_291.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_656.root')
+    chosenFiles.append('file:///eos/home-k/kbunkow/cms_data/run3_data/muon_digi_EphemeralZeroBias7_Run2025G-v1/omtfStage2Digis_output_16.root')
+    run3_digis = True    
+    
+    #chosenFiles.append('file:///afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/L1Trigger/L1TMuonOverlapPhase1/test/omtfStage2Digis_output.root')
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+
    
 if filesNameLike == "MinBias_Phase2Spring24":
     candidateSimMuonMatcherType = "withPropagator"
@@ -361,17 +386,24 @@ if test_mode :
 else :                     
     process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10))
 
 #Calibrate Digis
 process.load("L1Trigger.DTTriggerPhase2.CalibratedDigis_cfi")
-process.CalibratedDigis.dtDigiTag = "simMuonDTDigis" 
+if run3_digis :
+    process.CalibratedDigis.dtDigiTag = "muonDTDigis"     
+else :
+    process.CalibratedDigis.dtDigiTag = "simMuonDTDigis"
 process.CalibratedDigis.scenario = 0
-
+    
 #DTTriggerPhase2
 process.load("L1Trigger.DTTriggerPhase2.dtTriggerPhase2PrimitiveDigis_cfi")
 process.dtTriggerPhase2PrimitiveDigis.debug = False
 process.dtTriggerPhase2PrimitiveDigis.dump = False
 process.dtTriggerPhase2PrimitiveDigis.scenario = 0
+if run3_digis :
+    process.dtTriggerPhase2PrimitiveDigis.scenario = cms.int32(1)
+    process.CalibratedDigis.scenario = 2
 
 process.dtTriggerPhase2PrimitiveDigis.co_option = -1 # coincidence w.r.t. : -1 = off, 0 = co all, 1 = co phi, 2 = co theta. defoult is 1, but for OMTF this coincidence filter has no sense
 
@@ -394,6 +426,13 @@ process.load('L1Trigger.L1TMuonOverlapPhase2.simOmtfPhase2Digis_cfi')
 #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_t30__classProb17_recalib2.xml")
 #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_2_t31__classProb17_recalib2.xml")
 #process.simOmtfPhase2Digis.patternsXMLFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/Patterns_ExtraplMB1nadMB2DTQualAndRFixedP_DT_2_2_4_t34__classProb17_recalib2.xml")
+
+if run3_digis :
+    process.simOmtfPhase2Digis.srcDTPh = cms.InputTag('omtfStage2Digis')
+    process.simOmtfPhase2Digis.srcDTTh = cms.InputTag('omtfStage2Digis')
+    process.simOmtfPhase2Digis.srcCSC = cms.InputTag('omtfStage2Digis')
+    process.simOmtfPhase2Digis.srcRPC = cms.InputTag('omtfStage2Digis')
+    process.simOmtfPhase2Digis.dtBxShift = cms.int32(13) #13 seems to be good in CMSSW_16_0, but maybe will be changed?!!!!!!!!!!!!!!!!!!!!
 
 process.simOmtfPhase2Digis.candidateSimMuonMatcher = cms.bool(True)
 #process.simOmtfPhase2Digis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")
@@ -462,6 +501,9 @@ elif genParticlesType == "simTrack" :
 
 process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
 
+process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck",
+    ignoreTotal = cms.untracked.int32(1)
+)
 
 #process.dumpED = cms.EDAnalyzer("EventContentAnalyzer")
 #process.dumpES = cms.EDAnalyzer("PrintEventSetupContent")

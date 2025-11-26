@@ -7,15 +7,49 @@ import re
 from os import listdir
 from os.path import isfile, join
 import fnmatch
-
+import argparse
 
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 verbose = True
 
+test_mode = False
+
+dumpHitsToROOT = True
+
+run3_digis = False
+
+parser = argparse.ArgumentParser()
+
+analysisType = "efficiency"
+filesNameLike = ""
+genParticlesType = "simTrack"
+
+parser.add_argument("-f", "--filesNameLike")
+parser.add_argument("-a", "--analysisType", choices=["efficiency", "rate"])
+args = parser.parse_args()
+
+if args.filesNameLike :
+    filesNameLike = args.filesNameLike
+
+print("filesNameLike", filesNameLike)
+
+
+if args.analysisType :
+    analysisType = args.analysisType
+
+
+if analysisType == "efficiency" :
+    candidateSimMuonMatcherType = "simpleMatching"
+elif analysisType == "rate" :
+    #candidateSimMuonMatcherType = "simplePropagation"
+    candidateSimMuonMatcherType = "withPropagator"
+    genParticlesType = "trackingParticle" 
+    
+
 useExtraploationAlgo = True
 
-version = 't31__'
+version = 't40__'
 
 if useExtraploationAlgo :
     #version = version + 'Patterns_0x00021_classProb22_ExtraplMB1nadMB2SimplifiedFP_t27'
@@ -27,32 +61,14 @@ else :
 
 customize_omtf = False
 
-runDebug = "INFO" # or "INFO" DEBUG
-#useExtraploationAlgo = True
+log_threshold = 'INFO'
+if test_mode :
+    version = version + "_test30c_"
+    log_threshold = 'DEBUG'
+    #log_threshold = 'INFO' ####<<<<<<<<<<<<<<<<<<<<<<,
 
 
-analysisType = "efficiency" # or rate
-  
-for a in sys.argv :
-    if a == "efficiency" or a ==  "rate" or a == "withTrackPart" :
-        analysisType = a
-        break;
-    
-filesNameLike = sys.argv[1]
-    
-outFilesName = 'omtfAnalysis2_' 
-if analysisType == "efficiency" :
-    outFilesName = outFilesName + "eff_"
-elif analysisType == "rate" :
-    outFilesName = outFilesName + "rate_"    
-    
-if ("NeutrinoGun" in filesNameLike) or ("MinBias" in filesNameLike): 
-    outFilesName = 'omtfAnalysis2_'  + "rate_"
-    
-outFilesName = outFilesName + version + "__" + filesNameLike
 
-if(runDebug == "DEBUG") :
-    outFilesName = outFilesName + "_test10b"
 
 if verbose: 
     process.MessageLogger = cms.Service("MessageLogger",
@@ -66,9 +82,9 @@ if verbose:
                     ),
        categories        = cms.untracked.vstring( 'OMTFReconstruction', 'l1tOmtfEventPrint', 'l1MuonAnalyzerOmtf'), #'l1tOmtfEventPrint', 'l1MuonAnalyzerOmtf'
        omtfEventPrint = cms.untracked.PSet(    
-                         filename  = cms.untracked.string(outFilesName),
+                         filename  = cms.untracked.string('omtfAnalysis2_' + version + "_" + filesNameLike),
                          extension = cms.untracked.string('.txt'),                
-                         threshold = cms.untracked.string("INFO"), #DEBUG
+                         threshold = cms.untracked.string(log_threshold),
                          default = cms.untracked.PSet( limit = cms.untracked.int32(0) ), 
                          #INFO   =  cms.untracked.int32(0),
                          #DEBUG   = cms.untracked.int32(0),
@@ -82,14 +98,19 @@ if verbose:
 
     #process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
 if not verbose:
-    process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1000)
+    process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(10000)
+    process.MessageLogger.cerr.threshold = cms.untracked.string('INFO')
+    process.MessageLogger.cerr.l1tOmtfEventPrint = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) )
+    process.MessageLogger.cerr.OMTFReconstruction = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) )
+    process.MessageLogger.cerr.l1MuonAnalyzerOmtf = cms.untracked.PSet( limit = cms.untracked.int32(1000000000) )
+    
     process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(False), 
                                          #SkipEvent = cms.untracked.vstring('ProductNotFound') 
                                      )
     
     
-process.load('Configuration.Geometry.GeometryExtended2023Reco_cff')
-process.load('Configuration.Geometry.GeometryExtended2023_cff')
+process.load('Configuration.Geometry.GeometryExtended2025Reco_cff')
+process.load('Configuration.Geometry.GeometryExtended2025_cff')
 ############################
 #process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')    
     
@@ -110,48 +131,102 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run3_mc_FULL', '')
 
 chosenFiles = []
 
+cscBx = 8
+#file_cnt = 100000
 fileCnt = 100000 #1000 
+#fileCnt = 5 #1000 
+paths = []
 
- 
-       
-if filesNameLike == "SingleMu_9_3_14_FullEta_v2" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    cscBx = 6
-    matchUsingPropagation  = False 
+if filesNameLike == 'mcWaw2023_iPt2_04_04_2023' :
+    candidateSimMuonMatcherType = "simpleMatching"
     paths = [
-        '/eos/user/a/akalinow/Data/SingleMu/9_3_14_FullEta_v2/'
-        ]  
-    # fileCnt = 10 #<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+             #"{/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, 100files
+             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500},
+             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
+             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
+             ]
 
-if filesNameLike == 'mcWaw_2024_01_03_OneOverPt' :
-    cscBx = 8
-    matchUsingPropagation  = False 
+if filesNameLike == 'mcWaw2023_iPt1_04_04_2023' :
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [
+             #"{/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, 100files
+             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_22_02_2023/", "fileCnt" : 500},
+             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
+             #{"/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_iPt0_12_5_2_p1_15_02_2023/", "fileCnt" : 500},
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt1_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt1_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
+             ]
+
+if filesNameLike == 'mcWaw_2024_04_03_OneOverPt' :
+    candidateSimMuonMatcherType = "simpleMatching"
     paths = [    
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 500}, #1000 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 500} #1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_03_04_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_03_04_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_04_2024/", "fileCnt" : 10000},#1000 files
              ]
-    #fileCnt = 10 #<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-if filesNameLike == 'mcWaw2023_OneOverPt_and_iPt2':
-    cscBx = 8
-    matchUsingPropagation  = False 
-    paths = [
-             # {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_20_04_2023/", "fileCnt" : 500}, #500 files only negative eta
-             # {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_20_04_2023/", "fileCnt" : 500}, #500 files
-             # #
-             # {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500}, #500 files
-             # {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500}, #500 files
-             # #
-             # {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
-             # {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500}, #500 files
-             #
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, #200 files full eta
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500}, #200 files
-             #
-             #{"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500}, ##100 files
-             #{"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500}, ##100 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 200}, #500 files
-             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 200}, #500 files
+#negaive eta only  
+if filesNameLike == 'mcWaw_2024_03_11_OneOverPt' :
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_11_03_2024/SingleMu_ch0_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/13_1_0_11_03_2024/SingleMu_ch2_OneOverPt_Run2023_13_1_0_11_03_2024/", "fileCnt" : 10000},#1000 files
              ]
+    
+if filesNameLike == 'mcWaw_2023_04_20_OneOverPt' : #mcWaw2023_OneOverPt_allfiles
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_20_04_2023/", "fileCnt" : 500},#500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_20_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_20_04_2023/", "fileCnt" : 500},#500 files
+             ]
+
+if filesNameLike == 'mcWaw_2023_04_14_OneOverPt' : #mcWaw2023_OneOverPt_allfiles
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [         
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500},#500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_14_04_2023/", "fileCnt" : 500},#500 files
+             ]
+    
+if filesNameLike == 'mcWaw_2023_04_04_OneOverPt' : #mcWaw2023_OneOverPt_allfiles
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [         
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_04_04_2023/", "fileCnt" : 500},#500 files
+             ]    
+    
+if filesNameLike == 'mcWaw_2023_02_22_OneOverPt' : #mcWaw2023_OneOverPt_allfiles
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [         
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500},#200 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_22_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_22_02_2023/", "fileCnt" : 500},#200 files
+             ]        
+    
+if filesNameLike == 'mcWaw_2023_02_15_OneOverPt' : #mcWaw2023_OneOverPt_allfiles
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [         
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500},##100 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_15_02_2023/SingleMu_ch2_OneOverPt_12_5_2_p1_15_02_2023/", "fileCnt" : 500},##100 files
+             ]  
+       
+#negaive eta only  
+if filesNameLike == 'mcWaw_2024_01_03_OneOverPt_iPt2' :
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [    
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 1000},#1000 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/", "fileCnt" : 1000},#1000 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 100}, #500 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch2_iPt2_12_5_2_p1_04_04_2023/", "fileCnt" : 100},#500 files
+             ]
+
+#negaive eta only    
+if filesNameLike == 'mcWaw_2024_01_04_OneOverPt' :
+    candidateSimMuonMatcherType = "simpleMatching"
+    paths = [    
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_04_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_04_01_2024/", "fileCnt" : 1000},#1000 files
+             {"path": "/eos/user/a/akalinow/Data/SingleMu/13_1_0_04_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_04_01_2024/", "fileCnt" : 1000},#1000 files
+             ]    
+
 
 if filesNameLike == "DYToLL_Phase2Spring23_PU200" :
     cscBx = 8
@@ -170,54 +245,81 @@ if filesNameLike == "ZprimeToMuMu_Phase2Spring23_PU200" :
  
     
 if filesNameLike == "EfeMC_HTo2LongLivedTo2mu2jets" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    cscBx = 8
-    matchUsingPropagation  = True 
+    candidateSimMuonMatcherType = "withPropagator"
     paths = [
-        {"path": '/eos/cms/store/user/eyigitba/dispDiMu/crabOut/CRAB_PrivateMC/', "fileCnt" : 10000},
+        #{"path": '/eos/cms/store/user/eyigitba/dispDiMu/crabOut/CRAB_PrivateMC/', "fileCnt" : 10000},
+        {"path": '/data2/kbunkow/cmsdata/EfeMC2023_HTo2LongLivedTo2mu2jets/CRAB_PrivateMC/', "fileCnt" : 100000},
+        ]  
+
+if filesNameLike == 'Displaced_cTau5m_XTo2LLTo4Mu' :
+    candidateSimMuonMatcherType = "withPropagator"
+    paths = [
+             {"path": "/eos/user/a/almuhamm/ZMu_Test/simPrivateProduction/Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_realistic/XTo2LLPTo4Mu_CTau5m_Phase2Exotic/231203_175643/0000/", "fileCnt" : 500},#500 files
         ]   
 
 if filesNameLike == 'LLPGun_mH20_1000_cTau10_5000mm' :
-    matchUsingPropagation  = True 
+    candidateSimMuonMatcherType = "withPropagator"
     paths = [    
-             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/eyigitba/crab/LLPGun_mH20_1000_cTau10_5000mm/LLPGun_mH20_1000_cTau10_5000mm_GS_DR_v2/", "fileCnt" : 100},#100 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/eyigitba/crab/LLPGun_mH20_1000_cTau10_5000mm/LLPGun_mH20_1000_cTau10_5000mm_GS_DR_v2/", "fileCnt" : 1000},#100 files
+             ]    
+    
+if filesNameLike == 'Displaced_Dxy3m_pT0To1000_condPhase2_realistic' :
+    candidateSimMuonMatcherType = "withPropagator"
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt0_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt1_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch0_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_Dxy3m_pT0To1000_condPhase2_realistic/DisplacedMu_ch2_iPt2_Run2029_13_1_0_01_12_2023", "fileCnt" : 500},#500 files
              ]   
-        
-if filesNameLike == "Displaced_Dxy5m_pT0To1000_condRun3" :    #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    cscBx = 8
-    matchUsingPropagation  = False 
+    
+if filesNameLike == 'Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024' :
+    candidateSimMuonMatcherType = "withPropagator"
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/Displaced_cTau5m_XTo2LLTo4Mu_condPhase2_GP2024/", "fileCnt" : 10000},#995 files
+             ]    
+    
+if filesNameLike == '14_1_0pre3_11_06_2024_Dxy5m_PhaseII' :
+    candidateSimMuonMatcherType = "withPropagator"
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/PrivateProductionForOMTFStudy/14_1_0pre3_11_06_2024_Dxy5m_PhaseII/", "fileCnt" : 10000},#2311 files
+             ]  
+    
+if filesNameLike == 'MinBias_Phase2Spring23_PU200' :
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/ThinnedOfficialMC/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU200/", "fileCnt" : 10000},#2311 files
+             ]      
+           
+    
+if filesNameLike == 'MinBias_Phase2Spring23_PU140' :
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+    paths = [    
+             {"path": "/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/ThinnedOfficialMC/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU140/", "fileCnt" : 10000},#2311 files
+             ]  
+    
+if filesNameLike == 'EphemeralZeroBias7_Run2025G' :
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+    run3_digis = True
     paths = [
-        {"path": '/eos/user/a/akalinow/Data/SingleMu/Displaced_Dxy5m_pT0To1000_condRun3_131X_mcRun3_2023_realistic_v10/DisplacedMu_ch0_iPt0_Run2023_13_1_0_23_11_2023', "fileCnt" : 100},
-        {"path": '/eos/user/a/akalinow/Data/SingleMu/Displaced_Dxy5m_pT0To1000_condRun3_131X_mcRun3_2023_realistic_v10/DisplacedMu_ch0_iPt1_Run2023_13_1_0_23_11_2023', "fileCnt" : 100},
-        {"path": '/eos/user/a/akalinow/Data/SingleMu/Displaced_Dxy5m_pT0To1000_condRun3_131X_mcRun3_2023_realistic_v10/DisplacedMu_ch0_iPt2_Run2023_13_1_0_23_11_2023', "fileCnt" : 100},
-        {"path": '/eos/user/a/akalinow/Data/SingleMu/Displaced_Dxy5m_pT0To1000_condRun3_131X_mcRun3_2023_realistic_v10/DisplacedMu_ch2_iPt0_Run2023_13_1_0_23_11_2023', "fileCnt" : 100},
-        {"path": '/eos/user/a/akalinow/Data/SingleMu/Displaced_Dxy5m_pT0To1000_condRun3_131X_mcRun3_2023_realistic_v10/DisplacedMu_ch2_iPt1_Run2023_13_1_0_23_11_2023', "fileCnt" : 100},
-        {"path": '/eos/user/a/akalinow/Data/SingleMu/Displaced_Dxy5m_pT0To1000_condRun3_131X_mcRun3_2023_realistic_v10/DisplacedMu_ch2_iPt2_Run2023_13_1_0_23_11_2023', "fileCnt" : 100},
+             {"path": "/eos/home-k/kbunkow/cms_data/run3_data/muon_digi_EphemeralZeroBias7_Run2025G-v1/", "fileCnt" : 10000},#2311 files
         ]   
     
-if filesNameLike == "MinBias_Phase2Spring23_PU140" :   
-    cscBx = 8 
-    matchUsingPropagation  = False 
-    regeneratedL1DT = True
-    paths = [
-        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU140/', "fileCnt" : 10000},
-        ]   
-    analysisType = "rate"    
-    
-if filesNameLike == "MinBias_Phase2Spring23_PU200" :   
-    cscBx = 8 
-    matchUsingPropagation  = False 
-    regeneratedL1DT = True
-    paths = [
-        {"path": '/eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/OMTF/MinBias_TuneCP5_14TeV-pythia8/crab_MinBias_TuneCP5_14TeV-pythia8_Phase2Spring23DIGIRECOMiniAOD-PU200/', "fileCnt" : 10000},
-        ]   
-    analysisType = "rate" 
-    
+if filesNameLike == "test":
+    paths = [ ]
+
+if test_mode :
+    fileCnt = 1
         
 print("input data paths", paths)        
 
-if(runDebug == "DEBUG") :
-    fileCnt = 10;
-        
 for path in paths :
     root_files = []
     for root, dirs, files in os.walk(path["path"]):
@@ -232,25 +334,55 @@ for path in paths :
         else :
             print("file not found!!!!!!!: " + root_file)   
             
-        if file_num >= path["fileCnt"] :
+        if file_num > path["fileCnt"] :
             break         
         if file_num >= fileCnt :
             break            
 
+if filesNameLike == "test":
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_212.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_14_04_2023/SingleMu_ch0_OneOverPt_12_5_2_p1_14_04_2023/12_5_2_p1_14_04_2023/230414_115927/0000/SingleMu_OneOverPt_1_100_m_472.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/12_5_2_p1_04_04_2023/SingleMu_ch0_iPt2_12_5_2_p1_04_04_2023/12_5_2_p1_04_04_2023/230404_084329/0000/SingleMu_iPt_2_m_431.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_770.root')    
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_299.root')      
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_3.root')    
+        
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_289.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_29.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_290.root')
+    #chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch0_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094044/0000/SingleMu_OneOverPt_1_100_m_291.root')
+    chosenFiles.append('file:///eos/user/a/akalinow/Data/SingleMu/13_1_0_03_01_2024/SingleMu_ch2_OneOverPt_Run2029_13_1_0_03_01_2024/13_1_0_03_01_2024/240103_094121/0000/SingleMu_OneOverPt_1_100_p_656.root')
+    
+    #chosenFiles.append('file:///afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/L1Trigger/L1TMuonOverlapPhase1/test/omtfStage2Digis_output.root')
+    candidateSimMuonMatcherType = "collectMuonCands"
+    genParticlesType = "" 
+    analysisType = "rate" # or rate efficiency
+
+   
+if filesNameLike == "MinBias_Phase2Spring24":
+    candidateSimMuonMatcherType = "withPropagator"
+    genParticlesType = "trackingParticle" 
+    
+    analysisType = "rate" # or rate efficiency
+    chosenFiles.append('/store/mc/Phase2Spring24DIGIRECOMiniAOD/MinBias_TuneCP5_14TeV-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200ALCA_140X_mcRun4_realistic_v4-v2/120000/004dd3c5-29c9-4283-95f3-baf57220dce2.root')
+    chosenFiles.append('/store/mc/Phase2Spring24DIGIRECOMiniAOD/MinBias_TuneCP5_14TeV-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200ALCA_140X_mcRun4_realistic_v4-v2/120000/004f52f5-5cac-4a87-ab4d-ac7fcea30858.root')
+    chosenFiles.append('/store/mc/Phase2Spring24DIGIRECOMiniAOD/MinBias_TuneCP5_14TeV-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200ALCA_140X_mcRun4_realistic_v4-v2/120000/00be05a9-68a9-4947-b279-39f694cd536c.root')
+
+print("analysisType", analysisType)
+   
 print("chosenFiles")
 for chFile in chosenFiles:
     print(chFile)
 
-
-print("chosen file count", len(chosenFiles) )
+print("number of chosen files:", len(chosenFiles))
 
 if len(chosenFiles) == 0 :
     print("no files selected!!!!!!!!!!!!!!!")
     exit
 
 print("running version", version)
-print("analysisType", analysisType)
-print("outFilesName", outFilesName)
+print(filesNameLike)
+print("dumpHitsToROOT", dumpHitsToROOT)
 
 firstEv = 0#40000
 #nEvents = 1000
@@ -258,9 +390,7 @@ firstEv = 0#40000
 # input files (up to 255 files accepted)
 process.source = cms.Source('PoolSource',
 fileNames = cms.untracked.vstring( 
-    #'file:/eos/user/k/kbunkow/cms_data/SingleMuFullEta/721_FullEta_v4/SingleMu_16_p_1_1_xTE.root',
-    #'file:/afs/cern.ch/user/k/kpijanow/Neutrino_Pt-2to20_gun_50.root',
-    list(chosenFiles), ),
+    *(list(chosenFiles)) ),
     skipEvents =  cms.untracked.uint32(0),
     inputCommands=cms.untracked.vstring(
         'keep *',
@@ -271,11 +401,12 @@ fileNames = cms.untracked.vstring(
         'drop l1tEMTFTrack2016s_simEmtfDigis__HLT')
 )
 	                    
-if(runDebug == "DEBUG") :
-    process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000))
+if test_mode : 
+    process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(2000))
 else :
     process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))
 
+#process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10))
 
 ####Event Setup Producer
 if useExtraploationAlgo :
@@ -291,32 +422,40 @@ else:
 #    verbose = cms.untracked.bool(False)
 # )
 
-process.TFileService = cms.Service("TFileService", fileName = cms.string(outFilesName + '.root'), closeFileFast = cms.untracked.bool(True) )
+process.TFileService = cms.Service("TFileService", fileName = cms.string('omtfAnalysis2_' + version + "_" + filesNameLike +'.root'), closeFileFast = cms.untracked.bool(True) )
+
+#needed by candidateSimMuonMatcher
+process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAlong_cfi")
+#process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorOpposite_cfi")
+#process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAny_cfi")
                                    
 ####OMTF Emulator
 process.load('L1Trigger.L1TMuonOverlapPhase1.simOmtfDigis_cfi') 
 
-if(runDebug == "DEBUG") :
-    process.simOmtfDigis.dumpResultToXML = cms.bool(True)
-    process.simOmtfDigis.XMLDumpFileName = cms.string("TestEvents__" + outFilesName + ".xml")
-else :
-    process.simOmtfDigis.dumpResultToXML = cms.bool(False)
+if run3_digis :
+    process.simOmtfDigis.srcDTPh = cms.InputTag('omtfStage2Digis')
+    process.simOmtfDigis.srcDTTh = cms.InputTag('omtfStage2Digis')
+    process.simOmtfDigis.srcCSC = cms.InputTag('omtfStage2Digis')
+    process.simOmtfDigis.srcRPC = cms.InputTag('omtfStage2Digis')
 
-
-if(runDebug == "DEBUG") :
-    process.simOmtfDigis.eventCaptureDebug = cms.bool(True)
-else :
-    process.simOmtfDigis.eventCaptureDebug = cms.bool(False)    
-#process.simOmtfDigis.simTracksTag = cms.InputTag('g4SimHits')
-
-#needed only for the hits dumper
-#process.simOmtfDigis.simTracksTag = cms.InputTag('g4SimHits')
-#process.simOmtfDigis.simVertexesTag = cms.InputTag('g4SimHits')
+process.simOmtfDigis.candidateSimMuonMatcher = cms.bool(True)
 #process.simOmtfDigis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")
+process.simOmtfDigis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/deltaPhi_cand_simMu.root")
+
+if genParticlesType == "trackingParticle" :
+    process.simOmtfDigis.trackingParticleTag = cms.InputTag("mix", "MergedTrackTruth")
+    #process.simOmtfDigis.trackingParticleTag = cms.InputTag("prunedTrackingParticles")
+    
+elif genParticlesType == "simTrack" :
+    process.simOmtfDigis.simTracksTag = cms.InputTag('g4SimHits')
+    process.simOmtfDigis.simVertexesTag = cms.InputTag('g4SimHits')
 
 
-process.simOmtfDigis.dumpHitsToROOT = cms.bool(False)
-process.simOmtfDigis.candidateSimMuonMatcher = cms.bool(False)
+process.simOmtfDigis.dumpResultToXML = cms.bool(test_mode)
+process.simOmtfDigis.XMLDumpFileName = cms.string("TestEvents__" + version + "_" + filesNameLike + ".xml")
+process.simOmtfDigis.dumpHitsToROOT = cms.bool(dumpHitsToROOT)
+process.simOmtfDigis.dumpKilledOmtfCands = cms.bool(False)
+process.simOmtfDigis.eventCaptureDebug = cms.bool(test_mode)
 
 
 if customize_omtf :
@@ -372,54 +511,44 @@ if customize_omtf :
 #process.load("Configuration.StandardSequences.GeometryRecoDB_cff")
 #process.load("Configuration.StandardSequences.MagneticField_38T_cff")
 
-process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAlong_cfi")
-#process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorOpposite_cfi")
-#process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAny_cfi")
+process.simOmtfDigis.candidateSimMuonMatcherType = cms.string(candidateSimMuonMatcherType)
 
-
-if matchUsingPropagation :
-    process.L1MuonAnalyzerOmtf= cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
+process.L1MuonAnalyzerOmtf = cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
                                  etaCutFrom = cms.double(0.82), #OMTF eta range
                                  etaCutTo = cms.double(1.24),
                                  L1OMTFInputTag  = cms.InputTag("simOmtfDigis","OMTF"),
                                  #nn_pThresholds = cms.vdouble(nn_pThresholds), 
                                  analysisType = cms.string(analysisType),
                                  
-                                 simTracksTag = cms.InputTag('g4SimHits'),
-                                 simVertexesTag = cms.InputTag('g4SimHits'),
+                                 #simTracksTag = cms.InputTag('g4SimHits'),
+                                 #simVertexesTag = cms.InputTag('g4SimHits'),
+                                 #trackingParticleTag = cms.InputTag("mix", "MergedTrackTruth"),
                                  
-                                 matchUsingPropagation = cms.bool(matchUsingPropagation),
-                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root") #if you want to make this file, remove this entry#if you want to make this file, remove this entry
+                                 #matchUsingPropagation = cms.bool(matchUsingPropagationInAnlyzer),
+                                 #muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root"), #if you want to make this file, remove this entry#if you want to make this file, remove this entry
                                  #muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_noPropagation_t74.root")
+                                 
+                                 candidateSimMuonMatcherType = cms.string(candidateSimMuonMatcherType),
+                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/deltaPhi_cand_simMu.root"),
+                                 phase = cms.int32(1)
                                  )
-elif analysisType == "efficiency":
-    process.L1MuonAnalyzerOmtf= cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
-                                 etaCutFrom = cms.double(0.82), #OMTF eta range
-                                 etaCutTo = cms.double(1.24),
-                                 L1OMTFInputTag  = cms.InputTag("simOmtfDigis","OMTF"),
-                                 #nn_pThresholds = cms.vdouble(nn_pThresholds), 
-                                 analysisType = cms.string(analysisType),
-                                                                  
-                                 simTracksTag = cms.InputTag('g4SimHits'),
-                                 simVertexesTag = cms.InputTag('g4SimHits'),
-                                 matchUsingPropagation = cms.bool(matchUsingPropagation), #if this is defined, useMatcher is true, for rate analysis this mus be removed, but for efficiency is needed
-                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")                                     
-                                )
-elif analysisType == "rate":
-    process.L1MuonAnalyzerOmtf= cms.EDAnalyzer("L1MuonAnalyzerOmtf", 
-                                 etaCutFrom = cms.double(0.82), #OMTF eta range
-                                 etaCutTo = cms.double(1.24),
-                                 L1OMTFInputTag  = cms.InputTag("simOmtfDigis","OMTF"),
-                                 #nn_pThresholds = cms.vdouble(nn_pThresholds), 
-                                 analysisType = cms.string(analysisType),
-                                                                  
-                                 simTracksTag = cms.InputTag('g4SimHits'),
-                                 simVertexesTag = cms.InputTag('g4SimHits'),
-                                 #matchUsingPropagation = cms.bool(matchUsingPropagation), #if this is defined, useMatcher is true, for rate analysis this mus be removed, but for efficiency is needed
-                                 muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root"),
-                                 phase = cms.int32(2)                                    
-                                )
-    
+
+if genParticlesType == "trackingParticle" :
+    process.L1MuonAnalyzerOmtf.trackingParticleTag = cms.InputTag("mix", "MergedTrackTruth")
+    #process.L1MuonAnalyzerOmtf.trackingParticleTag = cms.InputTag("prunedTrackingParticles")
+elif genParticlesType == "simTrack" :
+    process.L1MuonAnalyzerOmtf.simTracksTag = cms.InputTag('g4SimHits')
+    process.L1MuonAnalyzerOmtf.simVertexesTag = cms.InputTag('g4SimHits')
+
+process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
+
+process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck",
+    ignoreTotal = cms.untracked.int32(1)
+)
+
+#process.dumpED = cms.EDAnalyzer("EventContentAnalyzer")
+#process.dumpES = cms.EDAnalyzer("PrintEventSetupContent")
+
 process.l1MuonAnalyzerOmtfPath = cms.Path(process.L1MuonAnalyzerOmtf)
 
 

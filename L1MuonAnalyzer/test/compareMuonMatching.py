@@ -2,7 +2,7 @@ from ROOT import TCanvas, TPad, TFile, TPaveLabel, TPaveText, TH1D, TEfficiency,
 from ROOT import gROOT
 from ROOT import gStyle
 from ROOT import kBlack, kBlue, kRed, kGreen, kMagenta
-from libPyROOT import TDirectory
+from ROOT import TDirectory
 import os
 import sys
 from collections import namedtuple
@@ -12,8 +12,13 @@ gStyle.SetOptStat(0)
 
 
 #fileDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_10_x_x_l1tOfflinePhase2/CMSSW_10_6_1_patch2/src/L1Trigger/L1TMuonBayes/test/crab/'
-fileDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/'
+#fileDir = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_11_x_x_l1tOfflinePhase2/CMSSW_11_1_3/src/L1Trigger/L1TMuonOverlapPhase1/test/crab/'
 
+fileDirt36 = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_Phase2Spring24_MinBias__t36/results/omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t35p_omtfPhiAtSt2.root'
+
+fileDirt37 = "/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_14_x_x/CMSSW_14_2_0_pre2/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_Phase2Spring24_MinBias__t37/results/omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t37.root"
+
+fileDirt40 = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/crab/crab_omtf_Phase2Spring24_MinBias__t40/results/omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t40.root'
 
 candCategories = ('promptMuons', 'nonPromptMuons', 'notMatched') #, 'muonsFromPions', 'muonsFromKaons'
 
@@ -51,16 +56,22 @@ def getRate(dir, ptCutGev,name):
             
     return results 
                 
-def readRateFile(version, algoName, ptCutGev):
-    folder = 'crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_v2_' + version
-    if version == "t74" or version == "t78" or version == "t80" or version == "t100"  or version == "t104":
-        folder = 'crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_v3_' + version
+def readRateFile(version, algoName, ptCutGev, fileName=""):     
+    if fileName != "" :
+        histFile = TFile( fileName)
+        histFiles[version + "_" + algoName + "_" + str(ptCutGev)] = histFile
         
-    if folder in histFiles:
-        histFile = histFiles.get(folder)
-    else :
-        histFile = TFile( fileDir + folder + '/results/omtfAnalysis2.root' )
-        histFiles[folder] = histFile
+    # folder = 'crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_v2_' + version
+    # if version == "t74" or version == "t78" or version == "t80" or version == "t100"  or version == "t104":
+    #     folder = 'crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_v3_' + version
+    #
+    # if folder in histFiles:
+    #     histFile = histFiles.get(folder)
+    # else :
+    #     histFile = TFile( fileDir + folder + '/results/omtfAnalysis2.root' )
+    #     histFiles[folder] = histFile
+    
+    
     
     print ("\nreading file " + histFile.GetName())
     
@@ -164,9 +175,9 @@ def readRateFile(version, algoName, ptCutGev):
     
     first = True
     for acceptedMuonsPt in thisAcceptedMuonsPts :
-        print "Drawing", acceptedMuonsPt.GetTitle()
+        print ("Drawing", acceptedMuonsPt.GetTitle())
         if first :
-            acceptedMuonsPt.GetYaxis().SetRangeUser(0, 15)
+            acceptedMuonsPt.GetYaxis().SetRangeUser(0, 35)
             acceptedMuonsPt.Draw("hist")
         else :
             acceptedMuonsPt.Draw("hist same")
@@ -179,10 +190,10 @@ def readRateFile(version, algoName, ptCutGev):
 
 
 
-VersionAlgo = namedtuple("VersionAlgo", "version algoName ptCutGev")
+VersionAlgo = namedtuple("VersionAlgo", "version algoName ptCutGev, fileName")
 
 toCompareList = ( 
-    VersionAlgo("t68", "omtf_q12", 10) , 
+    #VersionAlgo("t68", "omtf_q12", 10, fileDir + "crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_v2_t68/results/omtfAnalysis2.root") , 
     #VersionAlgo("t65", "omtf_q8", 5), 
     #VersionAlgo("t65", "omtf_q12", 18), 
     
@@ -199,7 +210,7 @@ toCompareList = (
     #VersionAlgo("t67", "nn_omtf_q12_pTresh_0.5", 22),
     
     
-    VersionAlgo("t100", "omtf_q12", 9),
+    #VersionAlgo("t100", "omtf_q12", 9, fileDir + "crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_v3_t100/results/omtfAnalysis2.root"),
     #VersionAlgo("t104", "omtf_q12", 20),
     
     #VersionAlgo("t68", "nn_omtf_q12_pTresh_0.5", 22),
@@ -208,8 +219,13 @@ toCompareList = (
     
     #VersionAlgo("t66", "nn_omtf_q12_pTresh_0.5", 22), #no mathcin for nn 
     
-    VersionAlgo("t67", "nn_omtf_q12_pTresh_0.4", 10), #this is good nn 
+    #VersionAlgo("t67", "nn_omtf_q12_pTresh_0.4", 10, fileDir + "crab_omtf_nn_MC_analysis_SingleNeutrino_PU200_v2_t67/results/omtfAnalysis2.root"), #this is good nn 
     #VersionAlgo("t67", "nn_omtf_q12_pTresh_0.5", 22), #this is good nn 
+    
+    #VersionAlgo("t36", "omtf_q12", 20, fileDirt36), #crab_omtf_Phase2Spring24_MinBias__t36
+    
+    VersionAlgo("t37", "omtf_q12", 20, fileDirt37), #crab_omtf_Phase2Spring24_MinBias__t36
+    VersionAlgo("t40", "omtf_q12", 18, fileDirt40), #crab_omtf_Phase2Spring24_MinBias__t40
     )
 
 # toCompareList = ( 
@@ -245,7 +261,7 @@ for candCategory in candCategories :
     rateVsCategoryStackLegend.AddEntry(rateVsCategory[candCategory], candCategory)
     
 for toCompare in toCompareList:
-    readRateFile(toCompare.version, toCompare.algoName, toCompare.ptCutGev)
+    readRateFile(toCompare.version, toCompare.algoName, toCompare.ptCutGev, toCompare.fileName)
     
 rateVsCategoryCanvas = TCanvas('rateVsCategoryCanvas', "rateVsCategoryCanvas", 200, 10, 700, 900)   
 rateVsCategoryCanvas.SetRightMargin(0.25)
@@ -268,4 +284,4 @@ for canvas in canvases :
 for rateCumul in rateCumuls :     
     print (" rateCumul "  + rateCumul.GetName() )
 
-raw_input("Press ENTER to exit")    
+input("Press ENTER to exit")    
