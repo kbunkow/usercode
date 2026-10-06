@@ -427,7 +427,7 @@ def makeEfficiencyPlots(ptCutGev, platCutGev, lineColor) :
         effVsPhi.SetName(effVsPhi.GetName().replace("_clone", "").replace("allCandsPhi", "efficiencyVsPhi"))
         effVsPhi.Draw("")
         c1.cd(4).Update()
-        effVsPhi.GetPaintedGraph().GetYaxis().SetRangeUser(0.8, 1.05)
+        effVsPhi.GetPaintedGraph().GetYaxis().SetRangeUser(0.8, 1.0)
         efficienciesVsPhi.append(effVsPhi)
     
     canvases.append(c1)

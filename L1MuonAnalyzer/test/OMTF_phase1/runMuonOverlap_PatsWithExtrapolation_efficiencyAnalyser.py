@@ -13,9 +13,11 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 verbose = True
 
-test_mode = False
+test_mode = True
 
 dumpHitsToROOT = True
+
+run_omtf_emulator = False
 
 run3_digis = False
 
@@ -63,7 +65,7 @@ customize_omtf = False
 
 log_threshold = 'INFO'
 if test_mode :
-    version = version + "_test30c_"
+    version = version + "_test30d_"
     log_threshold = 'DEBUG'
     #log_threshold = 'INFO' ####<<<<<<<<<<<<<<<<<<<<<<,
 
@@ -533,6 +535,9 @@ process.L1MuonAnalyzerOmtf = cms.EDAnalyzer("L1MuonAnalyzerOmtf",
                                  phase = cms.int32(1)
                                  )
 
+if not run_omtf_emulator :
+    process.L1MuonAnalyzerOmtf.L1OMTFInputTag = cms.InputTag("omtfStage2Digis") 
+
 if genParticlesType == "trackingParticle" :
     process.L1MuonAnalyzerOmtf.trackingParticleTag = cms.InputTag("mix", "MergedTrackTruth")
     #process.L1MuonAnalyzerOmtf.trackingParticleTag = cms.InputTag("prunedTrackingParticles")
@@ -560,7 +565,10 @@ process.L1TMuonSeq = cms.Sequence( #process.esProd+
 
 process.L1TMuonPath = cms.Path(process.L1TMuonSeq)
 
-process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath)
+if run_omtf_emulator :
+    process.schedule = cms.Schedule(process.L1TMuonPath, process.l1MuonAnalyzerOmtfPath)
+else :
+    process.schedule = cms.Schedule(process.l1MuonAnalyzerOmtfPath)
 
 #process.out = cms.OutputModule("PoolOutputModule", 
 #   fileName = cms.untracked.string("l1tomtf_superprimitives1.root")

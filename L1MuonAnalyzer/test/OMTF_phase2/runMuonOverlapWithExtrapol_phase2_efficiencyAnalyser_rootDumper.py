@@ -13,7 +13,7 @@ process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 verbose = True
 
-test_mode = False
+test_mode = True
 
 dumpHitsToROOT = True
 
@@ -62,7 +62,7 @@ version = "ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_" + str(minDt
 
 log_threshold = 'INFO'
 if test_mode :
-    version = version + "_test30e_"
+    version = version + "_test30g_"
     log_threshold = 'DEBUG'
     #log_threshold = 'INFO' ####<<<<<<<<<<<<<<<<<<<<<<,
     
@@ -432,7 +432,7 @@ if run3_digis :
     process.simOmtfPhase2Digis.srcDTTh = cms.InputTag('omtfStage2Digis')
     process.simOmtfPhase2Digis.srcCSC = cms.InputTag('omtfStage2Digis')
     process.simOmtfPhase2Digis.srcRPC = cms.InputTag('omtfStage2Digis')
-    process.simOmtfPhase2Digis.dtBxShift = cms.int32(13) #13 seems to be good in CMSSW_16_0, but maybe will be changed?!!!!!!!!!!!!!!!!!!!!
+    process.simOmtfPhase2Digis.dtBxShift = cms.int32(13) #13 looks almost good, but perfromance is still not good
 
 process.simOmtfPhase2Digis.candidateSimMuonMatcher = cms.bool(True)
 #process.simOmtfPhase2Digis.muonMatcherFile = cms.FileInPath("L1Trigger/L1TMuon/data/omtf_config/muonMatcherHists_100files_smoothStdDev_withOvf.root")

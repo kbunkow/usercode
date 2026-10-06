@@ -7,10 +7,45 @@ import matplotlib.ticker
 import matplotlib.pyplot as plt
 import pandas as pd
 import math
+from pathlib import Path
+import json
 
 import warnings
 import os
 warnings.filterwarnings("ignore", message="The value of the smallest subnormal for <class 'numpy.float64'> type is zero.")
+
+qualityCut = 12
+
+ptCut = 19
+
+label_prefix = ""
+
+versions_to_comapre = []
+if False :
+    data_file_dir  = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/'        
+    fileNameLike = "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t40_mcWaw_2024_01_03_OneOverPt_iPt2.root"  
+    version = "OMTF_phase2_DT_2_2_2_t40__2024_01_03_OneOverPt_iPt2"   
+    label_prefix = "phase2"
+    
+    versions_to_comapre = [ { "version":"OMTF_phase1_t40__2024_01_03_OneOverPt_iPt2_efficiency_plots", "file_name":"efficiency_vs_pt_omtfPt.json", "color":"magenta"},]
+
+if False :
+    data_file_dir  = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/OMTF_phase1/rootDump/'        
+    fileNameLike = "omtfAnalysis2_t40__Phase1_2024_mcWaw_2024_01_03_OneOverPt_iPt2.root"  
+    version = "OMTF_phase1_t40__2024_01_03_OneOverPt_iPt2"   
+    label_prefix = "phase1"
+    ptCut = 22
+
+if True :
+    data_file_dir = "/home/kbunkow/projects/machine_learning/results/omtfRegression_displ_quant_t36_v435/"
+    fileNameLike = "t40_NNReg_mcWaw_2024_01_03_OneOverPt_iPt2.root"
+    version = "OMTF_phase2_t40_NNreg_v435__2024_01_03_OneOverPt_iPt2"
+    label_prefix = "Phase2"
+
+
+output_dir = Path(version + "_efficiency_plots/")
+output_dir.mkdir(parents=True, exist_ok=True)    
+
 
 
 def read_root_files(dir, fileNameLike):
@@ -49,18 +84,27 @@ def add_combPt(data):
         print('Warning: could not create combPt column on data:', e)
 
 
-
-#Increase plots font size
-params = {'font.size': 12,
-        'legend.fontsize': 'large',
-          'figure.figsize': (10, 7),
-         'axes.labelsize': 'large',
-         'axes.titlesize':'large',
-         'axes.grid': True,
-         'xtick.labelsize':'large',
-         'ytick.labelsize':'large',
-         'lines.linewidth': 3,
-         'lines.markersize': 10,}
+params = {  'font.size': 12,
+            'legend.fontsize': 'large',
+            'figure.figsize': (10, 7),
+            'axes.labelsize': 'large',
+            'axes.titlesize':'large',
+            'axes.grid': True,
+            'xtick.labelsize':'large',
+            'ytick.labelsize':'large',
+            'lines.linewidth': 3,
+            'lines.markersize': 10,
+            'xtick.direction': 'in',
+            'ytick.direction': 'in',
+            'xtick.major.size': 8,
+            'xtick.minor.size': 4,
+            'ytick.major.size': 8,
+            'ytick.minor.size': 4,
+            'xtick.minor.visible': True,
+            'ytick.minor.visible': True,
+            'xtick.top': True,
+            'ytick.right': True
+         }
 plt.rcParams.update(params)
 
 #ptBins = np.linspace(0, 800, 2*800+1)
@@ -71,8 +115,10 @@ ptBins = np.concatenate((ptBins_fine, ptBins_coarse[1:]))  # drop duplicate 100
 
 print('ptBins:', ptBins)
 
-def efficiency_vs_pt_plots(axs, data, version, omtfPt, qualityCut, ptCut, color, ptBins):
+def efficiency_vs_pt_plots(axs, data, version, omtfPt, qualityCut, ptCut, color, ptBins, label_prefix=""):
     data_events_with_mu = data.query('abs(muonEta) > 0.84 and abs(muonEta) < 1.24 and muonPt > 0')
+    
+    label = label_prefix + " " + omtfPt + f' q >= {qualityCut} ptCut >= {ptCut} GeV'
     
     total_counts, _ = np.histogram(data_events_with_mu["muonPt"], bins=ptBins)
     passed_counts, _ = np.histogram(data_events_with_mu.query(f'{omtfPt} >= {ptCut} and omtfQuality >= {qualityCut}')["muonPt"], bins=ptBins)
@@ -87,13 +133,30 @@ def efficiency_vs_pt_plots(axs, data, version, omtfPt, qualityCut, ptCut, color,
     efficiency = np.clip(efficiency, eps_floor, 1.0)
 
     #bin_centers = (ptBins[:-1] + ptBins[1:]) / 2
-    axs.step(ptBins[:-1], efficiency, label=omtfPt, linestyle='-', where='post', color=color, linewidth=1.5) #marker='o', 
-    axs.set_xlabel('muonPt')
-    axs.set_ylabel('Efficiency')    
+    axs.step(ptBins[:-1], efficiency, label=label, linestyle='-', where='post', color=color, linewidth=1.5)
+     #marker='o', 
+    axs.set_xlabel('muon pT [GeV]')
+    axs.set_ylabel('efficiency')    
     # For the linear plot keep 0 as lower bound so the top plot looks natural
     #axs.set_xlim(0, ptBins[-1])
     axs.set_ylim(0.0, 1.0)
+    
+    # place minor ticks
+    axs.yaxis.set_minor_locator(matplotlib.ticker.MultipleLocator(0.05))
+    # optional: show a subtle minor-grid for readability
+    axs.grid(which='minor', axis='y', linestyle=':', alpha=0.6)
+    
     axs.legend()
+    
+    hist_data = {        
+        "ptBins": ptBins.tolist(),
+        "efficiency": efficiency.tolist(),
+        "label": label,
+        "color": color
+    }
+
+    with open(output_dir / ("efficiency_vs_pt_" + omtfPt + ".json"), "w") as f:
+        json.dump(hist_data, f)
 
 def efficiency_vs_eta_plots(axs, data, version, omtfPt, qualityCut, muPtCut, omtfPtCut, color, etaBins):
     # filter events with muonPt greater than the provided cut
@@ -140,29 +203,6 @@ def efficiency_vs_eta_plots(axs, data, version, omtfPt, qualityCut, muPtCut, omt
     
     return
 
-fig1, axs1 = plt.subplots(2, 2, figsize=(20, 12))
-
-data_file_dir  = '/afs/cern.ch/work/k/kbunkow/public/CMSSW/cmssw_16_x_x/CMSSW_16_0_0_pre1/src/usercode/L1MuonAnalyzer/test/OMTF_phase2/rootDump/'        
-fileNameLike = "omtfAnalysis2_ExtraplMB1andMB2RFixedP_ValueP1Scale_DT_2_2_2_t35____DT_2_2_2_t40_mcWaw_2024_01_03_OneOverPt_iPt2.root"  
-version = "DT_2_2_2_t40"   
-
-#data = read_root_files(data_file_dir, fileNameLike)
-
-qualityCut = 12
-
-ptCut = 19
-axs1[0, 0].set_title(f'Efficiency vs muonPt (omtfQuality >= {qualityCut}, ptCut {ptCut} GeV)')
-#efficiency_vs_pt_plots(axs1[0, 0], data, version, 'omtfPt', qualityCut, ptCut, "blue", ptBins)
-
-data_file_dir = "/home/kbunkow/projects/machine_learning/results/omtfRegression_displ_quant_t36_v435/"
-fileNameLike = "t40_NNReg_mcWaw_2024_01_03_OneOverPt_iPt2.root"
-version = "t40_NNreg_v435"
-data = read_root_files(data_file_dir, fileNameLike)
-add_combPt(data)
-efficiency_vs_pt_plots(axs1[0, 0], data, version, 'omtfPt', qualityCut, ptCut, "blue", ptBins)
-efficiency_vs_pt_plots(axs1[0, 0], data, version, 'nnPt0', qualityCut, ptCut, "green", ptBins)
-efficiency_vs_pt_plots(axs1[0, 0], data, version, 'combPt', qualityCut, ptCut, "red", ptBins)
-
 # Copy the plotted lines from axs1[0,0] to axs1[1,0] and set the y-axis to log scale.
 # The efficiencies are clipped to a small positive floor inside efficiency_vs_pt_plots, so zeros are avoided.
 def draw_copy(source_ax, target_ax, log_scale_y=True, x_min=None, x_max=None):
@@ -175,20 +215,62 @@ def draw_copy(source_ax, target_ax, log_scale_y=True, x_min=None, x_max=None):
     target_ax.legend()
     if log_scale_y:
         target_ax.set_yscale('log')
-        target_ax.set_ylim(1e-7, 1.05)
+        target_ax.set_ylim(1e-5, 2)
+    else :
+        target_ax.set_ylim(source_ax.get_ylim())
+        target_ax.yaxis.set_minor_locator(matplotlib.ticker.MultipleLocator(0.05))
+        target_ax.grid(which='minor', axis='y', linestyle=':', alpha=0.6)
+            
     if x_min is not None and x_max is not None:
         target_ax.set_xlim(x_min, x_max)
 
-draw_copy(axs1[0, 0], axs1[1, 0], log_scale_y=True, x_min=0, x_max=40)
-draw_copy(axs1[0, 0], axs1[0, 1], log_scale_y=False, x_min=0, x_max=100)
+def draw_from_json(axs, versions_to_comapre, file_name_like):
+    for ver in versions_to_comapre:
+        print("draw_from_json ver:", ver)
+        if file_name_like in ver["file_name"]:
+            filename = ver["version"] + "/" + ver["file_name"]
+            with open(filename, "r") as f:
+                hist_data = json.load(f)
+            
+            ptBins = np.array(hist_data["ptBins"])
+            efficiency = np.array(hist_data["efficiency"])
+            
+            axs.step(ptBins[:-1], efficiency, label=hist_data["label"], linestyle='-', where='post', color=ver["color"], linewidth=1.5)
+    axs.legend()        
+    
+
+#########################################################################################################################################
+
+fig1, axs1 = plt.subplots(2, 2, figsize=(20, 12))
+
+#data = read_root_files(data_file_dir, fileNameLike)
+
+axs1[0, 0].set_title(version)
+#efficiency_vs_pt_plots(axs1[0, 0], data, version, 'omtfPt', qualityCut, ptCut, "blue", ptBins)
+
+data = read_root_files(data_file_dir, fileNameLike)
+
+
+efficiency_vs_pt_plots(axs1[0, 0], data, version, 'omtfPt', qualityCut, ptCut, "blue", ptBins, label_prefix)
+if "NNreg" in version :
+    add_combPt(data)
+    efficiency_vs_pt_plots(axs1[0, 0], data, version, 'nnPt0', qualityCut, ptCut, "green", ptBins, label_prefix)
+    efficiency_vs_pt_plots(axs1[0, 0], data, version, 'combPt', qualityCut, ptCut, "red", ptBins, label_prefix)
+
+draw_from_json(axs1[0, 0], versions_to_comapre, "efficiency_vs_pt")
+
+draw_copy(axs1[0, 0], axs1[0, 1], log_scale_y=True, x_min=0, x_max=40)
+draw_copy(axs1[0, 0], axs1[1, 0], log_scale_y=False, x_min=0, x_max=100)
 
 etaBins = np.linspace(-2., 2., 51) 
 print('etaBins:', etaBins)
 omtfPtCut = 19
 muPtCut = 25
+
 efficiency_vs_eta_plots(axs1[1, 1], data, version, 'omtfPt', qualityCut, muPtCut, omtfPtCut, "blue", etaBins)
-efficiency_vs_eta_plots(axs1[1, 1], data, version, 'nnPt0', qualityCut, muPtCut, ptCut, "green", etaBins)
-efficiency_vs_eta_plots(axs1[1, 1], data, version, 'combPt', qualityCut, muPtCut, ptCut, "red", etaBins)
+if "NNreg" in version :
+    efficiency_vs_eta_plots(axs1[1, 1], data, version, 'nnPt0', qualityCut, muPtCut, ptCut, "green", etaBins)
+    efficiency_vs_eta_plots(axs1[1, 1], data, version, 'combPt', qualityCut, muPtCut, ptCut, "red", etaBins)
 
 ##################################################################################3
 #axs[0, 0].grid(axis='y', alpha=0.75)
